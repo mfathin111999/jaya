@@ -8,6 +8,8 @@ use App\Http\Controllers\API\V1\ReservationController;
 use App\Http\Controllers\API\V1\EngagementController;
 use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\EmployeeController;
+use App\Http\Controllers\API\V1\UserController;
+use App\Http\Controllers\API\V1\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,9 @@ use App\Http\Controllers\API\V1\EmployeeController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/register', [UserController::class, 'register']);
 
 Route::get('/province', [ResourceController::class, 'getProvince']);
 Route::post('/district', [ResourceController::class, 'getDistrict']);
@@ -50,9 +55,11 @@ Route::post('/reservation/destroy/{id}', [ReservationController::class, 'destroy
 
 Route::get('/engagement', [EngagementController::class, 'index']);
 Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
+Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
+Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
 Route::get('/engagement/{id}', [EngagementController::class, 'view']);
 Route::post('/engagement/create-engagement', [EngagementController::class, 'createEngagement']);
-Route::post('/engagement/acc', [EngagementController::class, 'acc']);
+Route::post('/engagement/action', [EngagementController::class, 'action']);
 Route::post('/engagement/ignore', [EngagementController::class, 'ignore']);
 Route::post('/engagement/finish', [EngagementController::class, 'finish']);
 Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
@@ -70,3 +77,12 @@ Route::post('test', [EmployeeController::class, 'test']);
 Route::get('/employee/{id}', [EmployeeController::class, 'view']);
 Route::post('/employee/update-employee/{id}', [EmployeeController::class, 'updateEmployee']);
 Route::post('/employee/destroy/{id}', [EmployeeController::class, 'destroy']);
+
+
+Route::get('/report', [ReportController::class, 'index']);
+Route::get('/report/getCount/{id}', [ReportController::class, 'index']);
+Route::post('/report/create', [ReportController::class, 'create']);
+Route::post('test', [ReportController::class, 'test']);
+Route::get('/report/{id}', [ReportController::class, 'view']);
+Route::post('/report/update/{id}', [ReportController::class, 'update']);
+Route::post('/report/destroy/{id}', [ReportController::class, 'destroy']);

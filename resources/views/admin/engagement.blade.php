@@ -6,7 +6,8 @@
 @section('content')
   @include('layout.admin_header')
   <div id="app" v-cloak>
-    <div class="modal fade" id="editModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="actionModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -18,54 +19,87 @@
           <div class="modal-body">
             <form>
               <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="name">Action</label>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <select class="form-control" v-model = 'action'>
+                          <option value="">Pilih Aksi</option>
+                          <option value="acc">Terima</option>
+                          <option value="ignore">Tolak</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6">
+                        <button type="button" class="btn btn-success btn-block" @click='actionEngagement(view.id)'>Kirim Aksi</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="name">Nama</label>
-                    <input type="text" class="form-control" id="name" v-model="view.name">
+                    <input type="text" class="form-control" id="name" v-model="view.name" disabled="">
                   </div>
                 </div>
                 <div class="col-6">
-                  <div class="form-group">
-                    <label for="code">Booking Code</label>
-                    <input type="text" class="form-control" id="book" v-model="view.code">
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="phone_number">Phone Number</label>
-                    <input type="text" class="form-control" id="phone_number" v-model="view.phone_number">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="code">Booking Code</label>
+                        <input type="text" class="form-control" id="book" v-model="view.code" disabled="">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="text" class="form-control" id="phone_number" v-model="view.phone_number" disabled="">
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" v-model="view.email">
+                    <input type="email" class="form-control" id="email" v-model="view.email" disabled="">
                   </div>
                 </div>
                 <div class="col-6">
-                  <div class="form-group">
-                    <label for="date">Date</label>
-                    <input type="text" class="form-control" id="date" v-model="view.date">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="text" class="form-control" id="date" v-model="view.date" disabled="">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="time">Time</label>
+                        <input type="text" class="form-control" id="time" v-model="view.time" disabled="">
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                   <div class="form-group">
-                    <label for="time">Time</label>
-                    <input type="text" class="form-control" id="time" v-model="view.time">
+                    <label for="service">Service</label>
+                    <input type="text" class="form-control" id="service" v-model="view.service" disabled="">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" :value="ucwords(view.address+' '+view.village+' '+view.district+' '+view.regency+' '+view.province)" disabled="">
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="form-group">
                     <label for="email">Description</label>
-                    <textarea type="text" class="form-control" id="description" rows="3" v-model="view.description"></textarea>
+                    <textarea type="text" class="form-control" id="description" rows="3" v-model="view.description" disabled=""></textarea>
                   </div>
                 </div>
               </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
@@ -78,15 +112,13 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Engagement</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#editModal"><i class="fa fa-plus pr-2"></i>add</button>
-              </div>
               <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
                 <span data-feather="calendar"></span>
                 This week
               </button>
             </div>
           </div>
+          
           <div class="table">
             <table id="example" class="table table-striped table-bordered" style="width:100%">
               <thead>
@@ -94,25 +126,22 @@
                       <th>Name</th>
                       <th>Service</th>
                       <th>Email</th>
-                      <th>Address</th>
                       <th>Date</th>
                       <th>Status</th>
-                      <th>Description</th>
                       <th>Action</th>
                   </tr>
               </thead>
               <tbody>
                   <tr v-for = "(item, index) in data">
                     <td>@{{ item.name }}</td>
-                    <td>@{{ item.service_id }}</td>
+                    <td>@{{ item.service }}</td>
                     <td>@{{ item.email }}</td>
-                    <td>@{{ item.province.name }} @{{ item.regency }} @{{ item.district_id }} @{{ item.village_id }}</td>
                     <td>@{{ item.date }} @{{ item.time }}</td>
-                    <td>@{{ item.description }}</td>
-                    <td>@{{ item.status }}</td>
+                    <td><span v-bind:class = 'item.status == "acc" ? "text-success" : "text-danger"' >@{{ item.status.toUpperCase() }}</span></td>
                     <td>
-                      <a class="btn btn-info" href="#" type="button" data-toggle="modal" data-target="#editModal" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
-                      <a class="btn btn-danger" href="#" type="button" v-on:click='deleteItem(item.id, index)'><i class="fa fa-trash"></i></a>
+                      <a class="btn btn-info" href="#" type="button" data-toggle="modal" data-target="#actionModal" v-on:click='viewData(item.id)'><i class="fa fa-eye"></i></a>
+                      <a class="btn btn-danger" href="#" type="button" v-on:click='deleteItem(item.id)'><i class="fa fa-trash"></i></a>
+                      <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "pending || "'><i class="fa fa-pencil"></i></a>
                     </td>
                   </tr>
               </tbody>
@@ -134,6 +163,7 @@
           data: [],
           view: [],
           form: {},
+          action: '',
       },
       created: function(){
         this.getData();
@@ -150,24 +180,49 @@
         },
         viewData : function(id){
           axios.get("{{ url('api/engagement') }}/"+id).then(function(response){
-            this.status = true;
             this.view = response.data.data;
           }.bind(this));
         },
-        addForm : function(){
-          this.status = false;
+        addReport : function(id){
+          // axios.get("{{ url('api/report') }}/"+id).then(function(response){
+          //   if (response != 0) {
+          //     window.location ="{{ url('report_survey') }}/"+id;
+          //   }else{
+
+          //   }
+          // }.bind(this));
+
+          window.location ="{{ url('report_survey') }}/"+id;
+
         },
-        submitform : function(){
-          axios.post("{{ url('api/engagement/create-engagement') }}", this.form).then(function(response){
-            app.$nextTick(() => {
-              $("#editModal").modal('hide');
-              $("#example").DataTable().destroy();
+        actionEngagement : function(id){
+          if (this.action == '') {
+            Swal.fire(
+                'Warning!',
+                'Harap isi Aksi.',
+                'warning'
+            );
+          }else{
+            let form = {
+              'id' : id,
+              'action' : this.action,
+            };
+
+            axios.post("{{ url('api/engagement/action') }}", form).then(function(response){
+              app.$nextTick(() => {
+                $('#example').DataTable().destroy();
+                $('#actionModal').modal('hide');
+              });
+              Swal.fire(
+                  'Success!',
+                  'Survey diterima.',
+                  'success'
+              );
+            }).then(()=>{
+              this.getData();
             });
-          }).then(() => {
-            this.form = {};
-            this.getData();
-          });
-        }, 
+          }
+        },
         deleteItem: function(id){
           Swal.fire({
             title: 'Are you sure?',
@@ -194,16 +249,6 @@
             }
           })
         },
-        editData: function(id){
-          axios.post("{{ url('api/engagement/update-engagement') }}/"+id, this.view).then(function(response){
-            app.$nextTick(() => {
-              $("#editModal").modal('hide');
-              $("#example").DataTable().destroy();
-            });
-          }).then(() => {
-            this.getData();
-          });
-        }
       }
     });
   </script>

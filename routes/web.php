@@ -53,6 +53,10 @@ Route::get('/dashboard', function(){
 	return view('admin.dashboard');
 })->name('dashboard');
 
+Route::get('/calendar', function(){
+	return view('admin.calendar');
+})->name('calendar');
+
 Route::get('/engagement', function(){
 	return view('admin.engagement');
 })->name('engagement');
@@ -88,3 +92,7 @@ Route::get('/setting_account', function(){
 Route::get('/setting_application', function(){
 	return view('admin.setting_application');
 })->name('setting_application');
+
+Route::get('/report_survey/{id}', function($id){
+	return view('admin.reportsurvey', compact('id'));
+})->name('survei');

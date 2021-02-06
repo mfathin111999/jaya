@@ -7,7 +7,9 @@ use App\Models\District;
 use App\Models\Regency;
 use App\Models\Province;
 use App\Domain\User\Entities\User;
-use App\Domain\Engagement\Entities\EngagementHasService;
+use App\Domain\Service\Entities\Service;
+use App\Domain\Employee\Entities\Employee;
+use App\Domain\Report\Entities\Report;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +43,14 @@ class Engagement extends Model
     }
 
     public function service(){
-        return $this->hasMany(EngagementHasService::class, 'engagement_id', 'id');
+        return $this->belongsToMany(Service::class, 'engagement_has_services')->withTimestamps();
+    }
+
+    public function employee(){
+        return $this->belongsToMany(Employee::class, 'engagement_has_employees')->withTimestamps();
+    }
+
+    public function report(){
+        return $this->hasMany(Report::class, 'reservation_id', 'id');
     }
 }

@@ -15,6 +15,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{{ route('calendar') }}">
+          <i class="fa fa-calendar pr-2"></i>
+          Calendar
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{{ route('engagement') }}">
           <i class="fa fa-calendar pr-2"></i>
           Engagements
@@ -32,6 +38,12 @@
           Reports
         </a>
       </li>
+      {{--<li class="nav-item">
+        <a class="nav-link" href="{{ route('survei') }}">
+          <i class="fa fa-clipboard pr-2"></i>
+          Survey Report
+        </a>
+      </li>--}}
       <li class="nav-item">
         <a class="nav-link" href="{{ route('statistic') }}">
           <i class="fa fa-area-chart pr-2"></i>

@@ -33,4 +33,8 @@ class Employee extends Model
     public function village(){
         return $this->belongsTo(Village::class);
     }
+
+    public function engagement(){
+        return $this->belongsToMany(Engagement::class, 'engagement_has_employees')->withTimestamps();
+    }
 }

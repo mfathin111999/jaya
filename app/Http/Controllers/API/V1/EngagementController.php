@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Domain\Engagement\Application\EngagementManagement;
+use App\Domain\Engagement\Factories\EngagementFactory;
 
 class EngagementController extends Controller
 {
@@ -24,7 +25,14 @@ class EngagementController extends Controller
     {
         $data = $this->engagement->allData();
 
-        return apiResponseBuilder(200, $data);
+        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+    }
+
+    public function getCalendarData()
+    {
+        $data = $this->engagement->getCalendarData();
+
+        return apiResponseBuilder(200, EngagementFactory::calendarFactory($data));
     }
 
     /**
@@ -46,9 +54,9 @@ class EngagementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function acc(Request $request)
+    public function action(Request $request)
     {
-        $data = $this->engagement->actionEngagement($request->id, 'acc');
+        $data = $this->engagement->actionEngagement($request['id'], $request['employee'], $request['action']);
 
         return apiResponseBuilder(200, $data);
     }
@@ -89,7 +97,14 @@ class EngagementController extends Controller
     {
         $data = $this->engagement->view($id);
 
-        return apiResponseBuilder(200, $data);
+        return apiResponseBuilder(200, EngagementFactory::viewFactory($data));
+    }
+
+    public function getByCode($code)
+    {
+        $data = $this->engagement->getByCode($code);
+
+        return apiResponseBuilder(200, EngagementFactory::viewFactory($data));
     }
 
     /**
