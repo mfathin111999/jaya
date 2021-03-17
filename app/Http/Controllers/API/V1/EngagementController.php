@@ -28,11 +28,42 @@ class EngagementController extends Controller
         return apiResponseBuilder(200, EngagementFactory::allFactory($data));
     }
 
+    public function indexSurveyer(Request $request)
+    {
+        $data = $this->engagement->allData($request);
+
+        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+    }
+
+    public function indexMandor(Request $request)
+    {
+        $data = $this->engagement->allDataMandor($request);
+
+        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+        // return $data;
+    }
+
     public function getCalendarData()
     {
         $data = $this->engagement->getCalendarData();
 
         return apiResponseBuilder(200, EngagementFactory::calendarFactory($data));
+    }
+
+    public function getCalendarDataSurveyer(Request $request)
+    {
+        $data = $this->engagement->getCalendarDataSurveyer($request);
+
+        return apiResponseBuilder(200, EngagementFactory::calendarFactory($data->engagement));
+        // return apiResponseBuilder(200, $request->id);
+    }
+
+    public function getCalendarDataMandor(Request $request)
+    {
+        $data = $this->engagement->getCalendarDataMandor($request);
+
+        return apiResponseBuilder(200, EngagementFactory::calendarFactory($data->engage));
+        // return apiResponseBuilder(200, $data);
     }
 
     /**
@@ -88,6 +119,19 @@ class EngagementController extends Controller
     }
 
     /**
+     * For finish the engagement
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function dealed($id)
+    {
+        $data = $this->engagement->deal($id);
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -118,6 +162,13 @@ class EngagementController extends Controller
 
         return apiResponseBuilder(200, $data);
 
+    }
+
+    public function addVendor(Request $request)
+    {
+        $data = $this->engagement->addVendor($request);
+
+        return apiResponseBuilder(200, $data, 'Success');
     }
 
     /**

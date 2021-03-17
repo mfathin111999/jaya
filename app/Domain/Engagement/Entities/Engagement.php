@@ -7,9 +7,13 @@ use App\Models\District;
 use App\Models\Regency;
 use App\Models\Province;
 use App\Domain\User\Entities\User;
+use App\Domain\User\Entities\User as Mandor;
 use App\Domain\Service\Entities\Service;
 use App\Domain\Employee\Entities\Employee;
+use App\Domain\Employee\Entities\Vendor as Customer;
+use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Report\Entities\Report;
+use App\Domain\Report\Entities\ReportGalleries;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,10 +24,14 @@ class Engagement extends Model
 
     protected $table = "engagements";
 
-    protected $fillable = ["code", "service_id", "user_id", "name", "email", "village_id", "district_id", "regency_id", "province_id", "phone_number", "description", "date", "time", 'status'];
+    protected $fillable = ["code", "service_id", "user_id", "name", "email", "village_id", "district_id", "regency_id", "province_id", "address", "phone_number", "description", "date", "time", 'status', 'locked'];
 
 	public function user(){
-    	return $this->belongsTo(Store::class, 'user_id', 'id');
+    	return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function mandor(){
+        return $this->belongsTo(Mandor::class, 'mandor_id', 'id');
     }
 
     public function village(){
@@ -47,10 +55,22 @@ class Engagement extends Model
     }
 
     public function employee(){
-        return $this->belongsToMany(Employee::class, 'engagement_has_employees')->withTimestamps();
+        return $this->belongsToMany(User::class, 'engagement_has_employees')->withTimestamps();
     }
 
     public function report(){
         return $this->hasMany(Report::class, 'reservation_id', 'id');
+    }
+
+    public function gallery(){
+        return $this->hasMany(ReportGalleries::class, 'reservation_id', 'id');
+    }
+
+    public function customer(){
+        return $this->hasOne(Customer::class, 'reservation_id', 'id');
+    }
+
+    public function vendor(){
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
     }
 }

@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST">
+      <form id="login">
         <div class="modal-body pl-4 pr-4">
           <div class="form-group">
             <label for="emailLogin">Email address</label>

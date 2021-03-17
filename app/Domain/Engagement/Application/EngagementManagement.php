@@ -2,11 +2,15 @@
 
 namespace App\Domain\Engagement\Application;
 
+use App\Mail\AccMail;
+use App\Mail\IgnoreMail;
+use App\Domain\User\Entities\User;
 use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Service\Entities\Service;
 use App\Domain\Engagement\Entities\EngagementHasEmployee;
 use App\Domain\Engagement\Service\GetCode;
 use App\Domain\Engagement\Service\GetResource;
+use Mail;
 
 class EngagementManagement
 {
@@ -17,14 +21,61 @@ class EngagementManagement
 		$this->getResource = $getResource;
 	}
 
-	public function allData(){
-		$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->get();
+	public function allData($request = null){
+		if ($request == null || empty($request)) {		
+			$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+		}else {
+			$id = $request->id;
+			$data = Engagement::whereHas('employee', function($query) use ($id) {
+				$query->where('user_id', $id);
+			})->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+		}
+
+		return $data;
+	}
+
+	public function allDataMandor($request){
+		$data = Engagement::where('mandor_id', $request->id)->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+
+		return $data;
+	}
+
+	public function deal($id){
+		$data = Engagement::where('id', $id)->first();
+
+		$data->locked 	 = 'deal';
+		$data->mandor_id = 7;
+
+		$data->save();
 
 		return $data;
 	}
 
 	public function getCalendarData(){
-		$data = Engagement::where('status', '!=', 'ignore')->with('province', 'regency', 'district', 'village', 'service')->get();
+		$data = Engagement::where('status', '!=', 'ignore')->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+
+		return $data;
+	}
+
+	public function getCalendarDataSurveyer($request){
+		$data = User::where('id', $request->id)
+				->with(['engagement' => function($query){
+					$query
+						->where('status', '!=', 'ignore')
+						->where('status', '!=', 'pending')
+						->with('province', 'regency', 'district', 'village', 'service')->withCount('report');
+				}])->first();
+
+		return $data;
+	}
+
+	public function getCalendarDataMandor($request){
+		$data = User::where('id', $request->id)
+				->with(['engage' => function($query){
+					$query
+						->where('locked', 'deal')
+						->with('province', 'regency', 'district', 'village', 'service')->withCount('report');
+				}])->first();
 
 		return $data;
 	}
@@ -59,6 +110,13 @@ class EngagementManagement
 		$data->status = $type;
 
 		$data->save();
+		// if ($type == 'acc') {
+		// 	Mail::to($data->email)
+  //       		->send(new AccMail($data));
+		// }elseif ($type == 'ignore') {
+		// 	Mail::to($data->email)
+  //       		->send(new IgnoreMail($data));
+		// }
 
 		if ($employee != null) {
 			$data->employee()->sync($employee);
@@ -79,8 +137,28 @@ class EngagementManagement
 		return $data;
 	}
 
+	public function getById($id){
+		$engagement = Engagement::where('id', $id)
+			->with(['province', 'regency', 'district', 'village', 'service', 'gallery', 'customer', 'vendor', 'report' => function($query){
+				$query->whereNull('parent_id')->with(['subreport' => function($query){
+					$query->orderBy('id', 'desc');
+				}]);
+			}])->first();
+
+		return $engagement;
+	}
+
 	public function getByCode($code){
-		$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->where('code', $code)->first();
+		$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->withCount('report')->where('code', $code)->first();
+
+		return $data;
+	}
+
+	public function addVendor($request){
+		$data = Engagement::where('id', $request['id'])->first();
+
+		$data->vendor_id = $request['vendor'];
+		$data->save();
 
 		return $data;
 	}

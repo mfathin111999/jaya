@@ -12,6 +12,4 @@ class Resource extends Model
 
     protected $table = "resources";
 
-    protected $fillable = ['name', 'type', 'type_service', 'description', 'price', 'width', 'length', 'height', 'unit', 'color', 'material'];
-
 }

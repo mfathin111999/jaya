@@ -21,7 +21,17 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        $data = $this->resource->allData();
+        $data = $this->resource->allResource();
+
+        return response()->json([
+            'status'    => 200,
+            'data'      => $data,
+        ]);
+    }
+
+    public function allUnit()
+    {
+        $data = $this->resource->allUnit();
 
         return response()->json([
             'status'    => 200,
@@ -34,9 +44,9 @@ class ResourceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createStep(Request $request)
+    public function createUnit(Request $request)
     {
-        $data = $this->resource->storeStep($request);
+        $data = $this->resource->createUnit($request);
 
         return response()->json([
             'status'    => 200,
@@ -44,20 +54,6 @@ class ResourceController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createResource(Request $request)
-    {
-        $data = $this->resource->storeResource($request);
-
-        return response()->json([
-            'status'    => 200,
-            'data'      => $data,
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -65,30 +61,14 @@ class ResourceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateStep(Request $request, $id)
+    public function updateUnit(Request $request, $id)
     {
-        $data = $this->resource->updateStep($id, $request);
+        $data = $this->resource->updateUnit($id, $request);
 
         return response()->json([
             'status'    => 200,
             'data'      => $data,
         ]);        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateResource(Request $request, $id)
-    {
-        $data = $this->resource->updateResource($id, $request);
-
-        return response()->json([
-            'status'    => 200,
-            'data'      => $data,
-        ]);
     }
 
     /**

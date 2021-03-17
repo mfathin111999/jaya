@@ -29,6 +29,8 @@ class CreateEngagementTable extends Migration
             $table->integer('province_id')->unsigned()->index()->nullable();
             $table->text('description');
             $table->string('status', 30)->default('pending');
+            $table->string('termin', 30)->nullable();
+            $table->integer('vendor_id')->unsigned()->index();
             $table->timestamps();
             $table->softDeletes();
         });

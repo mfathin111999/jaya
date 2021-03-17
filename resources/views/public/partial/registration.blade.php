@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST">
+      <form id="registration">
         <div class="modal-body pl-4 pr-4">
           <div class="form-group">
             <label for="nameSign">Nama Lengkap</label>

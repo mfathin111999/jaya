@@ -80,20 +80,26 @@ function calendarInit(data){
       eventClick: function(info) {
         axios.get('api/engagement/getByCode/'+info.event.title).then(function(response){
             let view = response.data.data;
-
-            document.getElementById('action').value = '';
-            $('#employee').val(null).trigger('change');
-            $('#id').val(view.id);
-            $('#name').val(view.name);
-            $('#code').val(view.code);
-            $('#email').val(view.email);
-            $('#phone_number').val(view.phone_number);
-            $('#date').val(view.date);
-            $('#time').val(view.time);
-            $('#service').html(view.service);
-            $('#address').html(view.address+' '+view.village+', '+view.district+', '+view.regency+', '+view.province);
-            $('#description').html(view.description);
-            $('#actionModal').modal('show');
+            console.log(view);
+            if (view.status == 'acc' && view.report_count == 0) {
+              window.location ="report_survey/"+view.id;
+            }else if (view.status == 'acc' && view.report_count != 0) {
+              window.location ="report_view/"+view.id;
+            }else if (view.status == 'pending'){
+              document.getElementById('action').value = '';
+              $('#employee').val(null).trigger('change');
+              $('#id').val(view.id);
+              $('#name').val(view.name);
+              $('#code').val(view.code);
+              $('#email').val(view.email);
+              $('#phone_number').val(view.phone_number);
+              $('#date').val(view.date);
+              $('#time').val(view.time);
+              $('#service').html(view.service);
+              $('#address').html(view.address+' '+view.village+', '+view.district+', '+view.regency+', '+view.province);
+              $('#description').html(view.description);
+              $('#actionModal').modal('show');
+            }
         });
       }
     });

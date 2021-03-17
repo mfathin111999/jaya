@@ -21,9 +21,7 @@
 
 		@yield('sec-css')
 	</head>
-	<body style="font-family: 'Montserrat', sans-serif; font-size: 14px; overflow-x: hidden;">
-		@include('public.partial.login')
-		@include('public.partial.registration')
+	<body style="font-family: 'Montserrat', sans-serif; font-size: 12px; overflow-x: hidden;">
 
 		@yield('content')
 
@@ -38,17 +36,9 @@
 		<script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('js/owl.carousel.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
-		<script type="text/javascript">
-			$('#trigSign').click(function(){
-				$('#signUp').modal('toggle')
-				$('#signUp').modal('show');
-			});
-
-			$('#trigLog').click(function(){
-				$('#loginModal').modal('toggle');
-				$('#loginModal').modal('show');
-			});
-		</script>
+		
+		@yield('header-js')
 		@yield('sec-js')
+		@yield('footer-js')
 	</body>
 </html>

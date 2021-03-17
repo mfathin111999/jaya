@@ -3,52 +3,125 @@
 namespace App\Domain\Report\Application;
 
 use App\Domain\Report\Entities\Report;
+use App\Domain\Report\Entities\ReportGalleries;
+use App\Domain\Engagement\Entities\Engagement;
+use App\Domain\Employee\Entities\Vendor;
 use App\Models\Village;
 use App\Models\District;
 use App\Models\Regency;
 use App\Models\Province;
+use App\Shared\Uploader;
 
 class ReportManagement
 {
-	public function __construct(){
+	protected $upload;
 
+	public function __construct(Uploader $upload){
+		$this->upload = $upload;
+	}
+
+	public function getByIdEngagement($id){
+		$engagement = Engagement::where('id', $id)
+					->with(['gallery', 'vendor', 'customer', 'report' => function($query){
+						$query->whereNull('parent_id')->with(['subreport' => function($query){
+							$query->orderBy('id', 'desc');
+						}]);
+					}])->first();
+
+		return $engagement;
 	}
 
 	public function call($request){
 		$array = [];
-		foreach ($request['data'] as $key) {
+		$datas = json_decode($request['data']);
+		foreach ($datas as $key) {
 			$data 	= new Report;
-			$data2 	= new Report;
-		 	$data->reservation_id = $request['id'];
-		 	$data->name = $key['name_part'];
+		 	$data->reservation_id 	= $request['id'];
+		 	$data->name 			= $key->name_part;
 
 		 	$data->save();
-		 	$array[] = $data;
+		 	$array[] 				= $key;
 
-		 	foreach ($key['detail'] as $value) {
+		 	foreach ($key->detail as $value) {
+				$data2 	= new Report;
 		 		$data2->reservation_id 	= $request['id'];
 		 		$data2->parent_id 		= $data->id;
-		 		$data2->name 			= $value['name_point'];
-		 		$data2->volume			= $value['volume'];
-		 		$data2->unit			= $value['unit'];
+		 		$data2->name 			= $value->name_point;
+		 		$data2->volume			= $value->volume;
+		 		$data2->unit			= $value->unit;
 
 		 		$data2->save();
-		 		$array[] = $data2;
+		 		$array[] = $value;
 
 		 	}
 		}
+
+		$partner 	= json_decode($request['partner']);
+		$vendor  	= new Vendor;
+		$search_key = explode(" ", $partner->name);
+
+		$vendor->name 			= $partner->name; 
+		$vendor->phone_number 	= $partner->phone_number; 
+		$vendor->email 			= $partner->email; 
+		$vendor->address 		= $partner->address; 
+		$vendor->ktp 			= $partner->ktp; 
+		$vendor->customer 		= 'yes';
+		$vendor->vendor 		= 'no';
+		$vendor->search_key 	= strtolower($search_key[0]);
+		$vendor->reservation_id = $request['id'];
+
+		$vendor->save();
+
+		$images = [];
+		
+		foreach ($request['image'] as $key2) {
+			$images[] = ['reservation_id' => $request['id'], 'image' => $this->upload->uploadImage($key2)];
+		}
+
+		$galleries = ReportGalleries::insert($images);
 
 		return $array;
 	}
 
 	public function getByEngagement($id){
-		$data = Report::where('reservation_id', $id)->count();
+		$data = Report::where('reservation_id', $id)->get()->count();
+
+		return $data;
+	}
+
+	public function price($request){
+		$data = Report::where('id', $request->id)->first();
+
+		$data->price_clean 	= $request->price_clean;
+		$data->price_dirt 	= $request->price_dirt;
+		// $data->status 		= 'deal';
+
+		$data->save();
+
+		return $data;
+	}
+
+	public function termin($request){
+		$data = Report::where('id', $request->id)->first();
+
+		$data->price_clean 	= $request->total_clean;
+		$data->price_dirt 	= $request->total_dirt;
+		$data->status 		= 'deal';
+		$data->termin 		= $request->termin;
+
+		$data->save();
 
 		return $data;
 	}
 
 	public function delete($id){
 		$data = Report::find($id)->delete();
+
+		return $data;
+	}
+
+	public function view($id){
+		$data = Engagement::where('id', $id)->with('report', 'gallery')->get();
 
 		return $data;
 	}

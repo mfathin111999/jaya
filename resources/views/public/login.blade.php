@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-4 mx-auto">
 					<div class="card">
-						<form method="POST">
+						<form method="POST" action="{{ url('api/login') }}">
 							<div class="card-header text-center">
 								<img src="{{ asset('img/logo.png') }}" style="max-width: 50px;">
 							</div>

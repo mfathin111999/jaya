@@ -14,66 +14,45 @@ class ResourceManagement
 
 	}
 
-	public function allData(){
+	public function allResource(){
 		$data = Resource::all();
 
-		return $data;
+		$unit = [];
+
+		foreach ($data as $key) {
+			if ($key->type == 'unit') {
+				$unit[] = $key;
+			}
+		}
+
+		return compact('unit');
 	}
 
-	public function storeStep($request){
-		$data = Resource::create([
-			'name' 			=> $request->name,
-			'type' 			=> $request->type,
-			'type_service' 	=> $request->type_service,
-			'description' 	=> $request->description,
-		]);
-
-		return $data;
-	}
-
-	public function storeResource($request){
-		$data = Resource::create([
-			'name' 			=> $request->name,
-			'type' 			=> $request->type,
-			'description' 	=> $request->description,
-			'price'			=> $request->price ?? null,
-			'unit'			=> $request->unit ?? null,
-			'width'			=> $request->width ?? null,
-			'length'		=> $request->length ?? null,
-			'height'		=> $request->height ?? null,
-			'color'			=> $request->color ?? null,
-			'material'		=> $request->material ?? null,
-		]);
+	public function allUnit(){
+		$data = Resource::where('type', 'unit')->get();
 
 		return $data;
 	}
 
-	public function updateResource($id, $request){
-		$data = Resource::find($id);
+	public function createUnit($request){
+		$data = new Resource;
 
-		$data->name 		= $request->name;
-		$data->type 		= $request->type;
-		$data->description 	= $request->description;
-		$data->price 		= $request->price ?? null;
-		$data->unit 		= $request->unit ?? null;
-		$data->width 		= $request->width ?? null;
-		$data->length 		= $request->length ?? null;
-		$data->height 		= $request->height ?? null;
-		$data->color 		= $request->color ?? null;
-		$data->material 	= $request->material ?? null;
+		$data->type 	= 'unit';
+		$data->name 	= $request->name;
+		$data->data1 	= $request->data1;
+		$data->data2	= $request->data2;
 
 		$data->save();
 
 		return $data;
 	}
 
-	public function updateStep($id, $request){
+	public function updateUnit($id, $request){
 		$data = Resource::find($id);
-		
-		$data->name 		= $request->name;
-		$data->type 		= $request->type;
-		$data->type_service	= $request->type_service;
-		$data->description 	= $request->description;
+
+		$data->name 	= $request->name;
+		$data->data1 	= $request->data1;
+		$data->data2 	= $request->data2;
 
 		$data->save();
 

@@ -27,6 +27,20 @@ class EmployeeController extends Controller
         return apiResponseBuilder(200, $data);
     }
 
+    public function allBusiness()
+    {
+        $data = $this->employee->allBusiness();
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function allVendor()
+    {
+        $data = $this->employee->allVendor();
+
+        return apiResponseBuilder(200, $data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -40,6 +54,13 @@ class EmployeeController extends Controller
         return apiResponseBuilder(200, $data);
     }
 
+    public function createVendor(Request $request)
+    {
+        $data = $this->employee->storeVendor($request);
+
+        return apiResponseBuilder(200, $data);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -49,6 +70,13 @@ class EmployeeController extends Controller
     public function view($id)
     {
         $data = $this->employee->view($id);
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function viewVendor($id)
+    {
+        $data = $this->employee->viewVendor($id);
 
         return apiResponseBuilder(200, $data);
     }
@@ -67,6 +95,13 @@ class EmployeeController extends Controller
         return apiResponseBuilder(200, $data);
     }
 
+    public function updateVendor(Request $request, $id)
+    {
+        $data = $this->employee->updateVendor($id, $request);
+
+        return apiResponseBuilder(200, $data);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -76,6 +111,13 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $data = $this->employee->delete($id);
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function destroyVendor($id)
+    {
+        $data = $this->employee->deleteVendor($id);
 
         return apiResponseBuilder(200, $data);
     }

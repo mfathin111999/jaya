@@ -2,6 +2,7 @@
 
 namespace App\Domain\Employee\Application;
 
+use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Employee\Entities\Employee;
 use App\Domain\Employee\Entities\EmployeeHasWork;
 use App\Shared\Uploader;
@@ -21,6 +22,18 @@ class EmployeeManagement
 		return $data;
 	}
 
+	public function allBusiness(){
+		$data = Vendor::all();
+
+		return $data;
+	}
+
+	public function allVendor(){
+		$data = Vendor::where('vendor', 'yes')->get();
+
+		return $data;
+	}
+
 	public function storeEmployee($request){
 		$image = $this->upload->uploadImage($request->picture);
 
@@ -36,6 +49,28 @@ class EmployeeManagement
 			'regency_id'		=> $request->regency_id,
 			'province_id'		=> $request->province_id,
 		]);
+
+		return $data;
+	}
+
+	public function storeVendor($request){
+		$data = new Vendor;
+
+		$data->name 				= $request->name ?? null;
+		$data->email 				= $request->email ?? null;
+		$data->tax_id				= $request->tax_id ?? null;
+		$data->phone_number			= $request->phone_number ?? null;
+		$data->search_key 			= $request->search_key ?? null;
+		$data->customer 			= $request->customer ?? null;
+		$data->vendor 				= $request->vendor ?? null;
+		$data->bank_name 			= $request->bank_name ?? null;
+		$data->bank_account_name	= $request->bank_account_name ?? null;
+		$data->bank_account_number	= $request->bank_account_number ?? null;
+		$data->owner				= $request->owner ?? null;
+		$data->address				= $request->address ?? null;
+		$data->ktp					= $request->ktp ?? null;
+
+		$data->save();
 
 		return $data;
 	}
@@ -62,6 +97,28 @@ class EmployeeManagement
 		return $data;
 	}
 
+	public function updateVendor($id, $request){
+		$data = Vendor::find($id);
+		
+		$data->name 				= $request->name ?? null;
+		$data->email 				= $request->email ?? null;
+		$data->tax_id				= $request->tax_id ?? null;
+		$data->phone_number			= $request->phone_number ?? null;
+		$data->search_key 			= $request->search_key ?? null;
+		$data->customer 			= $request->customer ?? null;
+		$data->vendor 				= $request->vendor ?? null;
+		$data->bank_name 			= $request->bank_name ?? null;
+		$data->bank_account_name	= $request->bank_account_name ?? null;
+		$data->bank_account_number	= $request->bank_account_number ?? null;
+		$data->owner				= $request->owner ?? null;
+		$data->address				= $request->address ?? null;
+		$data->ktp					= $request->ktp ?? null;
+
+		$data->save();
+
+		return $data;
+	}
+
 	public function view($id){
 		$data = Employee::find($id);
 
@@ -70,10 +127,24 @@ class EmployeeManagement
 		return $data;
 	}
 
+	public function viewVendor($id){
+		$data = Vendor::find($id);
+
+		return $data;
+	}
+
 	public function delete($id){
 		$data = Employee::find($id);
 
 		$this->upload->deleteImage($data->picture);
+
+		$data->delete();
+
+		return $data;
+	}
+
+	public function deleteVendor($id){
+		$data = Vendor::find($id);
 
 		$data->delete();
 

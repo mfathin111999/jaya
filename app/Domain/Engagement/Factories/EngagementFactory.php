@@ -27,8 +27,10 @@ class EngagementFactory
                 'time'              => $item->time,
                 'description'       => $item->description,
                 'status'            => $item->status,
+                'locked'            => $item->locked,
                 'phone_number'      => $item->phone_number,
                 'service'           => self::serviceFactory($item->service),
+                'count'             => $item->report_count,
             ];
         }
         return $data;
@@ -58,6 +60,10 @@ class EngagementFactory
                 'service'           => self::serviceFactory($item->service),
             ];
 
+        if (isset($item->report_count)) {
+            $data['report_count'] = $item->report_count;
+        }
+
         return $data;
     }
 
@@ -78,8 +84,8 @@ class EngagementFactory
     			'title' 			=> $key->code,
 				'start' 			=> date('Y-m-d H:m', strtotime($key->date.' '. $key->time,)),
 		      	'allDay' 			=> true,
-		      	'backgroundColor' 	=> $key->status == 'pending' ? '#f56954' : '#007bff',
-		      	'borderColor' 		=> $key->status == 'pending' ? '#f56954' : '#007bff',
+                'backgroundColor'   => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
+                'borderColor'       => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
     		]; 	
     	}
 

@@ -39,7 +39,7 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
           	<div class="card">
 				<div class="card-header">
-					<h3 class="text-center">Report Survey</h3>
+					<h3 class="text-center">Add Time Line</h3>
 					<h3 class="text-center"><strong>@{{ view.code }} - @{{ view.name }}</strong></h3>
 
 					<div class="btn-group mb-3">
@@ -58,6 +58,7 @@
 							<div class="col-md-12">
 								<div class="btn-group mb-3">
 		                <button type="button" class="btn btn-sm btn-outline-secondary" v-on:click='addNewPoint(index)' style="font-size: 12px;"><i class="fa fa-plus pr-2"></i>Tambah Point Detail</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" v-on:click='addNewPoint(index)' style="font-size: 12px;"><i class="fa fa-plus pr-2"></i>Tambah Gambar</button>
 		            </div>
 							</div>
 							<div class="col-md-12">
@@ -80,6 +81,13 @@
 									</div>
 								</div>
 							</div>
+              <div class="col-md-12">
+                <div class="row mt-3" v-for='(form1, index) in data[index].detail'>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" v-model = 'form1.name_point' required="">
+                  </div>
+                </div>
+              </div>
 						</div>
 					</div>
 					<div class="card-footer text-center">

@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\UserController;
+use App\Http\Controllers\API\V1\ReportController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/report/printEngagement/{id}', [ReportController::class, 'printPDF']);
 
 Route::get('/', function () {
     return view('public/home');
@@ -65,6 +71,10 @@ Route::get('/work', function(){
 	return view('admin.work');
 })->name('work');
 
+Route::get('/vendor', function(){
+	return view('admin.vendor');
+})->name('vendor');
+
 Route::get('/report', function(){
 	return view('admin.report');
 })->name('report');
@@ -94,5 +104,20 @@ Route::get('/setting_application', function(){
 })->name('setting_application');
 
 Route::get('/report_survey/{id}', function($id){
-	return view('admin.reportsurvey', compact('id'));
+	return view('admin.report_survey', compact('id'));
 })->name('survei');
+
+Route::get('/report_vendor/{id}', function($id){
+	return view('admin.report_vendor', compact('id'));
+})->name('survei');
+
+Route::get('/report_view/{id}', function($id){
+	return view('admin.report_view', compact('id'));
+})->name('survei_view');
+
+Route::prefix('auth')->group(function () {
+	Route::post('/setSession', [UserController::class, 'setToken']);
+	Route::post('/set', [AuthController::class, 'setSession']);
+	Route::post('/update', [AuthController::class, 'updateSession']);
+	Route::get('/delete', [AuthController::class, 'deleteSession']);
+});

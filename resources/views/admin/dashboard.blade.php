@@ -1,68 +1,231 @@
 @extends('layout.app')
 
-@section('content')
-  <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-2 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" href="#">Sign out</a>
-      </li>
-    </ul>
-  </nav>
+@if(session('id') == null || session('role') == 4)
+  <script type="text/javascript">
+    window.location = "{{ route('home') }}";
+  </script>
+@else
 
-  <div class="container-fluid" style="margin-top: 60px;">
-    <div class="row">
-      @include('layout.admin_side')
-      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Dashboard</h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-              <button class="btn btn-sm btn-outline-secondary">Share</button>
-              <button class="btn btn-sm btn-outline-secondary">Export</button>
+  @section('content')
+    @include('layout.admin_header')
+
+    <div class="container-fluid" style="margin-top: 60px;">
+      <div class="row">
+        @include('layout.admin_side')
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4 font-weight-bold">DASHBOARD</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
             </div>
-            <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-              <span data-feather="calendar"></span>
-              This week
-            </button>
           </div>
-        </div>
-        <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-      </main>
+          <div class="row">
+            <div class="col-md-4 mt-3">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center text-center">
+                      <i class="fa fa-calendar" style="font-size: 50px;"></i>
+                    </div>
+                    <div class="col-md-9 align-items-center">
+                      <label class="h6 font-weight-bold">Jumlah Reservasi</label><br>
+                      <label>100 Reservasi</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center text-center">
+                      <i class="fa fa-rocket" style="font-size: 50px;"></i>
+                    </div>
+                    <div class="col-md-9 align-items-center">
+                      <label class="h6 font-weight-bold">Reservasi Berjalan</label><br>
+                      <label>37 Reservasi</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center text-center">
+                      <i class="fa fa-close" style="font-size: 50px;"></i>
+                    </div>
+                    <div class="col-md-9 align-items-center">
+                      <label class="h6 font-weight-bold">Reservasi Ditolak</label><br>
+                      <label>33 Reservasi</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center text-center">
+                      <i class="fa fa-check" style="font-size: 50px;"></i>
+                    </div>
+                    <div class="col-md-9 align-items-center">
+                      <label class="h6 font-weight-bold">Reservasi Selesai</label><br>
+                      <label>40 Reservasi</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-3">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center text-center">
+                      <i class="fa fa-dollar" style="font-size: 50px;"></i>
+                    </div>
+                    <div class="col-md-9 align-items-center">
+                      <label class="h6 font-weight-bold">Pendapatan Bulan Maret</label><br>
+                      <label>Rp. 12.000.000</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6 mt-3">
+                  <div class="card">
+                    <div class="card-header text-center">
+                      <label class="m-0">Reservasi Bulan Maret</label>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="myChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                  <div class="card">
+                    <div class="card-header text-center">
+                      <label class="m-0">Reservasi Bulan Maret</label>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="myChart1"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mt-3">
+                  <div class="card">
+                    <div class="card-header text-center">
+                      <label class="m-0">Reservasi Bulan Maret</label>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="myChart2"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-  </div>
 
-@endsection
-@section('sec-js')
-    <script type="text/javascript" src="{{asset('js/Chart.min.js')}}"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
-@endsection
+  @endsection
+  @section('sec-js')
+      <script type="text/javascript" src="{{asset('js/chart.min.js')}}"></script>
+      <script type="text/javascript">
+          var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+          var ctx = document.getElementById('myChart');
+          var ctx1 = document.getElementById('myChart1');
+          var ctx2 = document.getElementById('myChart2');
+
+          var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                  labels: ['Ditolak', 'Berjalan', 'Selesai'],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [33, 37, 40],
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                    ],
+                    borderWidth: 2
+                  }]
+              },
+          });
+
+          var myChart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Ditolak', 'Berjalan', 'Selesai'],
+                datasets: [{
+                    label: 'Reservasi',
+                    data: [33, 37, 40],
+                    maxBarThickness: 50,
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+          });
+
+          var myChart2 = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Ditolak', 'Berjalan', 'Selesai'],
+                datasets: [{
+                    label: 'Ditolak',
+                    backgroundColor : 'transparent',
+                    borderColor : 'rgba(255, 99, 132)',
+                    data: [
+                        23, 17, 40
+                    ],
+                },
+                {
+                    label: 'Berjalan',
+                    backgroundColor : 'transparent',
+                    borderColor : 'rgba(54, 162, 235)',
+                    data: [
+                        33, 21, 10
+                    ],
+                },
+                {
+                    label: 'Selesai',
+                    backgroundColor : 'transparent',
+                    borderColor : 'rgba(255, 206, 86)',
+                    data: [
+                        23, 29, 21
+                    ],
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+          });
+      </script>
+  @endsection
+@endif

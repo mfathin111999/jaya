@@ -1,51 +1,40 @@
-<footer class="footer-area p-4" style="background-color: #aeaeae;">
-    <div class="container">
-        <div class="row justify-content-between">
-            <div class="col-sm-6 col-md-4 col-xl-3">
-                <div class="single-footer-widget footer_1">
-                    <a href="{{ url('/') }}"> 
-                        <img src="" width="120px" alt=""> 
-                    </a>
-                    <p>@lang('jp.footer_public_content')</p>
+<section class="mt-5 bg-info">
+    <div class="container pt-4">
+        <div class="row" style="line-height: 1.5rem;">
+            <div class="col-12 col-md-4 text-white">
+                <div class="max-height-100 text-center">
+                    <img src="{{ asset('img/logo.png') }}" class="img-fluid" style="max-width: 50px;">
+                </div>
+                <div class="mb-3 mt-5">
+                    <p class="text-center f-light">Memberikan solusi terbaik untuk kebutuhan rumah anda, dengan perencanaan yang baik dan hasil yang maksimal.</p>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-4 col-xl-4">
-                <div class="single-footer-widget footer_2">
-                    <h4>@lang('jp.sns')</h4>
-                    <div class="social_icon">
-                        <a href="https://www.facebook.com/yoyaku.id"> <i class="ti-facebook"></i> </a>
-                        <a href="https://www.instagram.com/yoyaku_id/"> <i class="ti-instagram"></i> </a>
-                        <a href="http://yoyaku.id/"> <i class="ti-wordpress"></i> </a>
-                        <a href="#"> <i class="ti-twitter-alt"></i> </a>
-                    </div>
+            <div class="col-12 col-md-4 text-center text-white">
+                <div class="max-height-100">
+                    <h4 class="font-weight-bold">Social Media</h4>
+                </div>
+                <div class="mb-3 mt-3">
+                    <i class="fa fa-facebook fa-lg pr-3"></i>
+                    <i class="fa fa-instagram fa-lg pr-3"></i>
+                    <i class="fa fa-twitter fa-lg"></i>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 col-md-4">
-                <div class="single-footer-widget footer_2">
-                    <h4>@lang('jp.contact_us')</h4>
-                    <div class="contact_info">
-                        <p>Paskal Hyper Square A-59 3rd Floor <br>
-                        Jl. Pasirkaliki No. 25-27, Bandung 40181</p>
-                    </div>
+            <div class="col-12 col-md-4 text-center text-white">
+                <div class="max-height-100">
+                    <h4 class="font-weight-bold text-center">Hubungi Kami</h4>
+                </div>
+                <div class="mb-3 mt-3">
+                    <p class="mb-0 f-light">+62881023554758 (WA / Tlp)</p>
+                    <p class="mb-0 f-light">mfathin111999@gmail.com</p>
+                    <p class="f-light">Jln. Perkasa No.322 Ds. Citalugtug Kec. Arjamulya Kab. Kulonuwon - Jawa Barat</p>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="copyright_part_text text-center">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <p class="footer-text m-0">
-                                All Right Reserved &copy; 2020 Rent Yoyaku by 
-                                <a href="https://sumroch.co.id" target="_blank" class="text-info">Sumroch Inc.</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+@section('footer-js')
+    <script type="text/javascript">
+        
+    </script>
+@endsection
