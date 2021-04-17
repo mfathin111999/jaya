@@ -23,7 +23,7 @@ class UserController extends Controller
 
         $message = "Login Error";
         if ($validator->fails()) {
-            return apiResponseBuilder(401, $validator->errors(), $message);
+            return apiResponseBuilder(200, $validator->errors(), $message);
         }
 
         $credentials                = $request->only('email', 'password');

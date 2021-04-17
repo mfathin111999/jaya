@@ -226,7 +226,7 @@
           @include('layout.admin_side')
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h1 class="h4 font-weight-bold">PENGATURAN USER</h1>
+              <h1 class="h4 font-weight-bold">SURVEYER</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
                   <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
@@ -263,6 +263,15 @@
               </table>
             </div>
 
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+              <h1 class="h4 font-weight-bold">MANDOR</h1>
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2">
+                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
+                </div>
+              </div>
+            </div>
+
             <div class="table">
               <table id="example2" class="table table-striped table-bordered" style="width:100%">
                 <thead>
@@ -290,6 +299,15 @@
                     </tr>
                 </tbody>
               </table>
+            </div>
+
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+              <h1 class="h4 font-weight-bold">VENDOR</h1>
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2">
+                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
+                </div>
+              </div>
             </div>
 
             <div class="table">

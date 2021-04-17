@@ -40,6 +40,18 @@ class EngagementManagement
 		return $data;
 	}
 
+	public function allDataVendor($request){
+		$data = Engagement::where('vendor_id', $request->id)
+							->where('status', '!=', 'finish')
+							->with(['regency', 'service', 'report' => function($query){
+								$query->whereNull('parent_id')->with(['subreport' => function($query){
+									$query->orderBy('id', 'desc');
+								}]);
+							}])->get();
+
+		return $data;
+	}
+
 	public function deal($id){
 		$data = Engagement::where('id', $id)->first();
 
@@ -161,6 +173,46 @@ class EngagementManagement
 		$data->save();
 
 		return $data;
+	}
+
+	public function accVendor($id){
+		$data = Engagement::find($id);
+
+		$data->vendor_is = 1;
+
+		$data->save();
+
+		return 'success';
+	}
+
+	public function accCustomer($id){
+		$data = Engagement::find($id);
+
+		$data->customer_is = 1;
+
+		$data->save();
+
+		return 'success';
+	}
+
+	public function notVendor($id){
+		$data = Engagement::find($id);
+
+		$data->vendor_is = 99;
+
+		$data->save();
+
+		return 'success';
+	}
+
+	public function notCustomer($id){
+		$data = Engagement::find($id);
+
+		$data->customer_is = 99;
+
+		$data->save();
+
+		return 'success';
 	}
 
 	public function delete($id){

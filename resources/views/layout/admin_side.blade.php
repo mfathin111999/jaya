@@ -21,11 +21,23 @@
         </a>
       </li>
       <li class="nav-item">
+        @if(session('role') == 5)
+        <a class="nav-link text-white" href="{{ route('engagement_vendor') }}">
+        @else
         <a class="nav-link text-white" href="{{ route('engagement') }}">
+        @endif
           <i class="fa fa-calendar pr-2"></i>
           RESERVASI
         </a>
       </li>
+      @if(session('role') == 5)
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('engagement_history') }}">
+          <i class="fa fa-calendar pr-2"></i>
+          HISTORY
+        </a>
+      </li>
+      @endif
       @if(session('role') == 1)
       <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('vendor') }}">

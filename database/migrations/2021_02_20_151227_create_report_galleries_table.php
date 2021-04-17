@@ -15,7 +15,7 @@ class CreateReportGalleriesTable extends Migration
     {
         Schema::create('report_galleries', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('reservation_id')->unsigned()->index();
+            $table->integer('report_id')->unsigned()->index();
             $table->string('image')->nullable();
             $table->timestamps();
         });

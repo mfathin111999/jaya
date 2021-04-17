@@ -16,11 +16,9 @@ class EngagementController extends Controller
         $this->engagement = $engagement;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    // GET DATA ENGAGEMENT BY ROLE
+
     public function index()
     {
         $data = $this->engagement->allData();
@@ -42,6 +40,16 @@ class EngagementController extends Controller
         return apiResponseBuilder(200, EngagementFactory::allFactory($data));
         // return $data;
     }
+
+    public function indexVendor(Request $request)
+    {
+        $data = $this->engagement->allDataVendor($request);
+
+        return apiResponseBuilder(200, EngagementFactory::vendorFactory($data));
+        // return $data;
+    }
+
+    // GET CALENDAR
 
     public function getCalendarData()
     {
@@ -66,11 +74,8 @@ class EngagementController extends Controller
         // return apiResponseBuilder(200, $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // STORE METHOD
+
     public function createEngagement(Request $request)
     {
         $data = $this->engagement->storeEngagement($request);
@@ -79,64 +84,15 @@ class EngagementController extends Controller
 
     }
 
-    /**
-     * For acc the engagement
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function action(Request $request)
+    public function addVendor(Request $request)
     {
-        $data = $this->engagement->actionEngagement($request['id'], $request['employee'], $request['action']);
+        $data = $this->engagement->addVendor($request);
 
-        return apiResponseBuilder(200, $data);
+        return apiResponseBuilder(200, $data, 'Success');
     }
 
-    /**
-     * For ignore the engagement
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function ignore(Request $request)
-    {
-        $data = $this->engagement->actionEngagement($request->id, 'ignore');
+    // GET METHOD
 
-        return apiResponseBuilder(200, $data);
-    }
-
-    /**
-     * For finish the engagement
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function finish(Request $request)
-    {
-        $data = $this->engagement->actionEngagement($request->id, 'finish');
-
-        return apiResponseBuilder(200, $data);
-    }
-
-    /**
-     * For finish the engagement
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function dealed($id)
-    {
-        $data = $this->engagement->deal($id);
-
-        return apiResponseBuilder(200, $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function view($id)
     {
         $data = $this->engagement->view($id);
@@ -151,11 +107,6 @@ class EngagementController extends Controller
         return apiResponseBuilder(200, EngagementFactory::viewFactory($data));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getAvailableDate()
     {
         $data = $this->engagement->getDate();
@@ -164,19 +115,55 @@ class EngagementController extends Controller
 
     }
 
-    public function addVendor(Request $request)
+    public function accVendor($id, Request $request)
     {
-        $data = $this->engagement->addVendor($request);
+        if ($request['type'] == 'not') {
+            $data = $this->engagement->notVendor($id);
+        }else if ($request['type'] == 'acc') {
+            $data = $this->engagement->accVendor($id);
+        }
+        return apiResponseBuilder(200, $data);
 
-        return apiResponseBuilder(200, $data, 'Success');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function accCustomer($id, Request $request)
+    {
+        $data = $this->engagement->accCustomer($id);
+
+        return view('public.home');
+
+    }
+
+    // ACTION METHOD
+
+    public function action(Request $request)
+    {
+        $data = $this->engagement->actionEngagement($request['id'], $request['employee'], $request['action']);
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function ignore(Request $request)
+    {
+        $data = $this->engagement->actionEngagement($request->id, 'ignore');
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function finish(Request $request)
+    {
+        $data = $this->engagement->actionEngagement($request->id, 'finish');
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function dealed($id)
+    {
+        $data = $this->engagement->deal($id);
+
+        return apiResponseBuilder(200, $data);
+    }
+
     public function destroy($id)
     {
         $data = $this->engagement->delete($id);

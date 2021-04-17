@@ -147,24 +147,24 @@
                       <td>@{{ item.date }} @{{ item.time }}</td>
                       <td>@{{ item.regency }}</td>
 
-                      <td v-if='item.status == "acc" && item.count == 0'>Diterima</td>
+                      <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Diterima</td>
                       <td v-if='item.status == "ignore"'>Ditolak</td>
-                      <td v-if='item.status == "acc" && item.count > 0'>Telah Disurvei</td>
-                      <td v-if='item.status == "deal"'>Telah Disepakati</td>
+                      <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>Telah Disurvei</td>
+                      <td v-if='item.status == "acc" && item.locked == "deal"'>Telah Disepakati</td>
                       <td v-if='item.status == "pending"'>Belum Dikonfirmasi</td>
 
                       <td>
                         @if(auth()->user()->role == 1)
                         <a class="btn btn-info" href="#" type="button" data-toggle="modal" data-target="#actionModal" v-on:click='viewData(item.id)' v-if = 'item.status == "pending"'><i class="fa fa-eye"></i></a>
                         <!-- <a class="btn btn-danger" href="#" type="button" v-on:click='deleteItem(item.id)' v-if='item-status'><i class="fa fa-trash"></i></a> -->
-                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.count == 0'><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReport(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
-                        <!-- <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a> -->
+                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" && item.count == 0'><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" &&  item.count > 0'><i class="fa fa-list-alt"></i></a>
+                        <a class="btn btn-info" href="#" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></a>
+                        <!-- <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a> -->
                         @elseif(auth()->user()->role == 2)
                         <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.count == 0'><i class="fa fa-pencil"></i></a>
                         @elseif(auth()->user()->role == 3)
-                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReport(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
+                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReportMandor(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
                         @endif
                       </td>
                     </tr>
@@ -260,6 +260,12 @@
           },
           seeReport : function(id){
             window.location ="{{ url('report_view') }}/"+id;
+          },
+          seeReportMandor : function(id){
+            window.location ="{{ url('/report_mandor') }}/"+id;
+          },
+          seeWork : function(id){
+            window.location ="{{ url('/report_supervisor_action') }}/"+id;
           },
           addReport : function(id){
             // axios.get("{{ url('api/report') }}/"+id).then(function(response){

@@ -12,7 +12,19 @@
 			</ul>
 			<ul class="navbar-nav">
 				@auth
-				<li class="nav-item ml-4" style="font-size: 14px;">
+				<li class="nav-item">
+					<div class="btn-group">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-bell text-white"></i>
+							<span class="badge bg-warning dropbtn" id="notif" style="color: black;">12</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right" style="max-width: 500px;">
+						    <a class="dropdown-item" href="#">Reservasi 1</a>
+						    <a class="dropdown-item" href="#">Reservasi 1</a>
+						</div>
+					</div>
+				</li>
+				<li class="nav-item ml-4 d-flex align-items-center" style="font-size: 14px;">
 					<div class="btn-group">
 					  <a class="dropdown-toggle font-weight-bold text-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor: pointer;">
 					    Hallo, {{ auth()->user()->name }} .. !

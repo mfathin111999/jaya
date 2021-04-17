@@ -7,16 +7,19 @@ class ReportFactory
 
     public static function call($items){
         $data = [
-            'id'        => $items->id,
-            'code'      => $items->code,
-            'name'      => $items->name,
-            'date'      => $items->date,
-            'time'      => $items->time,
-            'vendor'    => $items->vendor,
-            'locked'    => $items->locked,
-            'report'    => self::callReport($items->report),
-            'gallery'   => self::gallery($items->gallery),
-            'customer'  => $items->customer,
+            'id'            => $items->id,
+            'code'          => $items->code,
+            'name'          => $items->name,
+            'date'          => $items->date,
+            'date_work'     => $items->date_work,
+            'time'          => $items->time,
+            'vendor'        => $items->vendor,
+            'locked'        => $items->locked,
+            'vendor_is'     => $items->vendor_is,
+            'customer_is'   => $items->customer_is,
+            'report'        => self::callReport($items->report),
+            'gallery'       => self::gallery($items->gallery),
+            'customer'      => $items->customer,
         ];
 
         return $data;
@@ -64,6 +67,8 @@ class ReportFactory
                 'price_clean'   => $item->price_clean,
                 'price_dirt'    => $item->price_dirt,
                 'status'        => $item->status,
+                'time'          => $item->time,
+                'description'   => $item->description,
             ];
         }
 

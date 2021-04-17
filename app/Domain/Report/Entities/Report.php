@@ -5,6 +5,7 @@ namespace App\Domain\Report\Entities;
 use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Report\Entities\Report as ParentCategory;
 use App\Domain\Report\Entities\Report as SubCategory;
+use App\Domain\Report\Entities\ReportGalleries;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,6 +30,10 @@ class Report extends Model
 
     public function report(){
         return $this->hasOne(Report::class, 'report_id', 'id');
+    }
+
+    public function gallery(){
+        return $this->hasMany(ReportGalleries::class, 'report_id', 'id');
     }
 
 }

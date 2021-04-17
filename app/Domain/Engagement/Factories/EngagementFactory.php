@@ -31,9 +31,54 @@ class EngagementFactory
                 'phone_number'      => $item->phone_number,
                 'service'           => self::serviceFactory($item->service),
                 'count'             => $item->report_count,
+                'created_at'        => Date('Y-m-d', strtotime($item->created_at))
             ];
         }
         return $data;
+    }
+
+    public static function vendorFactory($items){
+        $data = [];
+
+        foreach ($items as $item) {
+        $data[] = [
+                'id'                => $item->id,
+                'code'              => $item->code,
+                'user_id'           => $item->user_id,
+                'name'              => $item->name,
+                'email'             => $item->email,
+                'address'           => empty($item->address) ? '' : $item->address,
+                'village_id'        => $item->village_id,
+                'district_id'       => $item->district_id,
+                'regency_id'        => $item->regency_id,
+                'province_id'       => $item->province_id,
+                'village'           => $item->village->name,
+                'district'          => $item->district->name,
+                'regency'           => $item->regency->name,
+                'province'          => $item->province->name,
+                'date'              => $item->date,
+                'time'              => $item->time,
+                'description'       => $item->description,
+                'status'            => $item->status,
+                'locked'            => $item->locked,
+                'phone_number'      => $item->phone_number,
+                'service'           => self::serviceFactory($item->service),
+                'price'             => self::allPrice($item->report),
+            ];
+        }
+        return $data;
+    }
+
+    public static function allPrice($item){
+        $price = 0;
+ 
+        foreach ($item as $key) {
+            foreach ($key->subreport as $value) {
+                $price += $value->price_dirt;
+            }
+        }
+
+        return $price;
     }
 
     public static function viewFactory($item){
@@ -57,7 +102,10 @@ class EngagementFactory
                 'description'       => $item->description,
                 'status'            => $item->status,
                 'phone_number'      => $item->phone_number,
+                'customer_is'       => $item->customer_is,
+                'vendor_is'         => $item->vendor_is,
                 'service'           => self::serviceFactory($item->service),
+                'created_at'        => Date('Y-m-d', strtotime($item->created_at))
             ];
 
         if (isset($item->report_count)) {
@@ -84,8 +132,20 @@ class EngagementFactory
     			'title' 			=> $key->code,
 				'start' 			=> date('Y-m-d H:m', strtotime($key->date.' '. $key->time,)),
 		      	'allDay' 			=> true,
-                'backgroundColor'   => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
-                'borderColor'       => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
+                // 'backgroundColor'   => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
+                // 'borderColor'       => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
+                'backgroundColor'   => $key->status == 'pending' 
+                                            ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 
+                                                ? '#17a2b8' : ($key->locked == 'offer' 
+                                                    ? '#ffc107' : ($key->locked == 'deal' 
+                                                        ? '#64bd63' : ($key->status == 'payed'
+                                                            ? '#26a69a' : '#546e7a')))),
+                'borderColor'       => $key->status == 'pending' 
+                                            ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 
+                                                ? '#17a2b8' : ($key->locked == 'offer' 
+                                                    ? '#ffc107' : ($key->locked == 'deal' 
+                                                        ? '#64bd63' : ($key->status == 'payed'
+                                                            ? '#26a69a' : '#546e7a')))),
     		]; 	
     	}
 

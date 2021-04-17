@@ -160,12 +160,13 @@
 		            }
 		        )
 		        .then(function(response){
+		        	// console.log(response.data);
 		        	this.setSession();
 
 		        }.bind(this))
 		        .catch(function (response) {
 					//handle error
-					console.log(response);
+					Swal.fire('Opss', response.response.data.message, 'warning');
 				});
 			},
 			logout: function(){

@@ -17,7 +17,10 @@ use App\Http\Controllers\API\V1\ReportController;
 |
 */
 
+Route::get('/report/sendEngagement/{id}', [ReportController::class, 'sendPDFCustomer']);
 Route::get('/report/printEngagement/{id}', [ReportController::class, 'printPDF']);
+Route::get('/report/printOrderCustomer/{id}', [ReportController::class, 'printPDFCustomer']);
+Route::get('/report/printVendor/{id}', [ReportController::class, 'printPDFVendor']);
 
 Route::get('/', function () {
     return view('public/home');
@@ -67,6 +70,14 @@ Route::get('/engagement', function(){
 	return view('admin.engagement');
 })->name('engagement');
 
+Route::get('/engagement_vendor', function(){
+	return view('admin.engagement_vendor');
+})->name('engagement_vendor');
+
+Route::get('/engagement_history', function(){
+	return view('admin.engagement_history');
+})->name('engagement_history');
+
 Route::get('/work', function(){
 	return view('admin.work');
 })->name('work');
@@ -104,16 +115,30 @@ Route::get('/setting_application', function(){
 })->name('setting_application');
 
 Route::get('/report_survey/{id}', function($id){
-	return view('admin.report_survey', compact('id'));
+	return view('admin.report_surveyer_survey', compact('id'));
 })->name('survei');
 
 Route::get('/report_vendor/{id}', function($id){
-	return view('admin.report_vendor', compact('id'));
-})->name('survei');
+	return view('admin.report_vendor_view', compact('id'));
+})->name('vendor.view');
+
+Route::get('/report_vendor_action/{id}', function($id){
+	return view('admin.report_vendor_action', compact('id'));
+})->name('vendor.action');
+
+Route::get('/report_mandor/{id}', function($id){
+	return view('admin.report_mandor_action', compact('id'));
+})->name('mandor.action');
 
 Route::get('/report_view/{id}', function($id){
-	return view('admin.report_view', compact('id'));
-})->name('survei_view');
+	return view('admin.report_supervisor_view', compact('id'));
+})->name('supervisor.view');
+
+Route::get('/report_supervisor_action/{id}', function($id){
+	return view('admin.report_supervisor_action', compact('id'));
+})->name('supervisor.view');
+
+Route::get('/test/{id}', [ReportController::class, 'test']);
 
 Route::prefix('auth')->group(function () {
 	Route::post('/setSession', [UserController::class, 'setToken']);

@@ -13,10 +13,10 @@ use App\Domain\Employee\Entities\Employee;
 use App\Domain\Employee\Entities\Vendor as Customer;
 use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Report\Entities\Report;
-use App\Domain\Report\Entities\ReportGalleries;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Domain\Engagement\Entities\EngagementGalleries;
 
 class Engagement extends Model
 {
@@ -63,7 +63,7 @@ class Engagement extends Model
     }
 
     public function gallery(){
-        return $this->hasMany(ReportGalleries::class, 'reservation_id', 'id');
+        return $this->hasMany(EngagementGalleries::class, 'reservation_id', 'id');
     }
 
     public function customer(){

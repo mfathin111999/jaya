@@ -32,6 +32,7 @@ Route::post('/register', [UserController::class, 'register']);
 Route::get('/engagement', [EngagementController::class, 'index']);
 Route::post('/engagementSurveyer', [EngagementController::class, 'indexSurveyer']);
 Route::post('/engagementMandor', [EngagementController::class, 'indexMandor']);
+Route::post('/engagementVendor', [EngagementController::class, 'indexVendor']);
 Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
 Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
 Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
@@ -45,6 +46,8 @@ Route::post('/engagement/create-engagement', [EngagementController::class, 'crea
 Route::post('/engagement/action', [EngagementController::class, 'action']);
 Route::post('/engagement/ignore', [EngagementController::class, 'ignore']);
 Route::post('/engagement/finish', [EngagementController::class, 'finish']);
+Route::post('/engagement/accVendor/{id}', [EngagementController::class, 'accVendor']);
+Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
 Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
 Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']);
 
@@ -79,15 +82,25 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/vendor/update-vendor/{id}', [EmployeeController::class, 'updateVendor']);
 	Route::post('/vendor/destroy/{id}', [EmployeeController::class, 'destroyVendor']);
 
+	Route::post('/vendor/report/{id}', [ReportController::class, 'setVendor']);
+	Route::post('/vendor/report-step/{id}', [ReportController::class, 'setVendorAll']);
+
+	Route::post('/mandor/action/{id}', [ReportController::class, 'mandorAction']);
+
+	Route::post('/supervisor/addPay/{id}', [ReportController::class, 'addPay']);
+
 	Route::get('/report', [ReportController::class, 'index']);
 	Route::get('/report/getByIdEngagement/{id}', [ReportController::class, 'getByIdEngagement']);
+	Route::get('/report/getByIdReport/{id}', [ReportController::class, 'getByIdReport']);
+	Route::get('/report/getByIdReportStep/{id}', [ReportController::class, 'getByIdReportStep']);
 	Route::get('/report/getCount/{id}', [ReportController::class, 'getCount']);
+	Route::get('/report/{id}', [ReportController::class, 'view']);
 	Route::post('/report/create', [ReportController::class, 'create']);
+	Route::post('/report/store', [ReportController::class, 'store']);
+	Route::post('/report/addDate', [ReportController::class, 'addDate']);
 	Route::post('/report/addPrice', [ReportController::class, 'addPrice']);
 	Route::post('/report/addTermin', [ReportController::class, 'addTermin']);
-	Route::post('test', [ReportController::class, 'test']);
-	Route::get('/report/{id}', [ReportController::class, 'view']);
-	Route::post('/report/update/{id}', [ReportController::class, 'update']);
+	Route::post('/report/update', [ReportController::class, 'updateReport']);
 	Route::post('/report/destroy/{id}', [ReportController::class, 'destroy']);
 
 	Route::get('/resource', [ResourceController::class, 'index']);

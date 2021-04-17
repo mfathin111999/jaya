@@ -3,6 +3,7 @@
 namespace App\Domain\Report\Application;
 
 use App\Domain\Report\Entities\Report;
+use App\Domain\Engagement\Entities\EngagementGalleries;
 use App\Domain\Report\Entities\ReportGalleries;
 use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Employee\Entities\Vendor;
@@ -24,7 +25,7 @@ class ReportManagement
 		$engagement = Engagement::where('id', $id)
 					->with(['gallery', 'vendor', 'customer', 'report' => function($query){
 						$query->whereNull('parent_id')->with(['subreport' => function($query){
-							$query->orderBy('id', 'desc');
+							$query->orderBy('id', 'asc');
 						}]);
 					}])->first();
 
@@ -78,7 +79,7 @@ class ReportManagement
 			$images[] = ['reservation_id' => $request['id'], 'image' => $this->upload->uploadImage($key2)];
 		}
 
-		$galleries = ReportGalleries::insert($images);
+		$galleries = EngagementGalleries::insert($images);
 
 		return $array;
 	}
@@ -89,12 +90,83 @@ class ReportManagement
 		return $data;
 	}
 
+	public function getByIdReport($id){
+		$data = Report::where('id', $id)->with('gallery')->first();
+
+		return $data;
+	}
+
+	public function getByIdReportStep($id){
+		$data = Report::where('id', $id)->with('gallery', 'subreport')->first();
+
+		return $data;
+	}
+
+	public function date($request){
+		$data = Engagement::where('id', $request['id'])->first();
+
+		$data->date_work 		= $request['date'];
+
+		$data->save();
+
+		return $data;
+	}
+
 	public function price($request){
 		$data = Report::where('id', $request->id)->first();
 
 		$data->price_clean 	= $request->price_clean;
 		$data->price_dirt 	= $request->price_dirt;
 		// $data->status 		= 'deal';
+
+		$data->save();
+
+		return $data;
+	}
+
+	public function store($request){
+		$data = new Report;
+
+		if ($request['type'] == 'step') {
+			$data->reservation_id 	= $request['reservation_id'];
+			$data->name 			= $request['name'];
+
+			$data->save();
+
+			return $data;
+
+		}elseif ($request['type'] == 'detail') {
+
+			$data->reservation_id 	= $request['reservation_id'];
+			$data->parent_id 		= $request['step_id'];
+			$data->name 			= $request['name'];
+			$data->price_clean 		= $request['price_clean'];
+			$data->price_dirt 		= $request['price_dirt'];
+			$data->volume 			= $request['volume'];
+			$data->description 		= $request['description'];
+			$data->unit 			= $request['unit'];
+			$data->time 			= $request['time'];
+			$data->start 			= $request['start'];
+			$data->end 				= $request['end'];
+
+			$data->save();
+
+			return $data;
+		}
+	}
+
+	public function updateReport($request){
+		$data = Report::where('id', $request['id'])->first();
+
+		$data->name 		= $request['name'];
+		$data->price_clean 	= $request['price_clean'];
+		$data->price_dirt 	= $request['price_dirt'];
+		$data->volume 		= $request['volume'];
+		$data->description 	= $request['description'];
+		$data->unit 		= $request['unit'];
+		$data->time 		= $request['time'];
+		$data->start 		= $request['start'];
+		$data->end 			= $request['end'];
 
 		$data->save();
 
