@@ -23,11 +23,15 @@ class ReportManagement
 
 	public function getByIdEngagement($id){
 		$engagement = Engagement::where('id', $id)
-					->with(['gallery', 'vendor', 'customer', 'report' => function($query){
+					->with(['gallery', 'vendor', 'report' => function($query){
 						$query->whereNull('parent_id')->with(['subreport' => function($query){
 							$query->orderBy('id', 'asc');
 						}]);
-					}])->first();
+					}])
+					->with(['partner' => function($query){
+						$query->with('province', 'regency', 'district', 'village');
+					}])
+					->first();
 
 		return $engagement;
 	}
@@ -58,20 +62,43 @@ class ReportManagement
 		}
 
 		$partner 	= json_decode($request['partner']);
-		$vendor  	= new Vendor;
-		$search_key = explode(" ", $partner->name);
+		$check		= Vendor::where('ktp', $partner->ktp)->first();
+		if ($check == null) {
+			$vendor  				= new Vendor;
+			$search_key 			= explode(" ", $partner->name);
 
-		$vendor->name 			= $partner->name; 
-		$vendor->phone_number 	= $partner->phone_number; 
-		$vendor->email 			= $partner->email; 
-		$vendor->address 		= $partner->address; 
-		$vendor->ktp 			= $partner->ktp; 
-		$vendor->customer 		= 'yes';
-		$vendor->vendor 		= 'no';
-		$vendor->search_key 	= strtolower($search_key[0]);
-		$vendor->reservation_id = $request['id'];
+			$vendor->name 			= $partner->name; 
+			$vendor->phone_number 	= $partner->phone_number; 
+			$vendor->email 			= $partner->email; 
+			$vendor->address 		= $partner->address; 
+			$vendor->ktp 			= $partner->ktp; 
+			$vendor->province_id 	= $partner->province_id; 
+			$vendor->regency_id 	= $partner->regency_id; 
+			$vendor->district_id 	= $partner->district_id; 
+			$vendor->village_id 	= $partner->village_id; 
+			$vendor->customer 		= 'yes';
+			$vendor->vendor 		= 'no';
+			$vendor->search_key 	= strtolower($search_key[0]);
+			$vendor->reservation_id = $request['id'];
 
-		$vendor->save();
+			$vendor->save();
+
+			$engagement = Engagement::find($request['id']);
+			$engagement->partner_id = $vendor->id;
+			$engagement->save();
+		}else {
+			$check->province_id 	= $partner->province_id; 
+			$check->regency_id 		= $partner->regency_id; 
+			$check->district_id 	= $partner->district_id; 
+			$check->village_id 		= $partner->village_id; 
+
+			$check->save();
+
+			$engagement = Engagement::find($request['id']);
+			$engagement->partner_id = $check->id;
+			$engagement->save();
+		}
+		
 
 		$images = [];
 		
@@ -91,7 +118,7 @@ class ReportManagement
 	}
 
 	public function getByIdReport($id){
-		$data = Report::where('id', $id)->with('gallery')->first();
+		$data = Report::where('id', $id)->with('subreport')->first();
 
 		return $data;
 	}

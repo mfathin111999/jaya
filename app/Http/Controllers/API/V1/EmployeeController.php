@@ -4,6 +4,11 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Domain\User\Entities\User;
+use App\Domain\Employee\Entities\Vendor;
+use App\Domain\Employee\Entities\Employee;
+use App\Domain\Employee\Entities\EmployeeHasWork;
+use App\Domain\Employee\Factories\EmployeeFactory;
 use App\Domain\Employee\Application\EmployeeManagement;
 
 class EmployeeController extends Controller
@@ -39,6 +44,60 @@ class EmployeeController extends Controller
         $data = $this->employee->allVendor();
 
         return apiResponseBuilder(200, $data);
+    }
+
+    public function getProgress()
+    {
+        $data = User::select('id', 'name')
+        ->where('role', 5)
+        ->whereHas('vendorEngage', function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        })
+        ->with(['vendorEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal')
+                  ->with(['service', 'vendor', 'report' => function($query){
+                    $query->whereNull('parent_id')->with(['subreport' => function($query){
+                        $query->orderBy('id', 'desc');
+                    }]);
+            }]);
+        }])
+        ->withCount(['vendorEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        }])
+        ->get();
+
+        return apiResponseBuilder(200, EmployeeFactory::call($data));
+        // return apiResponseBuilder(200, $data);
+    }
+
+    public function getProgressCustomer()
+    {
+        $data = Vendor::select('id', 'name')
+        ->where('customer', 'yes')
+        ->whereHas('customerEngage', function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        })
+        ->with(['customerEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal')
+                  ->with(['service', 'vendor', 'report' => function($query){
+                    $query->whereNull('parent_id')->with(['subreport' => function($query){
+                        $query->orderBy('id', 'desc');
+                    }]);
+            }]);
+        }])
+        ->withCount(['customerEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        }])
+        ->get();
+
+        return apiResponseBuilder(200, EmployeeFactory::callPartner($data));
+        // return apiResponseBuilder(200, $data);
     }
 
     /**

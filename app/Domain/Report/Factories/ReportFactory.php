@@ -19,7 +19,7 @@ class ReportFactory
             'customer_is'   => $items->customer_is,
             'report'        => self::callReport($items->report),
             'gallery'       => self::gallery($items->gallery),
-            'customer'      => $items->customer,
+            'partner'      => $items->partner,
         ];
 
         return $data;

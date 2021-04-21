@@ -2,6 +2,10 @@
 
 namespace App\Domain\Employee\Entities;
 
+use App\Models\Village;
+use App\Models\District;
+use App\Models\Regency;
+use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,9 +18,25 @@ class Vendor extends Model
 
     protected $table = "vendors";
 
-    public function customerEngagement()
+    public function customerEngage()
     {
-    	return $this->hasMany(Engagement::class, 'vendor_id', 'id');
+    	return $this->hasMany(Engagement::class, 'partner_id', 'id');
+    }
+
+    public function village(){
+        return $this->belongsTo(Village::class, 'village_id', 'id');
+    }
+
+    public function district(){
+        return $this->belongsTo(District::class, 'district_id', 'id');
+    }
+
+    public function regency(){
+        return $this->belongsTo(Regency::class, 'regency_id', 'id');
+    }
+
+    public function province(){
+        return $this->belongsTo(Province::class, 'province_id', 'id');
     }
 
 }

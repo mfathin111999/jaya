@@ -138,6 +138,22 @@ Route::get('/report_supervisor_action/{id}', function($id){
 	return view('admin.report_supervisor_action', compact('id'));
 })->name('supervisor.view');
 
+Route::get('/debt_supervisor_card_vendor', function(){
+	return view('admin.debt_supervisor_card_vendor');
+})->name('supervisor.debt.card.vendor');
+
+Route::get('/debt_supervisor_card_user', function(){
+	return view('admin.debt_supervisor_card_user');
+})->name('supervisor.debt.card.user');
+
+Route::get('/payment_supervisor_vendor', function(){
+	return view('admin.payment_supervisor_vendor');
+})->name('supervisor.payment.vendor');
+
+Route::get('/payment_supervisor_user', function(){
+	return view('admin.payment_supervisor_user');
+})->name('supervisor.payment.user');
+
 Route::get('/test/{id}', [ReportController::class, 'test']);
 
 Route::prefix('auth')->group(function () {

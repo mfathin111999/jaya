@@ -46,9 +46,27 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="{{ route('statistic') }}">
+        <a class="nav-link text-white" href="{{ route('supervisor.debt.card.vendor') }}">
           <i class="fa fa-area-chart pr-2"></i>
-          STATISTIK
+          KARTU HUTANG
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('supervisor.debt.card.user') }}">
+          <i class="fa fa-area-chart pr-2"></i>
+          KARTU PIUTANG
+        </a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('supervisor.payment.vendor') }}">
+          <i class="fa fa-area-chart pr-2"></i>
+          PEMBAYARAN VENDOR
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('supervisor.payment.user') }}">
+          <i class="fa fa-area-chart pr-2"></i>
+          PEMBAYARAN CUSTOMER
         </a>
       </li>
       <li class="nav-item">

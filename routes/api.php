@@ -75,6 +75,8 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/employee/update-employee/{id}', [EmployeeController::class, 'updateEmployee']);
 	Route::post('/employee/destroy/{id}', [EmployeeController::class, 'destroy']);
 
+	Route::get('/vendor/getProgress', [EmployeeController::class, 'getProgress']);
+	Route::get('/vendor/getProgressCustomer', [EmployeeController::class, 'getProgressCustomer']);
 	Route::get('/vendor/allBusiness', [EmployeeController::class, 'allBusiness']);
 	Route::get('/vendor/allVendor', [EmployeeController::class, 'allVendor']);
 	Route::post('/vendor/create-vendor', [EmployeeController::class, 'createVendor']);

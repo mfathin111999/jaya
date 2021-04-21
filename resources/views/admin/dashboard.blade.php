@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-9 align-items-center">
                       <label class="h6 font-weight-bold">Jumlah Reservasi</label><br>
-                      <label>100 Reservasi</label>
+                      <label>1000 Reservasi</label>
                     </div>
                   </div>
                 </div>

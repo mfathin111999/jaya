@@ -97,7 +97,6 @@ class EngagementManagement
 
 		$data = Engagement::create([
 			'code' 				=> $code,
-			'user_id' 			=> $request['user_id'] ?? null,
 			'name'				=> $request['name'],
 			'email'				=> $request['email'],
 			'address'			=> $request['address'],
@@ -151,7 +150,7 @@ class EngagementManagement
 
 	public function getById($id){
 		$engagement = Engagement::where('id', $id)
-			->with(['province', 'regency', 'district', 'village', 'service', 'gallery', 'customer', 'vendor', 'report' => function($query){
+			->with(['province', 'regency', 'district', 'village', 'service', 'gallery', 'partner', 'vendor', 'report' => function($query){
 				$query->whereNull('parent_id')->with(['subreport' => function($query){
 					$query->orderBy('id', 'desc');
 				}]);
@@ -160,6 +159,14 @@ class EngagementManagement
 		return $engagement;
 	}
 
+	public function getProgress(){
+		$engagement = Engagement::where('status', 'acc')->where('locked', 'deal')
+			->with(['service', 'partner', 'vendor', 'report' => function($query){
+					$query->whereNull('parent_id');
+			}])->get();
+
+		return $engagement;
+	}
 	public function getByCode($code){
 		$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->withCount('report')->where('code', $code)->first();
 

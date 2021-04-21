@@ -16,7 +16,7 @@ class CreateEngagementHasEmployessTable extends Migration
         Schema::create('engagement_has_employees', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('engagement_id')->unsigned()->index();
-            $table->integer('employee_id')->unsigned()->index();
+            $table->integer('user_id')->unsigned()->index();
             $table->timestamps();
             $table->softDeletes();
         });

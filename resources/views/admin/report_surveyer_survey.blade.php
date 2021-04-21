@@ -450,6 +450,10 @@
               email: this.view.email,
               address: this.partner.address,
               ktp: this.partner.ktp,
+              province_id: this.thisProvince,
+              regency_id: this.thisRegency,
+              district_id: this.thisDistrict,
+              village_id: this.thisVillage,
               phone_number: this.view.phone_number,
             }
 

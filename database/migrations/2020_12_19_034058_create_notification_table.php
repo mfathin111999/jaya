@@ -16,7 +16,6 @@ class CreateNotificationTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('engagement_id')->index()->unsigned()->nullable();
-            $table->integer('reservation_id')->index()->unsigned()->nullable();
             $table->integer('payment_id')->index()->unsigned()->nullable();
             $table->string('status', 30)->nullable();
             $table->string('is_read', 3)->nullable();

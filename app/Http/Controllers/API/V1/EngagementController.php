@@ -107,6 +107,13 @@ class EngagementController extends Controller
         return apiResponseBuilder(200, EngagementFactory::viewFactory($data));
     }
 
+    public function getProgress()
+    {
+        $data = $this->engagement->getProgress();
+
+        return apiResponseBuilder(200, $data);
+    }
+
     public function getAvailableDate()
     {
         $data = $this->engagement->getDate();

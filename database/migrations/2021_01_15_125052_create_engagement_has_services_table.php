@@ -17,7 +17,6 @@ class CreateEngagementHasServicesTable extends Migration
             $table->increments('id');
             $table->integer('engagement_id')->unsigned()->index();
             $table->integer('service_id')->unsigned()->index();
-            $table->double('price')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

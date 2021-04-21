@@ -261,7 +261,7 @@
                           <td align="center" class="text-center" style="vertical-align: middle;">
                             <span v-if='report.status != "donePayed"'>
                               <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
-                              <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report.id, formatPrice(report.all_price[0]))'>Bayar Vendor</a>
+                              <label class="font-weight-bold m-0" v-if='report.status == "doneMandor"'>-</label>
                             </span>
                               <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report.id, formatPrice(report.all_price[0]))'>Detail</a>
                           </td>

@@ -71,6 +71,10 @@ class Engagement extends Model
     }
 
     public function vendor(){
-        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
+        return $this->belongsTo(User::class, 'vendor_id', 'id');
+    }
+
+    public function partner(){
+        return $this->belongsTo(Vendor::class, 'partner_id', 'id');
     }
 }
