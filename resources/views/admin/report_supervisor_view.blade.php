@@ -387,7 +387,7 @@
                   </div>
                   <div class="col-md-3 text-right mt-3" v-for = "(image, index2) in data.gallery" >
                     <div>
-                      <img :src="'../storage/'+data.gallery[index2].image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
+                      <img :src="'/storage/'+data.gallery[index2].image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
                     </div>
                   </div>
                 </div>

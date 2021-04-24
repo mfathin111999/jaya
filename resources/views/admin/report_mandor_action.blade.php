@@ -39,40 +39,10 @@
                     <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
                   </div>
                 </div>
-                <div class="col-md-6">
+               <div class="col-md-12">
                   <div class="form-group">
-                      <label for="province">Provinsi</label>
-                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="regency">Kota/Kabupaten</label>
-                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-                        <option value="">Choose</option>
-                              <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="district">Kecamatan</label>
-                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="village">Kelurahan</label>
-                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
-                      </select>
+                      <label for="province">Alamat Pekerjaan</label>
+                      <textarea rows="3" class="form-control" id="allPlace" name="allPlace" v-model='allPlace' disabled=""></textarea>
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -220,7 +190,7 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
                           <td align="center" style="vertical-align: middle;">
-                            <label class="m-0 text-success" v-if='report.status == "offer" && detail.status == "deal"'>Proses Pengerjaan</label>
+                            <label class="m-0 text-success" v-if='(report.status == "deal" && report.status == "deal") && (detail.status == "deal" || detail.status == "offer")'>Proses Pengerjaan</label>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Pengerjaan Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Selesai</label>
@@ -275,6 +245,7 @@
             thisDistrict: '',
             village: {},
             thisVillage: '',
+            allPlace: '',
         },
         mounted: function(){
           this.getData(this.id);
@@ -299,7 +270,8 @@
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
-              this.partner = response.data.data.customer;
+              this.partner = response.data.data.partner;
+              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;
             }.bind(this));
           },
           allUnit: function(){
@@ -308,7 +280,7 @@
             }.bind(this));
           },
           getReport : function(id){
-            axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
+            axios.get("{{ url('api/report/getByIdReportStep') }}/"+id).then(function(response){
               this.view_report = response.data.data;
             }.bind(this));
           },

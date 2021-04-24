@@ -1,6 +1,5 @@
 <?php
 
-namespace Database\Seeders;
 /*
  * This file is part of the IndoRegion package.
  *
@@ -8,9 +7,11 @@ namespace Database\Seeders;
  *
  */
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use AzisHapidin\IndoRegion\RawDataGetter;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class IndoRegionDistrictSeeder extends Seeder
 {
@@ -27,6 +28,6 @@ class IndoRegionDistrictSeeder extends Seeder
         $districts = RawDataGetter::getDistricts();
 
         // Insert Data to Database
-        DB::table('indoregion_districts')->insert($districts);
+        DB::table('districts')->insert($districts);
     }
 }

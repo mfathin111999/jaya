@@ -76,7 +76,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report'>
+                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>

@@ -21,8 +21,8 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-md-12 mb-4 mt-3 text-center">
-                  <div class="pt-2 pb-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label class="font-weight-bold m-0 h5">Informasi Reservasi</label>
+                  <div class="pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
+                    <label class="font-weight-bold m-0 h3">Informasi Reservasi</label>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -39,47 +39,23 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                      <label for="province">Provinsi</label>
-                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
-                      </select>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" v-model='partner.email' disabled>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                      <label for="regency">Kota/Kabupaten</label>
-                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-                        <option value="">Choose</option>
-                              <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="district">Kecamatan</label>
-                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="village">Kelurahan</label>
-                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
-                      </select>
+                    <label for="ktp">No Identitas</label>
+                    <input type="text" class="form-control" id="ktp" v-model='partner.ktp' disabled>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                      <label for="village">Alamat</label>
-                      <input type="text" class="form-control" name="address" v-model='partner.address' disabled="">
+                      <label for="province">Alamat Pekerjaan</label>
+                      <textarea rows="2" class="form-control" id="allPlace" name="allPlace" v-model='allPlace' disabled=""></textarea>
                   </div>
                 </div>
-              </div>
+                </div>
 
               <div class="row mt-4">
                 <div class="col-md-12 rounded text-center">
@@ -103,7 +79,7 @@
       </div>
 
 
-      <div class="modal fade" id="addPayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header" style="background-color: #ffc3c3;">
@@ -112,65 +88,21 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form v-on:submit.prevent="sendPayment(view_report.id)" id="form-add-pay">
+            <form v-on:submit.prevent="saveAddReport()" id="form-add">
               <div class="modal-body">
                 <div class="row align-items-center">
-                  <div class="col-12 mb-2">
-                    <label class="m-0">Total Pembayaran</label>
-                  </div>
-                  <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ priceCleanVendor }}</label>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Bayar Pekerjaan</label>
-                      <input type="text" class="form-control" id="date_start" name="date" required>
-                    </div>
-                  </div>
                   <div class="col-12">
                     <div class="form-group">
                       <label for="price_clean1">Tanggal Laporan</label>
                       <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Kirim Pembayaran</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="seePayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form v-on:submit.prevent="sendPayment(view_report.id)" id="form-add-pay">
-              <div class="modal-body">
-                <div class="row align-items-center">
-                  <div class="col-12 mb-2">
-                    <label class="m-0">Total Pembayaran</label>
-                  </div>
-                  <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ priceCleanVendor }}</label>
-                  </div>
                   <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                      <input type="text" class="form-control" id="date_start" v-model='view_report.date_pay' name="date" required disabled="">
-                    </div>
+                    <label class="">Gambar Lapangan</label>
                   </div>
-                  <div class="col-12">
+                  <div class="col-12" v-for="(img, index) in view_report.gallery">
                     <div class="form-group">
-                      <label for="price_clean1">Tanggal Laporan</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
+                      <img :src="'../storage/'+img.image" class="img-fluid">
                     </div>
                   </div>
                 </div>
@@ -259,11 +191,13 @@
                             <label class="m-0" v-if='report.status == "donePayed"'>Telah Lunas</label>
                           </td>
                           <td align="center" class="text-center" style="vertical-align: middle;">
-                            <span v-if='report.status != "donePayed"'>
+                            {{-- <span v-if='report.status != "donePayed"'>
                               <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
                               <label class="font-weight-bold m-0" v-if='report.status == "doneMandor"'>-</label>
-                            </span>
-                              <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report.id, formatPrice(report.all_price[0]))'>Detail</a>
+                            </span> --}}
+                              <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Detail</span></button>
+
+                              <label class="font-weight-bold m-0" v-else>-</label>
                           </td>
                         </tr>
                       </tbody>
@@ -320,7 +254,8 @@
             thisDistrict: '',
             village: {},
             thisVillage: '',
-            priceCleanVendor: ''
+            priceCleanVendor: '',
+            allPlace: '',
         },
         mounted: function(){
           this.getData(this.id);
@@ -345,7 +280,8 @@
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
-              this.partner = response.data.data.customer;
+              this.partner = response.data.data.partner;
+              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;;
 
               console.log(this.data);
 
@@ -396,7 +332,7 @@
             }.bind(this));
           },
           getReport : function(id){
-            axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
+            axios.get("{{ url('api/report/getByIdReportStep') }}/"+id).then(function(response){
               this.view_report = response.data.data;
             }.bind(this));
           },

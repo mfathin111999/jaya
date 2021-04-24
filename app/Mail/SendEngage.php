@@ -32,7 +32,8 @@ class SendEngage extends Mailable
      */
     public function build()
     {
-        $pdf = PDF::loadView('export.customer', $this->engagement);
+        $datas = $this->engagement;
+        $pdf = PDF::loadView('export.customer', compact('datas'));
 
         return $this->subject('Penawaran Harga')
                     ->view('email.engage')

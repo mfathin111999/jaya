@@ -28,7 +28,7 @@ class CreateVendorTable extends Migration
             $table->string('customer', 20)->nullable();
             $table->string('search_key')->nullable();
             $table->char('province_id', 30)->nullable();
-            $table->char('regency_id, 30')->nullable();
+            $table->char('regency_id', 30)->nullable();
             $table->char('district_id', 30)->nullable();
             $table->char('village_id', 30)->nullable();
             $table->string('address')->nullable();

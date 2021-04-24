@@ -78,7 +78,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                       <label for="village">Alamat</label>
-                      <input type="text" class="form-control" name="address" v-model='partner.address' disabled="">
+                      <textarea class="form-control" name="address" v-model='allPlace' disabled="">
+                        </textarea>
                   </div>
                 </div>
               </div>
@@ -260,7 +261,7 @@
                             @{{ formatPrice(detail.price_clean) }}
                           </td>
                           <td align="center" style="vertical-align: middle;">
-                            <a href="#" class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></a>
+                            <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Disetujui</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Lunas</label>
@@ -271,7 +272,7 @@
                           <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
                           <td align="center" style="vertical-align: middle;">
                             <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
-                            <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.doneMandor'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
+                            <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status = "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
                             <button class="btn btn-info font-12" @click='infoCard' v-if='report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-info-circle"></i></button>
                           </td>
                         </tr>
@@ -324,6 +325,7 @@
             thisDistrict: '',
             village: {},
             thisVillage: '',
+            allPlace: ''
         },
         mounted: function(){
           this.getData(this.id);
@@ -348,7 +350,8 @@
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
-              this.partner = response.data.data.customer;
+              this.partner = response.data.data.partner
+              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;
 
               console.log(this.data);
 
@@ -399,7 +402,7 @@
             }.bind(this));
           },
           getReport : function(id){
-            axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
+            axios.get("{{ url('api/report/getByIdReportStep') }}/"+id).then(function(response){
               this.view_report = response.data.data;
             }.bind(this));
           },

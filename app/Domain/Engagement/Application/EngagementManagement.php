@@ -56,7 +56,7 @@ class EngagementManagement
 		$data = Engagement::where('id', $id)->first();
 
 		$data->locked 	 = 'deal';
-		$data->mandor_id = 7;
+		$data->mandor_id = 2;
 
 		$data->save();
 
@@ -121,13 +121,13 @@ class EngagementManagement
 		$data->status = $type;
 
 		$data->save();
-		// if ($type == 'acc') {
-		// 	Mail::to($data->email)
-  //       		->send(new AccMail($data));
-		// }elseif ($type == 'ignore') {
-		// 	Mail::to($data->email)
-  //       		->send(new IgnoreMail($data));
-		// }
+		if ($type == 'acc') {
+			Mail::to($data->email)
+        		->send(new AccMail($data));
+		}elseif ($type == 'ignore') {
+			Mail::to($data->email)
+        		->send(new IgnoreMail($data));
+		}
 
 		if ($employee != null) {
 			$data->employee()->sync($employee);

@@ -102,13 +102,13 @@ class ReportController extends Controller
     {
         $datas = $this->engagement->getById($id);
 
-        $pdf = PDF::loadView('export/customer', compact('datas'));  
-        return $pdf->stream("Penawaran.pdf", array("Attachment" => false));
+        // $pdf = PDF::loadView('export/customer', compact('datas'));  
+        // return $pdf->stream("Penawaran.pdf", array("Attachment" => false));
 
-        // Mail::to($data->email)
-        //      ->send(new SendEngage($data));
+        Mail::to($datas->email)
+             ->send(new SendEngage($datas));
 
-        // return redirect()->back();
+        return redirect()->back();
     }
 
     public function printPDFVendor($id)

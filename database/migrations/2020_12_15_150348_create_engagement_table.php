@@ -32,9 +32,9 @@ class CreateEngagementTable extends Migration
             $table->string('locked', 30)->default('offer');
             $table->char('vendor_is', 5)->nullable()->default(0);
             $table->char('customer_is', 5)->nullable()->default(0);
-            $table->integer('vendor_id')->unsigned()->index();
-            $table->integer('mandor_id')->unsigned()->index();
-            $table->integer('partner_id')->unsigned()->index();
+            $table->integer('vendor_id')->unsigned()->nullable()->index();
+            $table->integer('mandor_id')->unsigned()->nullable()->index();
+            $table->integer('partner_id')->unsigned()->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
         });

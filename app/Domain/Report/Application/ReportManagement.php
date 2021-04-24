@@ -79,7 +79,6 @@ class ReportManagement
 			$vendor->customer 		= 'yes';
 			$vendor->vendor 		= 'no';
 			$vendor->search_key 	= strtolower($search_key[0]);
-			$vendor->reservation_id = $request['id'];
 
 			$vendor->save();
 
