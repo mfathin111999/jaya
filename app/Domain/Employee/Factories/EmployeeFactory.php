@@ -87,6 +87,7 @@ class EmployeeFactory
                 'name'          => $item->name,
                 'price_dirt'    => self::price($item->subreport, 1),
                 'price_clean'   => self::price($item->subreport, 2),
+                'payment_url'   => $item->payment_url,
                 'date_invoice'  => $item->date_pay,
                 'updated_at'    => $item->updated_at,
                 'status'        => $item->status,

@@ -49,6 +49,9 @@ class EmployeeController extends Controller
     public function getProgress()
     {
         $data = User::select('id', 'name')
+        ->when(auth()->user()->role == 5, function($query){
+            $query->where('id' == auth()->user()->id);
+        })
         ->where('role', 5)
         ->whereHas('vendorEngage', function($query){
             $query->where('status', 'acc')
@@ -76,6 +79,9 @@ class EmployeeController extends Controller
     public function getProgressCustomer()
     {
         $data = Vendor::select('id', 'name')
+        ->when(auth()->user()->role == 4, function($query){
+            $query->where('id' == auth()->user()->id);
+        })
         ->where('customer', 'yes')
         ->whereHas('customerEngage', function($query){
             $query->where('status', 'acc')

@@ -23,14 +23,14 @@
               <div class="modal-body">
                 <div class="row align-items-center">
                   <div class="col-12 mb-2">
-                    <label class="m-0">Total Tagihan</label>
+                    <label class="m-0">Total Pembayaran</label>
                   </div>
                   <div class="col-12 mb-2">
                     <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="date_start">Tanggal Tagihan</label>
+                      <label for="date_start">Bayar Pekerjaan</label>
                       <input type="text" class="form-control" id="date_start" name="date" required>
                     </div>
                   </div>
@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Kirim Tagihan</button>
+                <button type="submit" class="btn btn-success">Kirim Pembayaran</button>
               </div>
             </form>
           </div>
@@ -104,8 +104,8 @@
                   <div class="list-group-item" style="display: none;" :id='datas.id'>
                     <div class="list-group">
                       <button type="button" 
-                      :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.customer_engage' @click="showReservation(index, index2)">
-                        @{{ reservation.code }}
+                      :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
+                        @{{ reservation.name }}
                       </button>
                     </div>
                   </div>
@@ -115,7 +115,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="col-md-12 rounded text-center">
-                        <label class="font-weight-bold m-0 h5">Kartu Piutang</label>
+                        <label class="font-weight-bold m-0 h5">PEMBAYARAN VENDOR</label>
                     </div>
                   </div>
                   <div class="card-body">
@@ -129,67 +129,59 @@
                             <tr>
                               <th align="center" class="text-center">
                                 <strong>Business Partner</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Date Invoise</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Document No</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Description</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Invoice Amount</strong>
-                            </th>
+                                <strong>Payment</strong>
+                              </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Aksi</strong>
+                                <strong>Payment Date</strong>
+                              </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Payment Amount</strong>
+                              </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Bank Account</strong>
                             </th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice == null'>
+                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice == null ? '-' : report.date_invoice }}
+                                @{{ report.date_invoice }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                INV-VEN/NRU/@{{ index+1 }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                INV-VEN/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>@{{ report.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(report.price_dirt) }}</strong>
+                                PMT/AA/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index != 0'>
-                                <div v-if='report.payment_url != null'>
-                                  <label class="m-0">Terkirim</label>
-                                </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>Progres</label>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report)'>Kirim Tagihan</a>
-                                  </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
-                                </div>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ report.date_invoice }}
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index == 0'>
-                                <div v-if='report.payment_url != null'>
-                                  <label class="m-0">Terkirim</label>
-                                </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" @click='addPayment(report)'>Kirim Tagihan</a>
-                                  </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
-                                </div>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ formatPrice(report.price_dirt) }}
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                BCA 233334448884
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="4">
+                              <td colspan="6">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
@@ -276,7 +268,7 @@
         },
         methods: {
           getData : function(){
-            axios.get("{{ url('api/vendor/getProgressCustomer') }}").then(function(response){
+            axios.get("{{ url('api/vendor/getProgress') }}").then(function(response){
               this.data = response.data.data;
               this.partner = {};
               this.view_report = {};
@@ -287,7 +279,6 @@
                 updated_at : '',
                 date_invoice : '',
               };
-              console.log(response);
             }.bind(this));
           },
           showDetail: function(id, index){
@@ -295,10 +286,10 @@
             $('#'+id).slideToggle();
           },
           showReservation: function(id, id2){
-            this.partner      = this.data[id];
-            this.view_report  = this.data[id].customer_engage[id2];
-            this.id           = this.partner.id;
-            this.id_engage    = this.view_report.id;
+            this.partner = this.data[id];
+            this.view_report = this.data[id].vendor_engage[id2];
+            this.id = this.partner.id;
+            this.id_engage = this.view_report.id;
           },
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
@@ -311,18 +302,18 @@
             }.bind(this));
           },
           addPayment : function(report){
-            this.add_report.id            = report.id; 
-            this.add_report.price         = report.price_dirt; 
-            this.add_report.name          = report.name;
-            this.add_report.updated_at    = moment(report.updated_at).format('YYYY-MM-DD');
-            this.add_report.date_invoice  = report.date_invoice;
+            this.add_report.id          = report.id; 
+            this.add_report.price       = report.price_dirt; 
+            this.add_report.name        = report.name;
+            this.add_report.updated_at  = moment(report.updated_at).format('YYYY-MM-DD');
+            this.add_report.date_invoice= report.date_invoice;
           },
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
 
-            axios.post("{{ url('api/supervisor/addCheckout') }}/"+id, { date : forms.get('date') }).then(function(response){
-              Swal.fire('Success', 'Tagihan Pembayaran Berhasil Terkirim', 'success');
+            axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
+              Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
               report.$nextTick(()=>{
                 $('#addPayment').modal('hide');
               });

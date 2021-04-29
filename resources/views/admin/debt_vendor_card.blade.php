@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 5)
+@if(session('id') == null || session('role') != 1)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -9,99 +9,6 @@
   @section('content')
     @include('layout.admin_header')
     <div id="app" v-cloak>
-
-      <div class="modal fade" id="info_engage" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-12 mb-4 mt-3 text-center">
-                  <div class="pt-2 pb-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label class="font-weight-bold m-0 h5">Informasi Reservasi</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="name">Nama Customer</label>
-                    <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="phone_number">No. Handphone</label>
-                    <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="province">Provinsi</label>
-                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="regency">Kota/Kabupaten</label>
-                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-                        <option value="">Choose</option>
-                              <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="district">Kecamatan</label>
-                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="village">Kelurahan</label>
-                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                      <label for="village">Alamat</label>
-                      <input type="text" class="form-control" name="address" v-model='partner.address' disabled="">
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mt-4">
-                <div class="col-md-12 rounded text-center">
-                  <div class="pt-2 pb-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label class="font-weight-bold m-0 h5">Gambar Lapangan</label>
-                  </div>
-                </div>
-                <div class="col-md-3 text-right mt-3" v-for = "(image, index2) in data.gallery" >
-                  <div>
-                    <img :src="'../storage/'+data.gallery[index2].image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
 
       <div class="modal fade" id="addPayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -112,25 +19,25 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form v-on:submit.prevent="sendPayment(view_report.id)" id="form-add-pay">
+            <form v-on:submit.prevent="sendPayment(add_report.id)" id="form-add-pay">
               <div class="modal-body">
                 <div class="row align-items-center">
                   <div class="col-12 mb-2">
                     <label class="m-0">Total Pembayaran</label>
                   </div>
                   <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ priceCleanVendor }}</label>
+                    <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="price_clean1">Bayar Pekerjaan</label>
+                      <label for="date_start">Bayar Pekerjaan</label>
                       <input type="text" class="form-control" id="date_start" name="date" required>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="price_clean1">Tanggal Laporan</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
+                      <label for="date_update">Tanggal Laporan</label>
+                      <input type="text" id="date_update" class="form-control" v-model='add_report.updated_at' required disabled="">
                     </div>
                   </div>
                 </div>
@@ -152,33 +59,31 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form v-on:submit.prevent="sendPayment(view_report.id)" id="form-add-pay">
-              <div class="modal-body">
-                <div class="row align-items-center">
-                  <div class="col-12 mb-2">
-                    <label class="m-0">Total Pembayaran</label>
+            <div class="modal-body">
+              <div class="row align-items-center">
+                <div class="col-12 mb-2">
+                  <label class="m-0">Total Pembayaran</label>
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
+                    <input type="text" class="form-control" id="date_start" v-model='add_report.date_invoice' name="date" required disabled="">
                   </div>
-                  <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ priceCleanVendor }}</label>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                      <input type="text" class="form-control" id="date_start" v-model='view_report.date_pay' name="date" required disabled="">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Tanggal Laporan</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
-                    </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="date_updated">Tanggal Laporan</label>
+                    <input type="text" class="form-control" id="date_updated" v-model='add_report.updated_at' required disabled="">
                   </div>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
           </div>
         </div>
       </div>
@@ -188,94 +93,104 @@
         <div class="row">
           @include('layout.admin_side')
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN PEKERJAAN</strong></h3>
-                <div class="row">
-                  <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-3 mb-3 mb-md-0">
+                <div class="list-group" v-for='(datas, index) in data'>
+                  <button type="button" 
+                    :class="partner.id == datas.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" @click='showDetail(datas.id, index)' style="cursor: pointer; border-radius: 0px;">
+                    @{{ datas.name }}
+                    <span class="badge badge-secondary badge-pill pull-right">@{{ datas.vendor_engage_count }}</span>
+                  </button>
+                  <div class="list-group-item" style="display: none;" :id='datas.id'>
+                    <div class="list-group">
+                      <button type="button" 
+                      :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
+                        @{{ reservation.name }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="col-md-12 rounded text-center">
+                        <label class="font-weight-bold m-0 h5">Kartu Hutang</label>
+                    </div>
+                  </div>
+                  <div class="card-body">
+
+                    <!-- PEKERJAAN VENDOR -->
+
                     <div class="row">
-                      <div class="col-md-3">Kode Booking</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
-                      </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
-                      </div>
-                      <div class="col-12 mt-2">
-                        <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
+                      <div class="col-12 table-responsive">
+                        <table class="table table-bordered" width="100%">
+                          <thead>
+                            <tr>
+                              <th align="center" class="text-center">
+                                <strong>Business Partner</strong>
+                            </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Date Invoise</strong>
+                            </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Document No</strong>
+                            </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Description</strong>
+                            </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Invoice Amount</strong>
+                            </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Aksi</strong>
+                            </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice == null'>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ partner.name }}
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ report.date_invoice == null ? '-' : report.date_invoice }}
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                INV-VEN/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                <strong>@{{ report.name }}</strong>
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                <strong>@{{ formatPrice(report.price_clean) }}</strong>
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                <span v-if='report.status != "donePayed"'>
+                                  <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
+                                  <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report)'>Bayar Vendor</a>
+                                </span>
+                                  <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan="4">
+                                <strong>Total @{{ partner.name }}</strong>
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                <strong>@{{ formatPrice(view_report.allprice_clean == null ? 0 : view_report.allprice_clean) }}</strong>
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                <strong>-</strong>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
-                </div>
-
+                </div>    
               </div>
-              <div class="card-body">
-
-                <!-- PEKERJAAN VENDOR -->
-
-                <div class="row">
-                  <div class="col-md-12 mb-4 mt-3 rounded text-center">
-                    <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                      <label class="font-weight-bold m-0 h3">Progres Pekerjaan</label>
-                      <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
-                    </div>
-                  </div>
-                  <div class="col-12 table-responsive">
-                    <table class="table table-bordered" width="100%">
-                      <thead>
-                        <tr>
-                          <th align="center" class="text-center"><strong>No</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Nama</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Harga Vendor</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Harga Customer</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Status</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Aksi</strong></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for='(report, index) in data.report'>
-                          <td align="center" style="vertical-align: middle;">@{{ index+1 }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ report.name }}</td>
-                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[1]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;">
-                            <div v-if='report.status != "donePayed"'>
-                              <label class="m-0" v-if='report.status != "done"'>Progress</label>
-                              <label class="m-0" v-if='report.status == "doneMandor"'>Telah Diverivikasi Mandor</label>
-                            </div>
-                            <label class="m-0" v-if='report.status == "donePayed"'>Telah Lunas</label>
-                          </td>
-                          <td align="center" class="text-center" style="vertical-align: middle;">
-                            <span v-if='report.status != "donePayed"'>
-                              <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
-                              <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report.id, formatPrice(report.all_price[0]))'>Bayar Vendor</a>
-                            </span>
-                              <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report.id, formatPrice(report.all_price[0]))'>Detail</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-              </div>
-              <div class="card-footer text-center">
-                <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
-              </div>
-            </div>    
+            </div>
           </main>
         </div>
       </div> 
@@ -284,23 +199,26 @@
 
   @endsection
   @section('sec-js')
-
-  
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/v-mask.min.js') }}"></script>
     </script>
     <script type="text/javascript">
-      Vue.use(VueMask.VueMaskPlugin);
       var report = new Vue({
         el: '#app',
         data: {
             check : 0,
             today : moment().format('YYYY-MM-DD'),
-            id : '{{ $id }}',
-            id_step : '',
+            id : '',
+            id_engage : '',
             partner: {},
             view_report : {},
-            add_report : {},
+            add_report : {
+              price : 0,
+              name : 0,
+              id : '',
+              updated_at : '',
+              date_invoice : '',
+            },
             add_form : {},
             add_date : {},
             add_step : {},
@@ -311,7 +229,6 @@
             image: [],
             view: [],
             view_image: [],
-            termin: [],
             vendor: [],
             allunit : [],
             province: {},
@@ -325,9 +242,7 @@
             priceCleanVendor: ''
         },
         mounted: function(){
-          this.getData(this.id);
-          this.allUnit();
-          this.loadProvince();
+          this.getData();
           this.$nextTick(()=>{
             let data = moment().format('YYYY-MM-DD');
             let data7 = moment().add(-7, 'days').format('YYYY-MM-DD');
@@ -344,53 +259,29 @@
           });
         },
         methods: {
-          getData : function(id){
-            axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
+          getData : function(){
+            axios.get("{{ url('api/vendor/getProgress') }}").then(function(response){
               this.data = response.data.data;
-              this.partner = response.data.data.customer;
-
-              console.log(this.data);
-
-              let termin = 0;
-              for (var i = 0; i < this.data.report.length; i++) {
-                if (this.data.report[i].termin > termin){
-                  termin = this.data.report[i].termin
-                }
-              }
-
-              if (termin != 0) {
-                this.termin = [];
-                for (var j = 0; j < termin; j++) {
-                  this.termin.push({
-                    step      : [],
-                    vendor    : 0,
-                    customer  : 0,
-                  });
-                  for (var k = 0; k < this.data.report.length; k++) {
-                    if (this.data.report[k].termin-1 == j){
-                      this.termin[j].step.push({
-                        id    : this.data.report[k].id,
-                        name  : this.data.report[k].name,
-                        clean : this.data.report[k].all_price[0],
-                        dirt  : this.data.report[k].all_price[1],
-                      });
-                    }
-                  }
-                }
-              }
-
-              for (var l = 0; l < this.termin.length; l++) {
-                let total_clean = 0;
-                let total_dirt  = 0;
-                for (var m = 0; m < this.termin[l].step.length; m++) {
-                  total_clean += this.termin[l].step[m].clean;
-                  total_dirt += this.termin[l].step[m].dirt;
-
-                  this.termin[l].vendor   = this.formatPrice(total_clean);
-                  this.termin[l].customer = this.formatPrice(total_dirt);
-                }
-              }
+              this.partner = {};
+              this.view_report = {};
+              this.add_report = {
+                price : 0,
+                name : 0,
+                id : '',
+                updated_at : '',
+                date_invoice : '',
+              };
             }.bind(this));
+          },
+          showDetail: function(id, index){
+            this.partner = this.data[index];
+            $('#'+id).slideToggle();
+          },
+          showReservation: function(id, id2){
+            this.partner = this.data[id];
+            this.view_report = this.data[id].vendor_engage[id2];
+            this.id = this.partner.id;
+            this.id_engage = this.view_report.id;
           },
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
@@ -399,18 +290,19 @@
           },
           getReport : function(id){
             axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
-              this.view_report = response.data.data;
+              this.add_report = response.data.data;
             }.bind(this));
           },
-          addPayment : function(id, price){
-            this.getReport(id);
-            this.priceCleanVendor = price;
+          addPayment : function(report){
+            this.add_report.id          = report.id; 
+            this.add_report.price       = report.price_clean; 
+            this.add_report.name        = report.name;
+            this.add_report.updated_at  = moment(report.updated_at).format('YYYY-MM-DD');
+            this.add_report.date_invoice= report.date_invoice;
           },
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
-
-            // console.log(forms.get('date'));
 
             axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
               Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');

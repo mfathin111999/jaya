@@ -185,7 +185,8 @@
                           <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[1]) }}</strong></td>
                           <td align="center" style="vertical-align: middle;">
                             <div v-if='report.status != "donePayed"'>
-                              <label class="m-0" v-if='report.status != "done"'>Progress</label>
+                              <label class="m-0" v-if='report.status == "deal"'>Progress</label>
+                              <label class="m-0" v-if='report.status == "done"'>Diselesaikan Vendor</label>
                               <label class="m-0" v-if='report.status == "doneMandor"'>Telah Diverivikasi Mandor</label>
                             </div>
                             <label class="m-0" v-if='report.status == "donePayed"'>Telah Lunas</label>
@@ -195,7 +196,7 @@
                               <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
                               <label class="font-weight-bold m-0" v-if='report.status == "doneMandor"'>-</label>
                             </span> --}}
-                              <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Detail</span></button>
+                              <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-pencil mr-2"></i><span>Detail</span></button>
 
                               <label class="font-weight-bold m-0" v-else>-</label>
                           </td>

@@ -12,6 +12,7 @@ use App\Domain\Report\Entities\ReportGalleries;
 use PDF;
 use Mail;
 use App\Mail\SendEngage;
+use App\Mail\PayMail;
 use App\Shared\Uploader;
 
 
@@ -190,10 +191,11 @@ class ReportController extends Controller
     public function addPay($id, Request $request){
         $data = Report::where('id', $id)->first();
 
-        $data->date_pay         = $request->date;
+        // $data->date_pay         = $request->date;
         $data->status           = 'donePayed';
 
         $data->save();
+
 
         return $data;
     }

@@ -152,7 +152,7 @@
 
                 <div v-if='data.customer_is == 1'>
                   <div class="row mt-4">
-                    <div class="col-md-6 align-self-center text-center" v-if='data.vendor_is == 0'>
+                    <div class="col-md-6 align-self-center text-center mx-auto" v-if='data.vendor_is == 0'>
                       <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
                         <label class="font-weight-bold h3">Penawaran</label><br>
                         <label class="font-weight-bold">Terima Semua Penawaran diatas ?</label>
@@ -161,10 +161,20 @@
                         <button class="btn btn-danger" @click='notAccept'><strong>Tolak Penawaran</strong></button>
                       </div>
                     </div>
-                    <div class="col-md-6 rounded text-center" v-if='data.vendor_is == 1'>
+                    <div class="col-md-6 rounded text-center mx-auto" v-if='data.vendor_is == 1'>
                       <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
-                        <label class="font-weight-bold h3">Vendor</label><br>
+                        <label class="font-weight-bold h3">Penawaran</label><br>
                         <label class="font-weight-bold">Penawaran Telah Terkunci</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div v-if='data.customer_is == 0'>
+                  <div class="row mt-4">
+                    <div class="col-md-6 rounded text-center mx-auto">
+                      <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
+                        <label class="font-weight-bold h3">Penawaran</label><br>
+                        <label class="font-weight-bold">Masih dalam proses penawaran</label>
                       </div>
                     </div>
                   </div>

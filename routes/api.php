@@ -10,6 +10,7 @@ use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\EmployeeController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ReportController;
+use App\Http\Controllers\API\V1\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,13 @@ Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCus
 Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
 Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']);
 
+
+Route::get('/termin/getByEngagementId/{id}', [PaymentController::class, 'getByEngagementId']);
+Route::get('/termin/view/{id}', [PaymentController::class, 'view']);
+Route::post('/termin', [PaymentController::class, 'store']);
+Route::post('/termin/destroy/{id}', [PaymentController::class, 'destroy']);
+
+
 Route::get('/notification', [NotificationController::class, 'index']);
 Route::post('/notification/create-notification', [NotificationController::class, 'createNotification']);
 Route::post('/notification/{id}', [NotificationController::class, 'view']);
@@ -84,12 +92,17 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/vendor/update-vendor/{id}', [EmployeeController::class, 'updateVendor']);
 	Route::post('/vendor/destroy/{id}', [EmployeeController::class, 'destroyVendor']);
 
+	Route::post('/vendor/history', [EngagementController::class, 'historyVendor']);
 	Route::post('/vendor/report/{id}', [ReportController::class, 'setVendor']);
 	Route::post('/vendor/report-step/{id}', [ReportController::class, 'setVendorAll']);
 
 	Route::post('/mandor/action/{id}', [ReportController::class, 'mandorAction']);
 
 	Route::post('/supervisor/addPay/{id}', [ReportController::class, 'addPay']);
+	Route::post('/supervisor/addCheckout/{id}', [PaymentController::class, 'addCheckout']);
+	Route::post('/supervisor/history', [EngagementController::class, 'historySupervisor']);
+
+	Route::post('/customer/history', [EngagementController::class, 'historyCustomer']);
 
 	Route::get('/report', [ReportController::class, 'index']);
 	Route::get('/report/getByIdEngagement/{id}', [ReportController::class, 'getByIdEngagement']);

@@ -10,84 +10,6 @@
     @include('layout.admin_header')
     <div id="app" v-cloak>
 
-      <div class="modal fade" id="addPayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form v-on:submit.prevent="sendPayment(add_report.id)" id="form-add-pay">
-              <div class="modal-body">
-                <div class="row align-items-center">
-                  <div class="col-12 mb-2">
-                    <label class="m-0">Total Tagihan</label>
-                  </div>
-                  <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="date_start">Tanggal Tagihan</label>
-                      <input type="text" class="form-control" id="date_start" name="date" required>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="date_update">Tanggal Laporan</label>
-                      <input type="text" id="date_update" class="form-control" v-model='add_report.updated_at' required disabled="">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Kirim Tagihan</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="seePayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row align-items-center">
-                <div class="col-12 mb-2">
-                  <label class="m-0">Total Pembayaran</label>
-                </div>
-                <div class="col-12 mb-2">
-                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                    <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                    <input type="text" class="form-control" id="date_start" v-model='add_report.date_invoice' name="date" required disabled="">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                    <label for="date_updated">Tanggal Laporan</label>
-                    <input type="text" class="form-control" id="date_updated" v-model='add_report.updated_at' required disabled="">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Content -->
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
@@ -115,7 +37,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="col-md-12 rounded text-center">
-                        <label class="font-weight-bold m-0 h5">Kartu Piutang</label>
+                        <label class="font-weight-bold m-0 h5">PEMBAYARAN CUSTOMER</label>
                     </div>
                   </div>
                   <div class="card-body">
@@ -129,71 +51,63 @@
                             <tr>
                               <th align="center" class="text-center">
                                 <strong>Business Partner</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Date Invoise</strong>
-                            </th>
+                                <strong>Date Invoice</strong>
+                              </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Document No</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Description</strong>
-                            </th>
+                              </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Invoice Amount</strong>
-                            </th>
+                                <strong>Payment</strong>
+                              </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Aksi</strong>
-                            </th>
+                                <strong>Payment Date</strong>
+                              </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Payment Amount</strong>
+                              </th>
+                              <th align="center" class="text-center" scope="col">
+                                <strong>Bank Account</strong>
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice == null'>
+                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice == null ? '-' : report.date_invoice }}
+                                @{{ report.date_invoice }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                INV-VEN/NRU/@{{ index+1 }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                INV-CUS/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ report.name }}</strong>
+                                <strong>Tahap @{{ index++ }} @{{ report.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(report.price_dirt) }}</strong>
+                                RCP/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index != 0'>
-                                <div v-if='report.payment_url != null'>
-                                  <label class="m-0">Terkirim</label>
-                                </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>Progres</label>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report)'>Kirim Tagihan</a>
-                                  </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
-                                </div>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ report.date_invoice }}
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index == 0'>
-                                <div v-if='report.payment_url != null'>
-                                  <label class="m-0">Terkirim</label>
-                                </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" @click='addPayment(report)'>Kirim Tagihan</a>
-                                  </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
-                                </div>
+                              <td align="center" style="vertical-align: middle;">
+                                @{{ formatPrice(report.price_clean) }}
+                              </td>
+                              <td align="center" style="vertical-align: middle;">
+                                MDR 233334448884
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="4">
+                              <td colspan="6">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(view_report.allprice_dirt == null ? 0 : view_report.allprice_dirt) }}</strong>
+                                <strong>@{{ formatPrice(view_report.allprice_clean == null ? 0 : view_report.allprice_clean) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>-</strong>
@@ -321,8 +235,8 @@
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
 
-            axios.post("{{ url('api/supervisor/addCheckout') }}/"+id, { date : forms.get('date') }).then(function(response){
-              Swal.fire('Success', 'Tagihan Pembayaran Berhasil Terkirim', 'success');
+            axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
+              Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
               report.$nextTick(()=>{
                 $('#addPayment').modal('hide');
               });

@@ -6,6 +6,7 @@ use App\Domain\Report\Entities\Report;
 use App\Domain\Engagement\Entities\EngagementGalleries;
 use App\Domain\Report\Entities\ReportGalleries;
 use App\Domain\Engagement\Entities\Engagement;
+use App\Domain\Payment\Entities\Termin;
 use App\Domain\Employee\Entities\Vendor;
 use App\Models\Village;
 use App\Models\District;
@@ -201,9 +202,40 @@ class ReportManagement
 
 	public function termin($request){
 		$data = Report::where('id', $request->id)->first();
+		// $check = Termin::where('reservation_id', $data->reservation_id)->where('termin', $request->termin)->first();
 
-		$data->price_clean 	= $request->total_clean;
-		$data->price_dirt 	= $request->total_dirt;
+		// if ($check == null) {
+		// 	if ($request->has('persentase')) {
+		// 		$all = 0;
+		// 		$check2 = Report::where('reservation_id', $data->reservation_id)->whereNotNull('parent_id')->get();
+		// 		foreach ($check2 as $key) {
+		// 			 $key->price_clean += $all;
+		// 		}
+
+		// 		$termin = new Termin;
+		// 		$termin->reservation_id = $data->reservation_id;
+		// 		$termin->termin 		= $data->termin;
+		// 		$termin->total 			= $request->persentase ? (int)$all/(int)$request->persentase : $request->total;
+		// 		$termin->persentase 	= $request->persentase ?? null;
+
+		// 		$termin->save();
+		// 	}else{
+		// 		$all = 0;
+		// 		$check2 = Report::where('reservation_id', $data->reservation_id)->where('parent_id', $request->id)->get();
+		// 		foreach ($check2 as $key) {
+		// 			(int) $key->price_clean += $all;
+		// 		}
+
+		// 		$termin = new Termin;
+		// 		$termin->reservation_id = $data->reservation_id;
+		// 		$termin->termin 		= $data->termin;
+		// 		$termin->total 			= $all;
+		// 		$termin->persentase 	= $request->persentase ?? null;
+
+		// 		$termin->save();
+		// 	}
+		// }
+
 		$data->status 		= 'deal';
 		$data->termin 		= $request->termin;
 

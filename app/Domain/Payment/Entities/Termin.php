@@ -15,12 +15,11 @@ class Termin extends Model
 
     protected $table = "termins";
 
-     public function engagement(){
+    public function engagement(){
     	return $this->belongsTo(Engagement::class, 'reservation_id', 'id');
     }
 
     public function report(){
-    	return $this->belongsTo(Report::class, 'report_id', 'id');
-    }
-
+    	return $this->hasMany(Report::class, 'termin', 'id');
+    } 
 }

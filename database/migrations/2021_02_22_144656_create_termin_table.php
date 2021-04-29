@@ -18,6 +18,7 @@ class CreateTerminTable extends Migration
             $table->integer('termin');
             $table->integer('reservation_id')->unsigned()->index();
             $table->integer('report_id')->unsigned()->index();
+            $table->string('persentase', 10)->nullable();
             $table->string('total', 50);
             $table->softDeletes();
             $table->timestamps();
