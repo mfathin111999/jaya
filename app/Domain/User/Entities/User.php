@@ -10,6 +10,7 @@ use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Engagement\Entities\Engagement as Mandor;
 use Laravel\Passport\HasApiTokens;
 
+use App\Domain\Employee\Entities\Vendor;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Models\District;
@@ -50,6 +51,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function partner(){
+        return $this->hasOne(Vendor::class, 'user_id', 'id');
+    }
 
     public function engage(){
         return $this->hasMany(Engagement::class, 'mandor_id', 'id');

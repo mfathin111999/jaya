@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Domain\User\Entities\User;
 use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Employee\Entities\Employee;
+use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Employee\Entities\EmployeeHasWork;
 use App\Domain\Employee\Factories\EmployeeFactory;
 use App\Domain\Employee\Application\EmployeeManagement;
@@ -46,11 +47,11 @@ class EmployeeController extends Controller
         return apiResponseBuilder(200, $data);
     }
 
-    public function getProgress()
+    public function getProgress(Request $request)
     {
         $data = User::select('id', 'name')
-        ->when(auth()->user()->role == 5, function($query){
-            $query->where('id' == auth()->user()->id);
+        ->when(auth()->guard('api')->user()->role == 5, function ($query) {
+          $query->where('id', auth()->guard('api')->user()->id);
         })
         ->where('role', 5)
         ->whereHas('vendorEngage', function($query){
@@ -61,7 +62,11 @@ class EmployeeController extends Controller
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
                   ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')->with(['subreport' => function($query){
+                    $query->whereNull('parent_id')
+                          ->where(function($query){
+                            $query->where('status', '!=', 'doneCustomer')
+                                  ->where('status', '!=', 'donePayed');
+                          })->with(['subreport' => function($query){
                         $query->orderBy('id', 'desc');
                     }]);
             }]);
@@ -73,15 +78,46 @@ class EmployeeController extends Controller
         ->get();
 
         return apiResponseBuilder(200, EmployeeFactory::call($data));
-        // return apiResponseBuilder(200, $data);
+        // return apiResponseBuilder(200);
+    }
+
+    public function getPayment(Request $request)
+    {
+        $data = User::select('id', 'name')
+        ->when(auth()->guard('api')->user()->role == 5, function ($query) {
+          $query->where('id', auth()->guard('api')->user()->id);
+        })
+        ->where('role', 5)
+        ->whereHas('vendorEngage', function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        })
+        ->with(['vendorEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal')
+                  ->with(['service', 'vendor', 'report' => function($query){
+                    $query->whereNull('parent_id')
+                          ->where(function($query){
+                            $query->where('status', 'doneCustomer')
+                                  ->orWhere('status', 'donePayed');
+                          })->with(['subreport' => function($query){
+                        $query->orderBy('id', 'desc');
+                    }]);
+            }]);
+        }])
+        ->withCount(['vendorEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        }])
+        ->get();
+
+        return apiResponseBuilder(200, EmployeeFactory::call($data));
+        // return apiResponseBuilder(200);
     }
 
     public function getProgressCustomer()
     {
         $data = Vendor::select('id', 'name')
-        ->when(auth()->user()->role == 4, function($query){
-            $query->where('id' == auth()->user()->id);
-        })
         ->where('customer', 'yes')
         ->whereHas('customerEngage', function($query){
             $query->where('status', 'acc')
@@ -91,10 +127,47 @@ class EmployeeController extends Controller
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
                   ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')->with(['subreport' => function($query){
+                    $query->whereNull('parent_id')
+                          ->where(function($query){
+                            $query->where('status', '!=', 'doneCustomer')
+                                  ->where('status', '!=','donePayed');
+                          })->with(['subreport' => function($query){
                         $query->orderBy('id', 'desc');
                     }]);
             }]);
+        }])
+        ->withCount(['customerEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        }])
+        ->get();
+
+        return apiResponseBuilder(200, EmployeeFactory::callPartner($data));
+        // return apiResponseBuilder(200, $data);
+    }
+
+    public function getPaymentCustomer()
+    {
+        $data = Vendor::select('id', 'name')
+        ->where('customer', 'yes')
+        ->whereHas('customerEngage', function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal');
+        })
+        ->with(['customerEngage' => function($query){
+            $query->where('status', 'acc')
+                  ->where('locked', 'deal')
+                  ->with(['service', 'vendor', 'report' => function($query){
+                    $query->whereNull('parent_id')
+                          ->where(function($query){
+                            $query->where('status', 'doneCustomer')
+                                  ->orWhere('status', 'donePayed');
+                          })->with(['subreport' => function($query){
+                            $query->orderBy('id', 'desc');
+                          }])->with(['payment' => function($query){
+                            $query->where('status', 'success')->limit(1);
+                          }]);
+                  }]);
         }])
         ->withCount(['customerEngage' => function($query){
             $query->where('status', 'acc')
@@ -122,6 +195,28 @@ class EmployeeController extends Controller
     public function createVendor(Request $request)
     {
         $data = $this->employee->storeVendor($request);
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function createPartner(Request $request)
+    {
+        $data = Vendor::firstOrNew(['user_id' => $request['user_id']]);
+
+        $data->user_id  = $request['user_id'];
+        $data->ktp      = $request['ktp'];
+        $data->customer = 'yes';
+
+        $data->save();
+
+        $reservation = Engagement::find($request['reservation_id']);
+
+        $reservation->pvillage_id   = $request['village_id'];
+        $reservation->pdistrict_id  = $request['district_id'];
+        $reservation->pregency_id   = $request['regency_id'];
+        $reservation->pprovince_id  = $request['province_id'];
+
+        $reservation->save();
 
         return apiResponseBuilder(200, $data);
     }

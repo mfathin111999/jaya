@@ -17,6 +17,7 @@ class Vendor extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = "vendors";
+    protected $fillable = ['tax_id', 'user_id', 'ktp', 'owner', 'bank_name', 'bank_account_name', 'bank_account_number', 'vendor', 'customer', 'search_key'];
 
     public function customerEngage()
     {

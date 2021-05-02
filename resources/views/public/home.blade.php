@@ -56,6 +56,23 @@
 			</div>
 		</section>
 
+		@guest
+		<section class="mb-3 mt-5 pt-5 pb-5 bg-info shadow">
+			<div class="container">
+				<div class="d-block text-center mb-5 text-white">
+					<h1><strong>Apa Yang Anda Butuhkan ?</strong></h1>
+					<p>Reservasi sesuai dengan kebutuhan anda</p>
+				</div>
+				<div class="text-center">
+					<button class="btn btn-warning p-4" data-toggle="modal" data-target="#signUp">
+						<span class="h3 font-weight-bold">Ayo daftar untuk memulai ..</span>
+					</button>
+				</div>
+			</div>
+		</section>
+		@endguest
+
+		@auth
 		<!-- Form Reservasi Survey -->
 		<section class="mb-3 mt-5 pt-5 pb-5 bg-info shadow">
 			<div class="container">
@@ -70,10 +87,6 @@
 					            <label for="name">Name</label>
 					            <input type="text" class="form-control" id="name" name="name" placeholder="Nama" required="">
 					        </div>
-							<div class="form-group">
-					            <label for="email">Email</label>
-					            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required="">
-					        </div>
 					        <div class="form-group">
 					            <label for="phone_number">No Handphone</label>
 					            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Whatsapp" required="">
@@ -83,7 +96,7 @@
 						        	<div class="form-group">
 							            <label for="province">Provinsi</label>
 							            <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-							            	<option value="">Choose</option>
+							            	<option value="">Pilih</option>
 							            	<option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
 							            </select>
 							        </div>
@@ -92,7 +105,7 @@
 						        	<div class="form-group">
 							            <label for="regency">Kota/Kabupaten</label>
 							            <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-							            	<option value="">Choose</option>
+							            	<option value="">Pilih</option>
                       						<option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
 							            </select>
 							        </div>
@@ -101,7 +114,7 @@
 						        	<div class="form-group">
 							            <label for="district">Kecamatan</label>
 							            <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-							            	<option value="">Choose</option>
+							            	<option value="">Pilih</option>
 							            	<option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
 							            </select>
 							        </div>
@@ -110,7 +123,7 @@
 						        	<div class="form-group">
 							            <label for="village">Kelurahan</label>
 							            <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-							            	<option value="">Choose</option>
+							            	<option value="">Pilih</option>
 							            	<option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
 							            </select>
 							        </div>
@@ -131,23 +144,24 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-							            <label for="time">Time</label>
+							            <label for="time">Waktu</label>
 							            <select class="form-control" name="time" id="time" required="">
-							            	<option value="">Choose</option>
+							            	<option value="">Pilih</option>
 							            	<option v-for= 'times in time' :value="times">@{{ times }}</option>
 							            </select>
 							        </div>
 								</div>
 							</div>
 							<div class="form-group">
-					            <label for="service">Service</label>
+					            <label for="service">Servis</label>
 					            <select type="text" class="form-control select2" id="service" name="service[]" multiple="" required="">
 					            	<option v-for = "(service, index) in service" :value = 'service.id'>@{{ service.name }}</option>
 					            </select>
 					        </div>
 							<div class="form-group">
-					            <label for="description">Description</label>
-					            <textarea type="text" class="form-control" id="description" name="description" placeholder="Description Keperluan" rows="5" required=""></textarea>
+					            <label for="description">Deskripsi ( 300 Karakter )</label>
+					            <textarea type="text" class="form-control" id="description" name="description" placeholder="Description Keperluan" rows="5" maxlength="300" required=""></textarea>
+					            <label id="maxDescription" class="mb-0 mt-2">300 Karakter tersisa</label>
 					        </div>
 						</div>
 					</div>
@@ -155,6 +169,7 @@
 				</form>
 			</div>
 		</section>
+		@endauth
 
 		<!-- List Service -->
 		<section class="container-fluid mt-5 mb-5 pt-5">
@@ -543,6 +558,14 @@
       }
     });
 
+    $('#description').keyup(function () {
+	    var left = 300 - $(this).val().length;
+	    if (left < 0) {
+	        left = 0;
+	    }
+	    $('#maxDescription').text(left + ' Karakter tersisa');
+	});
+
 	$('.owl-carousel').owlCarousel({
 	    nav: true,
 	    margin: 10,
@@ -565,7 +588,7 @@
 	});
 
 	$('.select2').select2({
-		placeholder: "Choose"
+		placeholder: "Pilih service"
 	});
 
 	$('.datePicker').daterangepicker({

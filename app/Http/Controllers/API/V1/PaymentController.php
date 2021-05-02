@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Domain\Payment\Entities\Termin;
 use App\Domain\Payment\Entities\Payment;
 use App\Domain\Report\Entities\Report;
+use App\Models\PaymentLog;
 
 class PaymentController extends Controller
 {
@@ -63,7 +64,7 @@ class PaymentController extends Controller
         $statusCode = null;
 
         $paymentNotification = new \Midtrans\Notification();
-        $order = Report::where('id', $paymentNotification->order_id)->firstOrFail();
+        $order = Report::where('id', $paymentNotification->order_id)->with('engagement')->firstOrFail();
 
         if ($order->isPaid()) {
             return response(['message' => 'The order has been paid before'], 422);
@@ -113,7 +114,7 @@ class PaymentController extends Controller
 
         $paymentParams = [
             'order_id' => $order->id,
-            'number' => 'PAY-YYYY-MMM',
+            'number' => 'PAY-'.date('ymdhis').'-'.$order->engagement->code.'-'.$paymentStatus,
             'amount' => $paymentNotification->gross_amount,
             'method' => 'midtrans',
             'status' => $paymentStatus,
@@ -150,53 +151,64 @@ class PaymentController extends Controller
         return response($response, 200);
     }
 
-    // public function completed(Request $request)
-    // {
-    //     $code = $request->query('order_id');
-    //     $order = Order::where('code', $code)->firstOrFail();
+    public function completed(Request $request)
+    {
+        // $code = $request->query('order_id');
+        // $order = Order::where('code', $code)->firstOrFail();
         
-    //     if ($order->payment_status == 'unpaid') {
-    //         return redirect('payments/failed?order_id='. $code);
-    //     }
+        // if ($order->payment_status == 'unpaid') {
+        //     return redirect('payments/failed?order_id='. $code);
+        // }
 
-    //     \Session::flash('success', "Thank you for completing the payment process!");
+        // \Session::flash('success', "Thank you for completing the payment process!");
 
-    //     return redirect('orders/received/'. $order->id);
-    // }
+        return redirect('/');
 
-    // /**
-    //  * Show unfinish payment page
-    //  *
-    //  * @param Request $request payment data
-    //  *
-    //  * @return void
-    //  */
-    // public function unfinish(Request $request)
-    // {
-    //     $code = $request->query('order_id');
-    //     $order = Order::where('code', $code)->firstOrFail();
+    }
 
-    //     \Session::flash('error', "Sorry, we couldn't process your payment.");
+    /**
+     * Show unfinish payment page
+     *
+     * @param Request $request payment data
+     *
+     * @return void
+     */
+    public function unfinish(Request $request)
+    {
+        $code = $request->query('order_id');
+        $order = Order::where('code', $code)->firstOrFail();
 
-    //     return redirect('orders/received/'. $order->id);
-    // }
+        \Session::flash('error', "Sorry, we couldn't process your payment.");
 
-    // /**
-    //  * Show failed payment page
-    //  *
-    //  * @param Request $request payment data
-    //  *
-    //  * @return void
-    //  */
-    // public function failed(Request $request)
-    // {
-    //     $code = $request->query('order_id');
-    //     $order = Order::where('code', $code)->firstOrFail();
+        return redirect('/');
+    }
 
-    //     \Session::flash('error', "Sorry, we couldn't process your payment.");
+    public function finish(Request $request)
+    {
+        // $code = $request->query('order_id');
+        // $order = Order::where('code', $code)->firstOrFail();
 
-    //     return redirect('orders/received/'. $order->id);
-    // }
+        // \Session::flash('error', "Sorry, we couldn't process your payment.");
+
+        return redirect('/');
+    }
+
+    /**
+     * Show failed payment page
+     *
+     * @param Request $request payment data
+     *
+     * @return void
+     */
+    public function failed(Request $request)
+    {
+        $code = $request->query('order_id');
+        $order = Order::where('code', $code)->firstOrFail();
+
+        \Session::flash('error', "Sorry, we couldn't process your payment.");
+
+        return redirect('/');
+    }
 
     public function addCheckout($id)
     {

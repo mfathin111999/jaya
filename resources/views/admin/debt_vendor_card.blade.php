@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 1)
+@if(session('id') == null || session('role') != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -97,18 +97,9 @@
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="list-group" v-for='(datas, index) in data'>
                   <button type="button" 
-                    :class="partner.id == datas.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" @click='showDetail(datas.id, index)' style="cursor: pointer; border-radius: 0px;">
-                    @{{ datas.name }}
-                    <span class="badge badge-secondary badge-pill pull-right">@{{ datas.vendor_engage_count }}</span>
+                  :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
+                    @{{ reservation.name }}
                   </button>
-                  <div class="list-group-item" style="display: none;" :id='datas.id'>
-                    <div class="list-group">
-                      <button type="button" 
-                      :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
-                        @{{ reservation.name }}
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
               <div class="col-md-9">
@@ -165,10 +156,8 @@
                                 <strong>@{{ formatPrice(report.price_clean) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <span v-if='report.status != "donePayed"'>
-                                  <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>-</label>
-                                  <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report)'>Bayar Vendor</a>
-                                </span>
+                                  <label class="m-0" v-if='report.date_invoice == null'>Belum ada pembayaran</label>
+                                  <label class="m-0" v-if='report.date_invoice != null'>Sudah dibayar Customer</label>
                                   <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
                               </td>
                             </tr>

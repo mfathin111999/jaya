@@ -89,6 +89,7 @@ class EmployeeFactory
                 'price_clean'   => self::price($item->subreport, 2),
                 'payment_url'   => $item->payment_url,
                 'date_invoice'  => $item->date_pay,
+                'document_no'   => $item->payment[0]->number ?? '-',
                 'updated_at'    => $item->updated_at,
                 'status'        => $item->status,
             ];

@@ -24,13 +24,10 @@ class ReportManagement
 
 	public function getByIdEngagement($id){
 		$engagement = Engagement::where('id', $id)
-					->with(['gallery', 'vendor', 'report' => function($query){
+					->with(['user.partner', 'gallery', 'pprovince', 'pdistrict', 'pregency', 'pvillage', 'vendor', 'report' => function($query){
 						$query->whereNull('parent_id')->with(['subreport' => function($query){
 							$query->orderBy('id', 'asc');
 						}]);
-					}])
-					->with(['partner' => function($query){
-						$query->with('province', 'regency', 'district', 'village');
 					}])
 					->first();
 
@@ -167,8 +164,8 @@ class ReportManagement
 			$data->reservation_id 	= $request['reservation_id'];
 			$data->parent_id 		= $request['step_id'];
 			$data->name 			= $request['name'];
-			$data->price_clean 		= $request['price_clean'];
-			$data->price_dirt 		= $request['price_dirt'];
+			$data->price_clean 		= $request->has('price_clean') ? $request['price_clean'] : null;
+			$data->price_dirt 		= $request->has('price_dirt') ? $request['price_dirt'] :null;
 			$data->volume 			= $request['volume'];
 			$data->description 		= $request['description'];
 			$data->unit 			= $request['unit'];
@@ -185,15 +182,15 @@ class ReportManagement
 	public function updateReport($request){
 		$data = Report::where('id', $request['id'])->first();
 
-		$data->name 		= $request['name'];
-		$data->price_clean 	= $request['price_clean'];
-		$data->price_dirt 	= $request['price_dirt'];
-		$data->volume 		= $request['volume'];
-		$data->description 	= $request['description'];
-		$data->unit 		= $request['unit'];
-		$data->time 		= $request['time'];
-		$data->start 		= $request['start'];
-		$data->end 			= $request['end'];
+		$data->name 		= $request['name'] ?? $data->name;
+		$data->price_clean 	= $request['price_clean'] ?? $data->price_clean;
+		$data->price_dirt 	= $request['price_dirt'] ?? $data->price_dirt;
+		$data->volume 		= $request['volume'] ?? $data->volume;
+		$data->description 	= $request['description'] ?? $data->description;
+		$data->unit 		= $request['unit'] ?? $data->unit;
+		$data->time 		= $request['time'] ?? $data->time;
+		$data->start 		= $request['start'] ?? $data->start;
+		$data->end 			= $request['end'] ?? $data->end;
 
 		$data->save();
 

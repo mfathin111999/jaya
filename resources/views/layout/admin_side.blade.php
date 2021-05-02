@@ -32,6 +32,18 @@
       </li>
       @if(session('role') == 5)
       <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('vendor.debt.card') }}">
+          <i class="fa fa-calendar pr-2"></i>
+          KARTU PIUTANG
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ route('vendor.payment.card') }}">
+          <i class="fa fa-calendar pr-2"></i>
+          PEMBAYARAN
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('engagement_history') }}">
           <i class="fa fa-calendar pr-2"></i>
           HISTORY

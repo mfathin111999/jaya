@@ -115,7 +115,7 @@ Route::get('/setting_application', function(){
 })->name('setting_application');
 
 Route::get('/report_survey/{id}', function($id){
-	return view('admin.report_surveyer_survey', compact('id'));
+	return view('admin.report_surveyer_surveys', compact('id'));
 })->name('survei');
 
 Route::get('/report_vendor/{id}', function($id){
@@ -145,6 +145,14 @@ Route::get('/debt_supervisor_card_vendor', function(){
 Route::get('/debt_supervisor_card_user', function(){
 	return view('admin.debt_supervisor_card_user');
 })->name('supervisor.debt.card.user');
+
+Route::get('/debt_vendor_card', function(){
+	return view('admin.debt_vendor_card');
+})->name('vendor.debt.card');
+
+Route::get('/debt_customer_card', function(){
+	return view('admin.debt_customer_card');
+})->name('customer.debt.card');
 
 Route::get('/payment_supervisor_vendor', function(){
 	return view('admin.payment_supervisor_vendor');

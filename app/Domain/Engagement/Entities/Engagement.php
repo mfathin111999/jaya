@@ -50,6 +50,22 @@ class Engagement extends Model
         return $this->belongsTo(Province::class, 'province_id', 'id');
     }
 
+    public function pvillage(){
+        return $this->belongsTo(Village::class, 'pvillage_id', 'id');
+    }
+
+    public function pdistrict(){
+        return $this->belongsTo(District::class, 'pdistrict_id', 'id');
+    }
+
+    public function pregency(){
+        return $this->belongsTo(Regency::class, 'pregency_id', 'id');
+    }
+
+    public function pprovince(){
+        return $this->belongsTo(Province::class, 'pprovince_id', 'id');
+    }
+
     public function service(){
         return $this->belongsToMany(Service::class, 'engagement_has_services')->withTimestamps();
     }
@@ -75,6 +91,6 @@ class Engagement extends Model
     }
 
     public function partner(){
-        return $this->belongsTo(Vendor::class, 'partner_id', 'id');
+        return $this->hasOne(Vendor::class, 'user_id', 'id');
     }
 }

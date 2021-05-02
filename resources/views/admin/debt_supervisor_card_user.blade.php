@@ -235,6 +235,7 @@
               updated_at : '',
               date_invoice : '',
             },
+            total: 0,
             add_form : {},
             add_date : {},
             add_step : {},

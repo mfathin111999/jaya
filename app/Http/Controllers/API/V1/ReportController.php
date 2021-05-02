@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Domain\Report\Application\ReportManagement;
-use App\Domain\Engagement\Application\EngagementManagement;
-use App\Domain\Report\Factories\ReportFactory;
-use App\Domain\Report\Entities\Report;
-use App\Domain\Report\Entities\ReportGalleries;
 use PDF;
 use Mail;
-use App\Mail\SendEngage;
 use App\Mail\PayMail;
+use App\Mail\SendEngage;
 use App\Shared\Uploader;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Domain\Report\Entities\Report;
+use App\Domain\Report\Factories\ReportFactory;
+use App\Domain\Engagement\Entities\Engagement;
+use App\Domain\Report\Entities\ReportGalleries;
+use App\Domain\Report\Application\ReportManagement;
+use App\Domain\Engagement\Entities\EngagementGalleries;
+use App\Domain\Engagement\Application\EngagementManagement;
 
 
 class ReportController extends Controller
@@ -47,6 +49,27 @@ class ReportController extends Controller
         return apiResponseBuilder(200, $data, 'Success');
     }
 
+    public function delStep(Request $request)
+    {
+        $data = Report::find($request['id']);
+
+        $subreport = Report::where('parent_id', $request->id)->delete();
+
+        $data->delete();
+
+        return apiResponseBuilder(200, $data, 'Success');
+    }
+
+    public function updateStep(Request $request)
+    {
+        $data = Report::find($request['id']);
+        $data->name     = $request['name'];
+
+        $data->save();
+
+        return apiResponseBuilder(200, $data, 'Success');
+    }
+
     public function getCount($id){
         $data = $this->report->getByEngagement($id);
 
@@ -70,6 +93,29 @@ class ReportController extends Controller
     public function addDate(Request $request)
     {
         $data = $this->report->date($request);
+
+        return apiResponseBuilder(200, $data, 'Success');
+    }
+
+    public function addImage(Request $request)
+    {
+        $data = new EngagementGalleries;
+
+        $data->reservation_id   = $request['reservation_id'];
+        $data->image            = $this->upload->uploadImage($request['image']);
+
+        $data->save();
+
+        return apiResponseBuilder(200, $data, 'Success');
+    }
+
+    public function delImage(Request $request)
+    {
+        $data = EngagementGalleries::find($request['id']);
+
+        $this->upload->deleteImage($data->image);
+
+        $data->delete();
 
         return apiResponseBuilder(200, $data, 'Success');
     }
@@ -191,8 +237,9 @@ class ReportController extends Controller
     public function addPay($id, Request $request){
         $data = Report::where('id', $id)->first();
 
-        // $data->date_pay         = $request->date;
-        $data->status           = 'donePayed';
+        $data->date_vendor         = $request->date;
+        $data->is_payed            = 'PAY/'.uniqid().'/'.date('y').'/'.date('y');
+        $data->status              = 'donePayed';
 
         $data->save();
 

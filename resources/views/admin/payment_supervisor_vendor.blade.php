@@ -162,7 +162,7 @@
                                 @{{ report.date_invoice }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                INV-VEN/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                @{{ report.document_no }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>@{{ report.name }}</strong>
@@ -268,7 +268,7 @@
         },
         methods: {
           getData : function(){
-            axios.get("{{ url('api/vendor/getProgress') }}").then(function(response){
+            axios.get("{{ url('api/vendor/getPayment') }}").then(function(response){
               this.data = response.data.data;
               this.partner = {};
               this.view_report = {};

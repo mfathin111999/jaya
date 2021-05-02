@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 1)
+@if(session('id') == null || session('role') != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -97,18 +97,9 @@
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="list-group" v-for='(datas, index) in data'>
                   <button type="button" 
-                    :class="partner.id == datas.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" @click='showDetail(datas.id, index)' style="cursor: pointer; border-radius: 0px;">
-                    @{{ datas.name }}
-                    <span class="badge badge-secondary badge-pill pull-right">@{{ datas.vendor_engage_count }}</span>
+                  :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
+                    @{{ reservation.name }}
                   </button>
-                  <div class="list-group-item" style="display: none;" :id='datas.id'>
-                    <div class="list-group">
-                      <button type="button" 
-                      :class="view_report.id == reservation.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" style="cursor: pointer;" v-for='(reservation, index2) in datas.vendor_engage' @click="showReservation(index, index2)">
-                        @{{ reservation.name }}
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
               <div class="col-md-9">
@@ -154,7 +145,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
+                            <tr v-for='(report, index) in view_report.report' v-if='report.status != "donePayed"'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
@@ -180,7 +171,7 @@
                                 BCA 233334448884
                               </td>
                             </tr>
-                            <tr>
+                            <tr v-if='view_report !== 0'>
                               <td colspan="6">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
@@ -219,7 +210,7 @@
             id : '',
             id_engage : '',
             partner: {},
-            view_report : {},
+            view_report : {report:[{}]},
             add_report : {
               price : 0,
               name : 0,

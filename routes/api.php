@@ -58,6 +58,12 @@ Route::get('/termin/view/{id}', [PaymentController::class, 'view']);
 Route::post('/termin', [PaymentController::class, 'store']);
 Route::post('/termin/destroy/{id}', [PaymentController::class, 'destroy']);
 
+Route::post('/payment/notification', [PaymentController::class, 'notification']);
+Route::get('/payment/complete', [PaymentController::class, 'completed']);
+Route::get('/payment/unfinish', [PaymentController::class, 'unfinish']);
+Route::get('/payment/finish', [PaymentController::class, 'finish']);
+Route::get('/payment/failed', [PaymentController::class, 'failed']);
+
 
 Route::get('/notification', [NotificationController::class, 'index']);
 Route::post('/notification/create-notification', [NotificationController::class, 'createNotification']);
@@ -83,8 +89,10 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/employee/update-employee/{id}', [EmployeeController::class, 'updateEmployee']);
 	Route::post('/employee/destroy/{id}', [EmployeeController::class, 'destroy']);
 
-	Route::get('/vendor/getProgress', [EmployeeController::class, 'getProgress']);
+	Route::get('/vendor/getProgress', [EmployeeController::class, 'getProgress'])->middleware('auth:api');
+	Route::get('/vendor/getPayment', [EmployeeController::class, 'getPayment'])->middleware('auth:api');
 	Route::get('/vendor/getProgressCustomer', [EmployeeController::class, 'getProgressCustomer']);
+	Route::get('/vendor/getPaymentCustomer', [EmployeeController::class, 'getPaymentCustomer']);
 	Route::get('/vendor/allBusiness', [EmployeeController::class, 'allBusiness']);
 	Route::get('/vendor/allVendor', [EmployeeController::class, 'allVendor']);
 	Route::post('/vendor/create-vendor', [EmployeeController::class, 'createVendor']);
@@ -104,6 +112,9 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 
 	Route::post('/customer/history', [EngagementController::class, 'historyCustomer']);
 
+
+	Route::post('/partner', [EmployeeController::class, 'createPartner']);
+
 	Route::get('/report', [ReportController::class, 'index']);
 	Route::get('/report/getByIdEngagement/{id}', [ReportController::class, 'getByIdEngagement']);
 	Route::get('/report/getByIdReport/{id}', [ReportController::class, 'getByIdReport']);
@@ -112,9 +123,13 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::get('/report/{id}', [ReportController::class, 'view']);
 	Route::post('/report/create', [ReportController::class, 'create']);
 	Route::post('/report/store', [ReportController::class, 'store']);
+	Route::post('/report/delStep', [ReportController::class, 'delStep']);
+	Route::post('/report/updateStep', [ReportController::class, 'updateStep']);
 	Route::post('/report/addDate', [ReportController::class, 'addDate']);
 	Route::post('/report/addPrice', [ReportController::class, 'addPrice']);
 	Route::post('/report/addTermin', [ReportController::class, 'addTermin']);
+	Route::post('/report/addImage', [ReportController::class, 'addImage']);
+	Route::post('/report/delImage', [ReportController::class, 'delImage']);
 	Route::post('/report/update', [ReportController::class, 'updateReport']);
 	Route::post('/report/destroy/{id}', [ReportController::class, 'destroy']);
 

@@ -30,12 +30,6 @@
                       <input type="text" class="form-control" id="name" v-model="view_report.name" name="name" required>
                     </div>
                   </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="description">Keterangan</label>
-                      <input type="text" class="form-control" id="description" v-model="view_report.description" name="description" required>
-                    </div>
-                  </div>
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume">Volume</label>
@@ -55,18 +49,6 @@
                     <div class="form-group">
                       <label for="time">Waktu Pengerjaan</label>
                       <input type="text" class="form-control" id="time" v-model="view_report.time" name="time" @keyup = 'filter' @keypress = 'isNumber' required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="price_clean">Harga Vendor</label>
-                      <input type="text" class="form-control" id="price_clean" v-model="view_report.price_clean" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="price_dirt">Harga Customer</label>
-                      <input type="text" class="form-control" id="price_dirt" v-model="view_report.price_dirt" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' required>
                     </div>
                   </div>
                 </div>
@@ -102,12 +84,6 @@
                       <input type="text" class="form-control" id="name1" name="name" required>
                     </div>
                   </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="description1">Keterangan</label>
-                      <input type="text" class="form-control" id="description1" name="description" required>
-                    </div>
-                  </div>
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume1">Volume</label>
@@ -125,20 +101,8 @@
                   </div>
                   <div class="col-4">
                     <div class="form-group">
-                      <label for="time1">Waktu Pengerjaan</label>
+                      <label for="time1">Estimasi Waktu</label>
                       <input type="text" class="form-control" id="time1" name="time" @keyup = 'filter' @keypress = 'isNumber' required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="price_clean1">Harga Vendor</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label for="price_dirt1">Harga Customer</label>
-                      <input type="text" class="form-control" id="price_dirt1" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' required>
                     </div>
                   </div>
                 </div>
@@ -214,6 +178,207 @@
         </div>
       </div>
 
+      <!-- MODAL EDIT TAHAPAN -->
+
+      <div class="modal fade" id="editStep" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #ffc3c3;">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Tahapan Pekerjaan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="updateStep(view_report.id)" id="form-update-step">
+              <div class="modal-body">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="name_step">Nama Tahapan</label>
+                      <input type="text" id="name_step" class="form-control" v-model='view_report.name' name="name" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL TAMBAH PARTNER-->
+
+      <div class="modal fade" id="addPartner" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #ffc3c3;">
+              <h5 class="modal-title" id="exampleModalLabel">Lengkapi Data Customer</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="savePartner()" id="form-add-partner">
+              <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="name">Nama Customer</label>
+                          <input type="text" class="form-control" id="name" name="name" v-model='data.name' readonly="">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="phone_number">No. Handphone</label>
+                        <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' name="phone_number" readonly="">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" v-model='data.email' readonly="">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="ktp">No Identitas</label>
+                        <input type="text" class="form-control" id="ktp" name="ktp" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="province">Provinsi</label>
+                          <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="regency">Kota/Kabupaten</label>
+                          <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
+                            <option value="">Choose</option>
+                                  <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="district">Kecamatan</label>
+                          <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="village">Kelurahan</label>
+                          <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL EDIT PARTNER-->
+
+      <div class="modal fade" id="showPartner" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #ffc3c3;">
+              <h5 class="modal-title" id="exampleModalLabel">Lengkapi Data Customer</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="savePartner()" id="form-add-partner">
+              <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="name">Nama Customer</label>
+                          <input type="text" class="form-control" id="name" name="name" v-model='data.name' readonly="">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="phone_number">No. Handphone</label>
+                        <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' name="phone_number" readonly="">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" v-model='data.email' readonly="">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="ktp">No Identitas</label>
+                        <input type="text" class="form-control" id="ktp" name="ktp" v-model='partner.ktp' required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="province">Provinsi</label>
+                          <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="regency">Kota/Kabupaten</label>
+                          <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
+                            <option value="">Choose</option>
+                                  <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="district">Kecamatan</label>
+                          <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="village">Kelurahan</label>
+                          <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
+                            <option value="">Choose</option>
+                            <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
+                          </select>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <!-- Content -->
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
@@ -221,7 +386,7 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
-      					<h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
+      					<h3 class="text-center mb-4"><strong>TAMBAH LAPORAN SURVEY</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
@@ -240,88 +405,64 @@
 
       				</div>
 
-              <div class="card-body" v-if = 'check > 0'>
+              <div class="card-body" v-if = 'data.locked == "deal"'>
                 <div class="text-center">
                   <h4 class="font-weight-bold">LAPORAN TELAH TERKIRIM</h4>
                 </div>
               </div>
-    					<div class="card-body" v-if = 'check == 0'>
+    					<div class="card-body" v-if = 'data.locked == "offer"'>
 
                 <!-- INFORMASI RESERVASI -->
 
-                <div class="row">
-                  <div class="col-md-12 mb-4 mt-3 text-center">
-                    <div class="pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
-                      <label class="font-weight-bold m-0 h3">Informasi Reservasi</label>
-                    </div>
+                <div class="row" v-if='data.partner != null'>
+                  <div class="col-md-12">
+                    <label class="font-weight-bold">KELENGKAPAN DATA CUSTOMER</label>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="name">Nama Customer</label>
-                      <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
+                      <input type="text" class="form-control" id="name" name="name" v-model='data.name' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="phone_number">No. Handphone</label>
-                      <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
+                      <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' name="phone_number" disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
-                      <input type="email" class="form-control" id="email" v-model='partner.email' disabled>
+                      <input type="email" class="form-control" id="email" name="email" v-model='data.email' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="ktp">No Identitas</label>
-                      <input type="text" class="form-control" id="ktp" v-model='partner.ktp' disabled>
+                      <input type="text" class="form-control" id="ktp" name="ktp" v-model='partner.ktp' disabled>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="form-group">
-                        <label for="province">Provinsi</label>
-                        <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-                          <option value="">Choose</option>
-                          <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
-                        </select>
+                      <label for="ktp">Address</label>
+                      <textarea type="text" rows="2" class="form-control" id="ktp" name="address" v-model='allPlace' disabled></textarea>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="regency">Kota/Kabupaten</label>
-                        <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-                          <option value="">Choose</option>
-                                <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
-                        </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="district">Kecamatan</label>
-                        <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-                          <option value="">Choose</option>
-                          <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
-                        </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="village">Kelurahan</label>
-                        <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-                          <option value="">Choose</option>
-                          <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
-                        </select>
-                    </div>
+                  <div class="col-md-12">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#addPartner" @click='showPartner()'>
+                      <i class="fa fa-pencil"></i>
+                    </button>
                   </div>
                 </div>
 
+                <div class="col-12 text-center" v-if='data.partner == null'>
+                  <button class="btn btn-success mb-0 h3 p-3" data-toggle="modal" data-target="#addPartner">Lengkapi Data Customer</button>
+                </div>
                 <!-- TAHAPAN PEKERJAAN -->
 
     						<div class="row">
-                  <div class="col-md-12 mb-4 mt-3 rounded text-center">
-                    <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
+                  <div class="col-md-12 mb-4 mt-3 text-center">
+                    <div class="pt-3 pb-3 pl-2 pr-2 rounded" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan</label>
                       <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
                     </div>
@@ -330,9 +471,11 @@
                     <table class="table table-bordered" width="100%">
                       <thead>
                         <tr>
-                          <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
+                          <th colspan="5" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
                           <th class="text-center">
                             <i class="btn btn-info fa fa-plus" data-toggle="modal" data-target="#addModal" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
+                            <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editStep" v-if='data.locked == "offer"' @click="getReport(report.id)"></i>
+                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer"' @click="delStep(report.id, index)"></i>
                           </th>
                         </tr>
                         <tr>
@@ -350,7 +493,7 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.volume }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari</td>
                           <td align="center" style="vertical-align: middle;">
                             <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editModal" v-if='data.locked == "offer"' @click="getReport(detail.id)"></i>
                             <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer"' @click="delReport(detail.id)"></i>
@@ -365,9 +508,12 @@
                 <!-- GAMBAR LAPANGAN
                  -->
                 <div class="row mt-4">
-                  <div class="col-md-12 pt-3 pb-3 rounded" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label for="image_report" class="btn btn-sm btn-outline-secondary font-weight-bold m-0"><i class="fa fa-plus pr-2"></i>Tambah Gambar Report</label>
-                    <input type="file" name="gambar" id="image_report" class="form-control" multiple="" @change="onFileChange" style="display: none;">
+                  <div class="col-md-12">
+                    <div class="pt-3 pb-3 pl-2 pr-2 rounded" style="background-color: #00000008; border: 1px solid #00000020;">
+
+                      <label for="image_report" class="btn btn-sm btn-outline-secondary font-weight-bold m-0"><i class="fa fa-plus pr-2" v-if="view_image.length <= 8"></i>Tambah Gambar Report</label>
+                      <input type="file" name="gambar" id="image_report" class="form-control" @change="onFileChange" style="display: none;" v-if="view_image.length <= 8">
+                    </div>
                   </div>
                   <div class="col-md-12 text-center" v-if= 'view_image.length == 0'>
                     <h4 class="font-weight-bold mt-4">GAMBAR KOSONG</h4>
@@ -375,7 +521,7 @@
                   <div class="col-md-3 text-right mt-3" v-for = "(image, index3) in view_image" >
                     <div>
                       <i class="fa fa-minus-circle btn btn-warning" @click='deleteItem(index3, 1)' style="position: absolute; top: 5%; right: 10%;"></i>
-                      <img :src="image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
+                      <img :src="'/storage/'+image.image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
                     </div>
                   </div>
                 </div>
@@ -405,7 +551,10 @@
             today : moment().format('YYYY-MM-DD'),
             id : '{{ $id }}',
             id_step : '',
-            partner: {},
+            partner:{
+              address : '',
+              ktp : '',
+            },
             view_report : {},
             add_report : {},
             add_form : {},
@@ -421,6 +570,7 @@
             termin: [],
             vendor: [],
             allunit : [],
+            allPlace: '',
             province: {},
             allPlace: '',
             thisProvince: '',
@@ -439,15 +589,38 @@
         methods: {
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
+              let partner = {
+                name : response.data.data.name,
+                email : response.data.data.email,
+                phone_number : response.data.data.phone_number,
+                address : '',
+                ktp : '',
+              };
               this.data = response.data.data;
-              this.partner = response.data.data.partner;
-
+              this.partner = response.data.data.partner == null ? partner : response.data.data.partner;
+              this.allPlace = response.data.data.partner == null ? '' : response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
+              for (var i = 0; i < response.data.data.gallery.length; i++) {
+                this.view_image.push(response.data.data.gallery[i]);
+              }
             }.bind(this));
           },
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
               this.allunit = response.data.data;
             }.bind(this));
+          },
+          showPartner: function(){
+            this.thisDistrict = this.data.pdistrict.id;
+            this.thisRegency  = this.data.pregency.id;
+            this.thisVillage  = this.data.pvillage.id;
+            this.thisProvince = this.data.pprovince.id;
+
+            this.getRegency().then(function () {
+              this.getDistrict().then(function () {
+                this.getVillage();
+              });
+            });
+
           },
           getReport : function(id){
             axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
@@ -471,6 +644,32 @@
                 }.bind(this));
               }
             });
+          },
+          onFileChange(e) {
+            const file = e.target.files[0];
+            let form = new FormData();
+
+            form.append('image', file);
+            form.append('reservation_id', this.id);
+
+            axios.post('{{ url("api/report/addImage") }}', form).then(function (response) {
+              if (response.data.message == 'Success') {
+                this.view_image.push(response.data.data);
+              }
+            }.bind(this));
+          },
+          deleteItem: function(index, type) {
+            let form = new FormData();
+
+            form.append('id', this.view_image[index].id);
+            form.append('reservation_id', this.id);
+
+            axios.post('{{ url("api/report/delImage") }}', form).then(function (response) {
+
+            }.bind(this));
+
+            if (type == 1)
+              this.view_image.splice(index, 1);
           },
           saveStep : function(){
             let form = document.getElementById('form-add-step');
@@ -542,41 +741,86 @@
 
             forms.append('type', 'detail');
 
-            let price_dirt = forms.get('price_dirt');
-            let price_clean = forms.get('price_clean');
-
-            if (price_clean == 0 || price_dirt == 0 || price_clean == '' || price_dirt == '') {
-              Swal.fire(
-                'Oppss',
-                'Harga Customer dan Harga Vendor harus di isi .. !',
-                'warning'
-                );
-            }else if (parseInt(price_clean) >= parseInt(price_dirt) ) {
-              Swal.fire(
-                'Oppss',
-                'Harga Customer harus lebih tinggi dari Harga Vendor',
-                'warning'
-                );
-            }else{
-              axios.post(
-                "{{ url('api/report/store') }}",
-                forms,
-                {
-                  headers: {
-                    'Content-Type': 'multipart/form-data',
-                  }
+            axios.post(
+              "{{ url('api/report/store') }}",
+              forms,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
                 }
-              )
-              .then(function (response) {
-                report.$nextTick(() => {
-                  form.reset();
-                  $("#addModal").modal('hide');
-                });
-              }).then(() => {
-                this.getData(this.id);
-                Swal.fire('Success', 'Store Successfully .. !', 'success');
+              }
+            )
+            .then(function (response) {
+              report.$nextTick(() => {
+                form.reset();
+                $("#addModal").modal('hide');
               });
-            }
+            }).then(() => {
+              this.getData(this.id);
+              Swal.fire('Success', 'Store Successfully .. !', 'success');
+            });
+          },
+          savePartner : function(){
+            let form = document.getElementById('form-add-partner');
+            let forms = new FormData(form);
+
+            forms.append('reservation_id', this.id);
+            forms.append('user_id', this.data.user_id);
+
+            axios.post(
+              "{{ url('api/partner') }}",
+              forms,
+            )
+            .then(function (response) {
+              report.$nextTick(() => {
+                $("#addStep").modal('hide');
+              });
+            }).then(() => {
+              this.getData(this.id);
+              Swal.fire('Success', 'Update Successfully .. !', 'success');
+            });
+          },
+          updateStep : function(id){
+            let form = document.getElementById('form-update-step');
+            let forms = new FormData(form);
+
+            forms.append('reservation_id', this.id);
+            forms.append('id', id);
+
+            axios.post(
+              "{{ url('api/report/updateStep') }}",
+              forms,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                }
+              }
+            )
+            .then(function (response) {
+              report.$nextTick(() => {
+                $("#editStep").modal('hide');
+              });
+            }).then(() => {
+              this.getData(this.id);
+              Swal.fire('Success', 'Update Successfully .. !', 'success');
+            });
+          },
+          delStep : function(id, index){
+            Swal.fire({
+              title: 'Apakah kamu yakin ?',
+              text: 'Data yang dihapus tidak dapat dikembalikan !',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios.post("{{ url('api/report/delStep') }}", {'id' : id}).then(function(response){
+                  this.data.report.splice(index, 1)
+                }.bind(this));
+              }
+            });
           },
           formatPrice(value) {
             let val = (value/1).toFixed(0).replace(',', ',')

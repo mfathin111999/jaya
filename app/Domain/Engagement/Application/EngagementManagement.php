@@ -4,6 +4,7 @@ namespace App\Domain\Engagement\Application;
 
 use App\Mail\AccMail;
 use App\Mail\IgnoreMail;
+use App\Mail\ThanksMail;
 use App\Domain\User\Entities\User;
 use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Service\Entities\Service;
@@ -97,8 +98,9 @@ class EngagementManagement
 
 		$data = Engagement::create([
 			'code' 				=> $code,
+			'user_id' 			=> auth()->guard('api')->user()->id,
 			'name'				=> $request['name'],
-			'email'				=> $request['email'],
+			'email'				=> auth()->guard('api')->user()->email,
 			'address'			=> $request['address'],
 			'village_id'		=> $request['village_id'],
 			'district_id'		=> $request['district_id'],
@@ -111,6 +113,9 @@ class EngagementManagement
 		]);
 
 		$data->service()->sync($request['service']);
+
+		Mail::to($data->email)
+        		->send(new ThanksMail($data));
 
 		return $data;
 	}

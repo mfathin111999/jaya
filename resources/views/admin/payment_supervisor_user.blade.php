@@ -84,7 +84,7 @@
                                 @{{ report.date_invoice }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                INV-CUS/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                @{{ report.document_no }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>Tahap @{{ index++ }} @{{ report.name }}</strong>
@@ -102,7 +102,7 @@
                                 MDR 233334448884
                               </td>
                             </tr>
-                            <tr>
+                            <tr v-if='view_report.report !== undefined && view_report.report.length !== 0'>
                               <td colspan="6">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
@@ -111,6 +111,11 @@
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>-</strong>
+                              </td>
+                            </tr>
+                            <tr v-else>
+                              <td colspan="8" class="text-center">
+                                <strong>Belum ada pembayaran</strong>
                               </td>
                             </tr>
                           </tbody>
@@ -190,7 +195,7 @@
         },
         methods: {
           getData : function(){
-            axios.get("{{ url('api/vendor/getProgressCustomer') }}").then(function(response){
+            axios.get("{{ url('api/vendor/getPaymentCustomer') }}").then(function(response){
               this.data = response.data.data;
               this.partner = {};
               this.view_report = {};

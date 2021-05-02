@@ -1,4 +1,4 @@
-<header id="header-app" v-cloak>
+<header id="headerApp" v-cloak>
 
 	<div class="modal fade" id="loginModal" role="dialog">
 	  <div class="modal-dialog" role="document">
@@ -27,7 +27,7 @@
 	        </div>
 	        <div class="modal-footer" style="justify-content: center;">
 	          <p class="m-0">Belum punya akun ?</p>
-	          <a class="text-info" data-dismiss="modal" id="trigSign">Daftar</a>
+	          <a class="text-info" data-dismiss="modal" style="cursor: pointer;" @click='signup'>Login</a>
 	        </div>
 	      </form>
 	    </div>
@@ -66,7 +66,7 @@
 	        </div>
 	        <div class="modal-footer" style="justify-content: center;">
 	          <p class="m-0">Sudah punya akun ?</p>
-	          <a class="text-info" data-dismiss="modal">Login</a>
+	          <a class="text-info" data-dismiss="modal" style="cursor: pointer;" @click='login'>Login</a>
 	        </div>
 	      </form>
 	    </div>
@@ -104,7 +104,7 @@
 				</li> -->
 				@if(session('role') == 4)
 				<li class="nav-item ml-4">
-					<a class="nav-link" href="#">History</a>
+					<a class="nav-link" href="{{ route('history') }}">History</a>
 				</li>
 				@endif
 			</ul>
@@ -133,7 +133,7 @@
 @section('header-js')
 <script type="text/javascript">
 	var header = new Vue({
-		el: '#header-app', 
+		el: '#headerApp', 
 		data: {
 			data: [],
 		},
@@ -208,19 +208,19 @@
 					//handle error
 					console.log(response);
 				});
+			},
+			signup: function(){
+				this.$nextTick(() => {
+					$('#signUp').modal('show');
+				});
+			},
+			login: function(){
+				this.$nextTick(() => {
+					$('#loginModal').modal('show');
+				});
 			}
 		}
 	})
-
-	$('#trigSign').click(function(){
-		$('#signUp').modal('toggle')
-		$('#signUp').modal('show');
-	});
-
-	$('#trigLog').click(function(){
-		$('#loginModal').modal('toggle');
-		$('#loginModal').modal('show');
-	});
 
 </script>
 @endsection
