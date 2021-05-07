@@ -19,14 +19,14 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form v-on:submit.prevent="sendPayment(add_report.id)" id="form-add-pay">
+            <form v-on:submit.prevent="sendPayment(add_termin.id)" id="form-add-pay">
               <div class="modal-body">
                 <div class="row align-items-center">
                   <div class="col-12 mb-2">
                     <label class="m-0">Total Tagihan</label>
                   </div>
                   <div class="col-12 mb-2">
-                    <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
+                    <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_termin.price) }}</label>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
@@ -37,7 +37,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="date_update">Tanggal Laporan</label>
-                      <input type="text" id="date_update" class="form-control" v-model='add_report.updated_at' required disabled="">
+                      <input type="text" id="date_update" class="form-control" v-model='add_termin.updated_at' required disabled="">
                     </div>
                   </div>
                 </div>
@@ -65,18 +65,18 @@
                   <label class="m-0">Total Pembayaran</label>
                 </div>
                 <div class="col-12 mb-2">
-                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
+                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_termin.price) }}</label>
                 </div>
                 <div class="col-12">
                   <div class="form-group">
                     <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                    <input type="text" class="form-control" id="date_start" v-model='add_report.date_invoice' name="date" required disabled="">
+                    <input type="text" class="form-control" id="date_start" v-model='add_termin.date_invoice' name="date" required disabled="">
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="form-group">
                     <label for="date_updated">Tanggal Laporan</label>
-                    <input type="text" class="form-control" id="date_updated" v-model='add_report.updated_at' required disabled="">
+                    <input type="text" class="form-control" id="date_updated" v-model='add_termin.updated_at' required disabled="">
                   </div>
                 </div>
               </div>
@@ -148,43 +148,43 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice == null'>
+                            <tr v-for='(termins, index) in view_report.termin'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice == null ? '-' : report.date_invoice }}
+                                @{{ termins.date_invoice }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                INV-VEN/NRU/@{{ index+1 }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                @{{ termins.document_no }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ report.name }}</strong>
+                                <strong>@{{ mapUh(termins.report) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(report.price_dirt) }}</strong>
+                                <strong>@{{ formatPrice(termins.price_dirt) }}</strong>
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index != 0'>
-                                <div v-if='report.payment_url != null'>
+                              <td align="center" style="vertical-align: middle;" v-if = 'termins.termin != 1'>
+                                <div v-if='termins.payment_url != null'>
                                   <label class="m-0">Terkirim</label>
                                 </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <label class="font-weight-bold m-0" v-if='report.status != "doneMandor"'>Progres</label>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='report.status == "doneMandor"' @click='addPayment(report)'>Kirim Tagihan</a>
+                                <div v-if='termins.payment_url == null'>
+                                  <span v-if='termins.status == null'>
+                                    <label class="font-weight-bold m-0" v-if='termins.report.findIndex(x => x.status !== "doneMandor") != -1'>Progres</label>
+                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" v-if='termins.report.findIndex(x => x.status !== "doneMandor") == -1' @click='addPayment(termins)'>Kirim Tagihan</a>
                                   </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
+                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='termins.status == "donePayed"' @click='addPayment(termins)'>Detail</a>
                                 </div>
                               </td>
-                              <td align="center" style="vertical-align: middle;" v-if = 'index == 0'>
-                                <div v-if='report.payment_url != null'>
+                              <td align="center" style="vertical-align: middle;" v-if = 'termins.termin == 1'>
+                                <div v-if='termins.payment_url != null'>
                                   <label class="m-0">Terkirim</label>
                                 </div>
-                                <div v-if='report.payment_url == null'>
-                                  <span v-if='report.status != "donePayed"'>
-                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" @click='addPayment(report)'>Kirim Tagihan</a>
+                                <div v-if='termins.payment_url == null'>
+                                  <span v-if='termins.status != "donePayed"'>
+                                    <a href="" class="btn btn-success font-12" data-toggle="modal" data-target="#addPayment" @click='addPayment(termins)'>Kirim Tagihan</a>
                                   </span>
-                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='report.status == "donePayed"' @click='addPayment(report)'>Detail</a>
+                                    <a href="" class="btn btn-info font-12" data-toggle="modal" data-target="#seePayment" v-if='termins.status == "donePayed"' @click='addPayment(termins)'>Detail</a>
                                 </div>
                               </td>
                             </tr>
@@ -228,7 +228,7 @@
             id_engage : '',
             partner: {},
             view_report : {},
-            add_report : {
+            add_termin : {
               price : 0,
               name : 0,
               id : '',
@@ -281,7 +281,7 @@
               this.data = response.data.data;
               this.partner = {};
               this.view_report = {};
-              this.add_report = {
+              this.add_termin = {
                 price : 0,
                 name : 0,
                 id : '',
@@ -311,12 +311,12 @@
               this.add_report = response.data.data;
             }.bind(this));
           },
-          addPayment : function(report){
-            this.add_report.id            = report.id; 
-            this.add_report.price         = report.price_dirt; 
-            this.add_report.name          = report.name;
-            this.add_report.updated_at    = moment(report.updated_at).format('YYYY-MM-DD');
-            this.add_report.date_invoice  = report.date_invoice;
+          addPayment : function(termin){
+            this.add_termin.id            = termin.id; 
+            this.add_termin.price         = termin.price_dirt; 
+            this.add_termin.name          = termin.name;
+            this.add_termin.updated_at    = moment(termin.updated_at).format('YYYY-MM-DD');
+            this.add_termin.date_invoice  = termin.date_invoice;
           },
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');
@@ -403,6 +403,17 @@
           },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
+          },
+          mapUh(x){
+            let data = [];
+            for (var i = 0; i < x.length; i++) {
+              data.push(x[i].name);
+            }
+
+            if (data.length <= 1 )
+              return 'Tahap '+data[0];
+            else
+              return 'Tahap '+data.join(', ');
           },
         }
       });

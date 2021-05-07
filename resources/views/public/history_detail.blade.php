@@ -10,182 +10,6 @@
     @include('layout.admin_header')
     <div id="app" v-cloak>
 
-      <!-- MODAL INFORMASI RESERVASI -->
-
-      <div class="modal fade" id="info_engage" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-12 mb-4 mt-3 text-center">
-                  <div class="pt-2 pb-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label class="font-weight-bold m-0 h5">Informasi Reservasi</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="name">Nama Customer</label>
-                    <input type="text" class="form-control" id="name" v-model='data.name' disabled>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="phone_number">No. Handphone</label>
-                    <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' disabled>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="province">Provinsi</label>
-                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="regency">Kota/Kabupaten</label>
-                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
-                        <option value="">Choose</option>
-                              <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="district">Kecamatan</label>
-                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="village">Kelurahan</label>
-                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
-                        <option value="">Choose</option>
-                        <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
-                      </select>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                      <label for="village">Alamat</label>
-                      <textarea class="form-control" name="address" v-model='allPlace' disabled="">
-                        </textarea>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mt-4">
-                <div class="col-md-12 rounded text-center">
-                  <div class="pt-2 pb-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                    <label class="font-weight-bold m-0 h5">Gambar Lapangan</label>
-                  </div>
-                </div>
-                <div class="col-md-3 text-right mt-3" v-for = "(image, index2) in data.gallery" >
-                  <div>
-                    <img :src="'../storage/'+data.gallery[index2].image" class="img-fluid p-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAMBAH LAPORAN LAPANGAN -->
-
-      <div class="modal fade" id="addModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Tambah Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form v-on:submit.prevent="addWorkUpdate()" id="form-add">
-              <div class="modal-body">
-                <div class="row align-items-center">
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Tanggal Laporan</label>
-                      <input type="text" name="date" class="form-control" id="date_start">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="image_report" class="btn btn-sm btn-outline-secondary font-weight-bold m-0"><i class="fa fa-plus pr-2"></i>Tambah Gambar</label>
-                      <input type="file" name="gambar" id="image_report" class="form-control" multiple="" @change="onFileChange" style="display: none;">
-                    </div>
-                  </div>
-                  <div class="col-6" v-for="(img, index) in view_image">
-                    <div class="form-group">
-                      <i class="fa fa-minus-circle btn btn-warning" @click='deleteItem(index)' style="position: absolute; top: 5%; right: 10%;"></i>
-                      <img :src="img" class="img-fluid">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- LIHAT & EDIT LAPORAN LAPANGAN -->
-
-      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form v-on:submit.prevent="saveAddReport()" id="form-add">
-              <div class="modal-body">
-                <div class="row align-items-center">
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label for="price_clean1">Tanggal Laporan</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <label class="">Gambar Lapangan</label>
-                  </div>
-                  <div class="col-12" v-for="(img, index) in view_report.gallery">
-                    <div class="form-group">
-                      <img :src="'../storage/'+img.image" class="img-fluid">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
       <!-- Content -->
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
@@ -193,7 +17,6 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
               <div class="card-header">
-                <h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
@@ -213,9 +36,6 @@
                       </div>
                       <div class="col-md-8" v-if= 'data.date_work == null' >
                         <strong>Belum Ditentukan</strong>
-                      </div>
-                      <div class="col-12 mt-2">
-                        <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
                       </div>
                     </div>
                   </div>
@@ -258,7 +78,7 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
                           <td align="center" style="vertical-align: middle;">
-                            @{{ formatPrice(detail.price_clean) }}
+                            @{{ formatPrice(detail.price_dirt) }}
                           </td>
                           <td align="center" style="vertical-align: middle;">
                             <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
@@ -270,7 +90,7 @@
                         </tr>
                         <tr>
                           <td colspan="6" align="center" style="vertical-align: middle;"><strong>Total Harga</strong></td>
-                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
+                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[1]) }}</strong></td>
                           <td align="center" style="vertical-align: middle;">
                             <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
                             <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>

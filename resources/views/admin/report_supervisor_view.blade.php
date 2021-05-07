@@ -214,6 +214,37 @@
         </div>
       </div>
 
+      <!-- MODAL EDIT TAHAPAN -->
+
+      <div class="modal fade" id="editStep" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #ffc3c3;">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Tahapan Pekerjaan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="updateStep(view_report.id)" id="form-update-step">
+              <div class="modal-body">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="name_step">Nama Tahapan</label>
+                      <input type="text" id="name_step" class="form-control" v-model='view_report.name' name="name" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <!-- Content -->
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
@@ -286,19 +317,19 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="name">Nama Customer</label>
-                      <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
+                      <input type="text" class="form-control" id="name" v-model='data.name' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="phone_number">No. Handphone</label>
-                      <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
+                      <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
-                      <input type="email" class="form-control" id="email" v-model='partner.email' disabled>
+                      <input type="email" class="form-control" id="email" v-model='data.email' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -331,6 +362,8 @@
                           <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
                           <th class="text-center">
                             <i class="btn btn-info fa fa-plus" data-toggle="modal" data-target="#addModal" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
+                            <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editStep" v-if='data.locked == "offer"' @click="getReport(report.id)"></i>
+                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer"' @click="delStep(report.id, index)"></i>
                           </th>
                         </tr>
                         <tr>
@@ -426,14 +459,14 @@
                               <td align="center" style="vertical-align: middle;">@{{ formatPrice(report.all_price[1]) }}</td>
                               <td align="center" style="vertical-align: middle;">
                                 <label v-if='termin.length == 0'>Tambah termin terlebih dahulu</label>
-                                <select class="form-control" v-if='termin.length != 0' v-model='report.termin' @change='addToTermin(event, report)' :disabled="data.locked == 'deal' ? true : false">
+                                <select class="form-control" v-if='termin.length != 0' v-model='report.termin' @change='addToTermin(report)' :disabled="data.locked == 'deal' ? true : false">
                                   <option value="null">Pilih</option>
-                                  <option v-for='(termins, index5) in termin' :value="index5+1">@{{ index5+1 }}</option>
+                                  <option v-for='(termins, index5) in termin' :value="termins.id">@{{ termins.termin }}</option>
                                 </select>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <i class="btn btn-info fa fa-save" v-if='data.locked == "offer"' @click='sendTermin(report)'></i>
-                                <i class="btn btn-warning fa fa-check" v-if='report.termin != null && report.termin != "null" && data.locked == "deal"'></i>
+                                <i class="btn btn-warning fa fa-check" v-if='report.termin != "null" && data.locked == "deal"'></i>
+                                <span v-else>-</span>
                               </td>
                             </tr>
                           </tbody>
@@ -455,11 +488,12 @@
                           <tbody>
                             <tr v-for='(termins, index) in termin'>
                               <td align="center" style="vertical-align: middle;">@{{ index+1 }}</td>
-                              <td align="center" style="vertical-align: middle;">@{{ termins.vendor }}</td>
-                              <td align="center" style="vertical-align: middle;">@{{ termins.customer }}</td>
+                              <td align="center" style="vertical-align: middle;">@{{ formatPrice(termins.total_vendor == null ? 0 :  termins.total_customer) }}</td>
+                              <td align="center" style="vertical-align: middle;">@{{ formatPrice(termins.total_customer == null ? 0 :  termins.total_customer) }}</td>
                               <td align="center" style="vertical-align: middle;">
-                                <i class="btn btn-warning fa fa-check" v-if='termins.vendor != 0 && termins.customer != 0'></i>
-                                <i class="btn btn-danger fa fa-times" v-if='termins.vendor == 0 && termins.customer == 0' @click='deleteTermin(index)'></i>
+                                <i class="btn btn-warning fa fa-check" v-if='termins.report_count == 0 && termins.termin != termin.length'></i>
+                                <i class="btn btn-warning fa fa-check" v-if='termins.report_count != 0'></i>
+                                <i class="btn btn-danger fa fa-times" v-if='termins.report_count == 0 && termins.termin == termin.length' @click='deleteTermin(termins, index)'></i>
                               </td>
                             </tr>
                           </tbody>
@@ -473,7 +507,7 @@
 
                 <div class="row mt-4" v-if='data.locked != "deal"'>
                   <div class="col-md-6 pt-3 pb-3 rounded text-center" v-if='data.customer_is == 0'>
-                    <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
+                    <div class="rounded p-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Vendor</label><br>
                       <label class="font-weight-bold" v-if = "data.vendor == null">Tentukan vendor yang akan bergabung.</label><br v-if = "data.vendor == null">
                       <select class="form-control" v-if = "data.vendor == null" v-model = 'data.vendor' @change="addVendor">
@@ -482,6 +516,12 @@
                       </select>
                       <label class="font-weight-bold" v-if = "data.vendor != null">Vendor telah anda tentukan, apakah anda ingin mengubahnya ?</label><br v-if = "data.vendor != null">
                       <button class="btn btn-danger" v-if = "data.vendor != null" @click='removeVendor'>Kosongkan Vendor</button>
+                    </div>
+                  </div>
+                  <div class="col-md-5 pt-3 pb-3 text-center mx-auto" v-if='data.customer_is != 0 && data.vendor_is == 0'>
+                    <div class="rounded p-3" style="background-color: #00000008; border: 1px solid #00000020;">
+                      <label class="font-weight-bold h3">Customer</label><br>
+                      <label class="font-weight-bold">Penawaran Telah Disetujui</label>
                     </div>
                   </div>
                   <div class="col-md-6 align-self-center text-center" v-if='data.customer_is != 0 && data.vendor_is != 0'>
@@ -561,8 +601,8 @@
             thisVillage: '',
         },
         mounted: function(){
-          this.loadProvince();
           this.getData(this.id);
+          this.getTermin();
           this.getVendor();
           this.allUnit();
           this.$nextTick(()=>{
@@ -587,47 +627,6 @@
               this.partner = response.data.data.partner;
               this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
 
-              console.log(this.data);
-
-              let termin = 0;
-              for (var i = 0; i < this.data.report.length; i++) {
-                if (this.data.report[i].termin > termin){
-                  termin = this.data.report[i].termin
-                }
-              }
-
-              if (termin != 0) {
-                this.termin = [];
-                for (var j = 0; j < termin; j++) {
-                  this.termin.push({
-                    step      : [],
-                    vendor    : 0,
-                    customer  : 0,
-                  });
-                  for (var k = 0; k < this.data.report.length; k++) {
-                    if (this.data.report[k].termin-1 == j){
-                      this.termin[j].step.push({
-                        id    : this.data.report[k].id,
-                        name  : this.data.report[k].name,
-                        clean : this.data.report[k].all_price[0],
-                        dirt  : this.data.report[k].all_price[1],
-                      });
-                    }
-                  }
-                }
-              }
-
-              for (var l = 0; l < this.termin.length; l++) {
-                let total_clean = 0;
-                let total_dirt  = 0;
-                for (var m = 0; m < this.termin[l].step.length; m++) {
-                  total_clean += this.termin[l].step[m].clean;
-                  total_dirt += this.termin[l].step[m].dirt;
-
-                  this.termin[l].vendor   = this.formatPrice(total_clean);
-                  this.termin[l].customer = this.formatPrice(total_dirt);
-                }
-              }
             }.bind(this));
           },
           allUnit: function(){
@@ -635,10 +634,15 @@
               this.allunit = response.data.data;
             }.bind(this));
           },
+          getTermin : function(){
+            axios.get("{{ url('api/termin/getByEngagementId') }}/"+this.id).then(function(response){
+              this.termin = response.data.data;
+              console.log(this.termin);
+            }.bind(this));
+          },
           getVendor : function(){
             axios.get("{{ url('api/user/getVendor') }}").then(function(response){
               this.vendor = response.data.data;
-              console.log(this.vendor);
             }.bind(this));
           },
           getReport : function(id){
@@ -687,6 +691,48 @@
             }).then(() => {
               this.getData(this.id);
               Swal.fire('Success', 'Update Successfully .. !', 'success');
+            });
+          },
+          updateStep : function(id){
+            let form = document.getElementById('form-update-step');
+            let forms = new FormData(form);
+
+            forms.append('reservation_id', this.id);
+            forms.append('id', id);
+
+            axios.post(
+              "{{ url('api/report/updateStep') }}",
+              forms,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                }
+              }
+            )
+            .then(function (response) {
+              report.$nextTick(() => {
+                $("#editStep").modal('hide');
+              });
+            }).then(() => {
+              this.getData(this.id);
+              Swal.fire('Success', 'Update Successfully .. !', 'success');
+            });
+          },
+          delStep : function(id, index){
+            Swal.fire({
+              title: 'Apakah kamu yakin ?',
+              text: 'Data yang dihapus tidak dapat dikembalikan !',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios.post("{{ url('api/report/delStep') }}", {'id' : id}).then(function(response){
+                  this.data.report.splice(index, 1)
+                }.bind(this));
+              }
             });
           },
           saveReport : function(){
@@ -778,51 +824,36 @@
             this.id_step = id;
           },
           addTermin : function(){
-
-            this.termin.push({
-              step      : [],
-              vendor    : 0,
-              customer  : 0,
+            axios.post(
+              "{{ url('api/termin') }}",
+              {reservation_id : this.id}
+            )
+            .then(function (response) {
+              console.log(response.data);
+            }).then(() => {
+              this.getTermin();
             });
-            // console.log(this.termin);
           },
-          deleteTermin : function(index){
-
-            this.termin.splice(index, 1);
-          },
-          addToTermin : function(event, report){
-            let index = event.target.value-1;
-
-            for (var i = 0; i < this.termin.length; i++) {
-               this.termin[i].step = [];
-               this.termin[i].vendor = 0;
-               this.termin[i].customer = 0;
-            } 
-
-            for (var j = 0; j < this.data.report.length; j++) {
-              for (var k = 0; k < this.termin.length; k++) {
-                if (this.data.report[j].termin == k+1) {
-                  this.termin[k].step.push({
-                    id    : this.data.report[j].id,
-                    name  : this.data.report[j].name,
-                    clean : this.data.report[j].all_price[0],
-                    dirt  : this.data.report[j].all_price[1],
-                  });
-                }
-              } 
-            }
-
-            for (var l = 0; l < this.termin.length; l++) {
-              let total_clean = 0;
-              let total_dirt  = 0;
-              for (var m = 0; m < this.termin[l].step.length; m++) {
-                total_clean += this.termin[l].step[m].clean;
-                total_dirt += this.termin[l].step[m].dirt;
-
-                this.termin[l].vendor   = this.formatPrice(total_clean);
-                this.termin[l].customer = this.formatPrice(total_dirt);
+          deleteTermin : function(termin, index){
+            axios.post(
+              "{{ url('api/termin/destroy') }}/"+termin.id
+            )
+            .then(function (response) {
+              if (response.data.message == 'Oke') {
+                this.termin.splice(index, 1);
               }
-            }
+            }.bind(this));
+          },
+          addToTermin : function(report){ 
+            axios.post(
+              "{{ url('api/termin/addToTermin') }}",
+              {'id' : report.id, 'termin' : report.termin}
+            )
+            .then(function (response) {
+              console.log(response.data);
+            }).then(() => {
+              this.getTermin();
+            });
           },
           sendTermin : function(report){
             if (report.termin == 'null' || report.termin == null || report.termin == '') {
@@ -838,7 +869,6 @@
                 'warning'
               );
             }else{
-
               Swal.fire({
                 title: 'Apakah kamu yakin ?',
                 text: "Kamu tidak bisa mengubah termin setelah termin ditetapkan",
@@ -871,24 +901,6 @@
                 }
               });
             }
-          },
-          submitform : function(){
-            var form = new FormData();
-
-            form.append('id', this.id);
-            for( var i = 0; i < this.image.length; i++ ){
-              let file = this.image[i];
-              form.append('image[' + i + ']', file);
-            }
-            for( var i = 0; i < this.data.length; i++ ){
-              let data = this.data[i];
-              form.append('data[' + i + ']', data);
-            }
-
-            axios.post("{{ url('api/report/create') }}", form).then(function(response){
-              // window.location = "{{ route('engagement') }}";
-              console.log(response.data.data);
-            });
           },
           addDate: function(){
             let form = document.getElementById('form-add-date');
@@ -983,7 +995,6 @@
                 axios.post("{{ url('api/engagement/addVendor') }}", 
                   { 'id' : this.id, 'vendor': null })
                 .then(function(response){
-                  console.log(response);
                   if (response.data.message == "Success") {
                     Swal.fire(
                       'Berhasil',
@@ -1017,7 +1028,6 @@
                 axios.post("{{ url('api/engagement/addVendor') }}", 
                   { 'id' : this.id, 'vendor': e.target.value })
                 .then(function(response){
-                  console.log(response);
                   if (response.data.message == "Success") {
                     Swal.fire(
                       'Berhasil',

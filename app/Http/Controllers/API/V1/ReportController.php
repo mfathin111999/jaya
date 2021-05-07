@@ -9,6 +9,7 @@ use App\Mail\SendEngage;
 use App\Shared\Uploader;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Domain\Payment\Entities\Termin;
 use App\Domain\Report\Entities\Report;
 use App\Domain\Report\Factories\ReportFactory;
 use App\Domain\Engagement\Entities\Engagement;
@@ -235,11 +236,11 @@ class ReportController extends Controller
     }
 
     public function addPay($id, Request $request){
-        $data = Report::where('id', $id)->first();
+        $data = Termin::where('id', $id)->first();
 
-        $data->date_vendor         = $request->date;
-        $data->is_payed            = 'PAY/'.uniqid().'/'.date('y').'/'.date('y');
-        $data->status              = 'donePayed';
+        $data->date_invoice         = $request->date;
+        $data->document             = 'PAY/'.uniqid().'/'.date('m').'/'.date('Y');
+        $data->status               = 'donePayed';
 
         $data->save();
 

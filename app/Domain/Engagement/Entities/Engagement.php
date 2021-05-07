@@ -3,18 +3,19 @@
 namespace App\Domain\Engagement\Entities;
 
 use App\Models\Village;
-use App\Models\District;
 use App\Models\Regency;
+use App\Models\District;
 use App\Models\Province;
 use App\Domain\User\Entities\User;
-use App\Domain\User\Entities\User as Mandor;
-use App\Domain\Service\Entities\Service;
-use App\Domain\Employee\Entities\Employee;
-use App\Domain\Employee\Entities\Vendor as Customer;
-use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Report\Entities\Report;
 use Illuminate\Database\Eloquent\Model;
+use App\Domain\Payment\Entities\Termin;
+use App\Domain\Employee\Entities\Vendor;
+use App\Domain\Service\Entities\Service;
+use App\Domain\Employee\Entities\Employee;
+use App\Domain\User\Entities\User as Mandor;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Domain\Employee\Entities\Vendor as Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Domain\Engagement\Entities\EngagementGalleries;
 
@@ -88,6 +89,10 @@ class Engagement extends Model
 
     public function vendor(){
         return $this->belongsTo(User::class, 'vendor_id', 'id');
+    }
+
+    public function termin(){
+        return $this->hasMany(Termin::class, 'reservation_id', 'id');
     }
 
     public function partner(){

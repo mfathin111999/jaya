@@ -305,7 +305,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form v-on:submit.prevent="savePartner()" id="form-add-partner">
+            <form v-on:submit.prevent="savePartner(1)" id="form-show-partner">
               <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -448,9 +448,9 @@
                       <textarea type="text" rows="2" class="form-control" id="ktp" name="address" v-model='allPlace' disabled></textarea>
                     </div>
                   </div>
-                  <div class="col-md-12">
-                    <button class="btn btn-info" data-toggle="modal" data-target="#addPartner" @click='showPartner()'>
-                      <i class="fa fa-pencil"></i>
+                  <div class="col-md-12 text-right">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#showPartner" @click='showPartner()'>
+                      <i class="fa fa-pencil mr-2"></i><span>Edit Data Customer</span>
                     </button>
                   </div>
                 </div>
@@ -483,7 +483,7 @@
                           <td align="center" scope="col"><strong>Nama</strong></td>
                           <td align="center" scope="col"><strong>Volume</strong></td>
                           <td align="center" scope="col"><strong>Unit</strong></td>
-                          <td align="center" scope="col"><strong>Waktu</strong></td>
+                          <td align="center" scope="col"><strong>Estimasi</strong></td>
                           <td align="center" scope="col"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
@@ -599,9 +599,7 @@
               this.data = response.data.data;
               this.partner = response.data.data.partner == null ? partner : response.data.data.partner;
               this.allPlace = response.data.data.partner == null ? '' : response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
-              for (var i = 0; i < response.data.data.gallery.length; i++) {
-                this.view_image.push(response.data.data.gallery[i]);
-              }
+              this.view_image = response.data.data.gallery;
             }.bind(this));
           },
           allUnit: function(){
@@ -609,17 +607,18 @@
               this.allunit = response.data.data;
             }.bind(this));
           },
-          showPartner: function(){
-            this.thisDistrict = this.data.pdistrict.id;
-            this.thisRegency  = this.data.pregency.id;
-            this.thisVillage  = this.data.pvillage.id;
+          async showPartner(){
             this.thisProvince = this.data.pprovince.id;
+            await this.getRegency(1);
 
-            this.getRegency().then(function () {
-              this.getDistrict().then(function () {
-                this.getVillage();
-              });
-            });
+            this.thisRegency  = this.data.pregency.id;
+            await this.getDistrict(1);
+
+            this.thisDistrict = this.data.pdistrict.id;
+            await this.getVillage();
+
+            this.thisVillage  = this.data.pvillage.id;
+
 
           },
           getReport : function(id){
@@ -760,8 +759,14 @@
               Swal.fire('Success', 'Store Successfully .. !', 'success');
             });
           },
-          savePartner : function(){
-            let form = document.getElementById('form-add-partner');
+          savePartner : function(type = 0){
+            let form;
+            if (type == 0)
+              form = document.getElementById('form-add-partner');
+            else
+              form = document.getElementById('form-show-partner');
+
+
             let forms = new FormData(form);
 
             forms.append('reservation_id', this.id);
@@ -773,7 +778,8 @@
             )
             .then(function (response) {
               report.$nextTick(() => {
-                $("#addStep").modal('hide');
+                $("#addPartner").modal('hide');
+                $("#showPartner").modal('hide');
               });
             }).then(() => {
               this.getData(this.id);
@@ -947,23 +953,26 @@
               this.thisVillage = '';
             }.bind(this));
           },
-          getRegency: function(){
+          getRegency: function(type = 0){
             if (this.thisProvince != '') {
                 axios.post("{{ url('api/regency') }}", {id: this.thisProvince}).then(function(response){
                 this.regency = response.data.data;
                 this.district = {};
-                this.thisDistrict = '';
                 this.village = {};
-                this.thisVillage = '';
+                if (type == 0) {
+                  this.thisDistrict = '';
+                  this.thisVillage = '';
+                }
               }.bind(this));
             }
           },
-          getDistrict: function(){
+          getDistrict: function(type = 0){
             if (this.thisRegency != '') {
               axios.post("{{ url('api/district') }}", {id: this.thisRegency}).then(function(response){
                 this.district = response.data.data;
                 this.village = {};
-                this.thisVillage = '';
+                if (type == 0)
+                  this.thisVillage = '';
               }.bind(this));
             }
           },

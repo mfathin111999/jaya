@@ -76,38 +76,38 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
+                            <tr v-for='(termins, index) in view_report.termin'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice }}
+                                @{{ termins.date_pay }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.document_no }}
+                                @{{ termins.document_no }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>Tahap @{{ index++ }} @{{ report.name }}</strong>
+                                <strong>@{{ mapUh(termins.report) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                RCP/NRU/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                @{{ termins.payment[0].number }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice }}
+                                @{{ moment(termins.date_pay).format('YYYY-MM-DD') }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ formatPrice(report.price_clean) }}
+                                @{{ formatPrice(termins.price_dirt) }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                MDR 233334448884
+                                @{{ termins.payment[0].payment_type }}
                               </td>
                             </tr>
-                            <tr v-if='view_report.report !== undefined && view_report.report.length !== 0'>
+                            <tr v-if='view_report.termin !== undefined && view_report.termin.length !== 0'>
                               <td colspan="6">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(view_report.allprice_clean == null ? 0 : view_report.allprice_clean) }}</strong>
+                                <strong>@{{ formatPrice(view_report.allprice_dirt == null ? 0 : view_report.allprice_dirt) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>-</strong>
@@ -321,6 +321,17 @@
           },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
+          },
+          mapUh(x){
+            let data = [];
+            for (var i = 0; i < x.length; i++) {
+              data.push(x[i].name);
+            }
+
+            if (data.length <= 1 )
+              return 'Tahap '+data[0];
+            else
+              return 'Tahap '+data.join(', ');
           },
         }
       });

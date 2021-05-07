@@ -24,11 +24,18 @@ class ReportManagement
 
 	public function getByIdEngagement($id){
 		$engagement = Engagement::where('id', $id)
+					->when(auth()->guard('api')->user()->role == 1, function ($query){
+						$query->with('termin');
+					})
 					->with(['user.partner', 'gallery', 'pprovince', 'pdistrict', 'pregency', 'pvillage', 'vendor', 'report' => function($query){
-						$query->whereNull('parent_id')->with(['subreport' => function($query){
-							$query->orderBy('id', 'asc');
-						}]);
-					}])
+						$query->whereNull('parent_id')
+							  ->when(auth()->guard('api')->user()->role == 1, function ($query){
+									$query->with('termin');
+								})
+							  ->with(['subreport' => function($query){
+									$query->orderBy('id', 'asc');
+								}]);
+						}])
 					->first();
 
 		return $engagement;

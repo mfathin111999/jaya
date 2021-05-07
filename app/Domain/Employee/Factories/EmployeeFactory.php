@@ -25,8 +25,8 @@ class EmployeeFactory
         $data[] = [
                 'id'                    => $item->id,
                 'name'                  => $item->name,
-                'customer_engage'       => self::reservation($item->customerEngage),
-                'customer_engage_count' => $item->customer_engage_count,
+                'customer_engage'       => self::reservation($item->engageCustomer),
+                'customer_engage_count' => $item->engage_customer_count,
             ];
         }
         return $data;
@@ -49,9 +49,9 @@ class EmployeeFactory
                 'time'              => $item->time,
                 'status'            => $item->status,
                 'service'           => $item->service,
-                'report'            => self::report($item->report),
-                'allprice_dirt'     => self::allprice($item->report, 1),
-                'allprice_clean'    => self::allprice($item->report, 2),
+                'termin'            => self::termin($item->termin),
+                'allprice_dirt'     => self::allprice($item->termin, 3),
+                'allprice_clean'    => self::allprice($item->termin, 4),
                 'created_at'        => Date('Y-m-d', strtotime($item->created_at))
             ];
         }
@@ -73,6 +73,44 @@ class EmployeeFactory
                     $data += $value->price_clean;
                 }
             }
+        }elseif ($type == 3) {
+            foreach ($items as $item) {
+                foreach ($item->report as $key) {
+                    foreach ($key->subreport as $value) {
+                        $data += $value->price_dirt;
+                    }
+                }
+            }
+        }elseif ($type == 4) {
+            foreach ($items as $item) {
+                foreach ($item->report as $key) {
+                    foreach ($key->subreport as $value) {
+                        $data += $value->price_clean;
+                    }
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public static function termin($items){
+        $data = [];
+
+        foreach ($items as $item) {
+            $data[] = [
+                'id'            => $item->id,
+                'termin'        => $item->termin,
+                'price_dirt'    => self::allprice($item->report, 1),
+                'price_clean'   => self::allprice($item->report, 2),
+                'payment_url'   => $item->payment_url,
+                'date_invoice'  => $item->date_invoice ?? '-',
+                'date_pay'      => $item->date_pay ?? '-',
+                'document_no'   => $item->document ?? '-',
+                'status'        => $item->status,
+                'payment'       => $item->payment,
+                'report'        => self::report($item->report),
+            ];
         }
 
         return $data;

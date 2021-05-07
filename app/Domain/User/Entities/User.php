@@ -60,6 +60,10 @@ class User extends Authenticatable
         return $this->hasMany(Engagement::class, 'mandor_id', 'id');
     }
 
+    public function engageCustomer(){
+        return $this->hasMany(Engagement::class, 'user_id', 'id');
+    }
+
     public function vendorEngage(){
         return $this->hasMany(Engagement::class, 'vendor_id', 'id');
     }

@@ -25,8 +25,9 @@
 				font-size: 12px !important;
 			}
 		</style>
-
+		@yield('header-css')
 		@yield('sec-css')
+		@yield('footer-css')
 	</head>
 	<body style="font-family: 'Montserrat', sans-serif; font-size: 12px; overflow-x: hidden;">
 

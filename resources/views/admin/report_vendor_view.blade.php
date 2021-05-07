@@ -17,7 +17,7 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
-      					<h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
+      					<h3 class="text-center mb-4"><strong>PENAWARAN PEKERJAAN</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
@@ -59,19 +59,19 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="name">Nama Customer</label>
-                      <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
+                      <input type="text" class="form-control" id="name" v-model='data.name' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="phone_number">No. Handphone</label>
-                      <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
+                      <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
-                      <input type="email" class="form-control" id="email" v-model='partner.email' disabled>
+                      <input type="email" class="form-control" id="email" v-model='data.email' disabled>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -236,7 +236,7 @@
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
               this.partner = response.data.data.partner;
-              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;
+              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
 
               console.log(this.data);
 

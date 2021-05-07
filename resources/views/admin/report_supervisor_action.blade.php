@@ -28,19 +28,19 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="name">Nama Customer</label>
-                    <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
+                    <input type="text" class="form-control" id="name" v-model='data.name' disabled>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="phone_number">No. Handphone</label>
-                    <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
+                    <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' disabled>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" v-model='partner.email' disabled>
+                    <input type="email" class="form-control" id="email" v-model='data.email' disabled>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -185,6 +185,7 @@
                           <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[1]) }}</strong></td>
                           <td align="center" style="vertical-align: middle;">
                             <div v-if='report.status != "donePayed"'>
+                              <label class="m-0" v-if='report.status == "offer"'>-</label>
                               <label class="m-0" v-if='report.status == "deal"'>Progress</label>
                               <label class="m-0" v-if='report.status == "done"'>Diselesaikan Vendor</label>
                               <label class="m-0" v-if='report.status == "doneMandor"'>Telah Diverivikasi Mandor</label>
@@ -282,9 +283,7 @@
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
               this.partner = response.data.data.partner;
-              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;;
-
-              console.log(this.data);
+              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
 
               let termin = 0;
               for (var i = 0; i < this.data.report.length; i++) {
@@ -344,8 +343,6 @@
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
-
-            // console.log(forms.get('date'));
 
             axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
               Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');

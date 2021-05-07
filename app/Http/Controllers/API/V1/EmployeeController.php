@@ -61,15 +61,15 @@ class EmployeeController extends Controller
         ->with(['vendorEngage' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')
-                          ->where(function($query){
-                            $query->where('status', '!=', 'doneCustomer')
-                                  ->where('status', '!=', 'donePayed');
-                          })->with(['subreport' => function($query){
-                        $query->orderBy('id', 'desc');
-                    }]);
-            }]);
+                  ->with(['service', 'vendor', 'termin' => function ($query) {
+                    $query->where('status', 'doneCustomer')
+                          ->with(['report' => function($query){
+                            $query->whereNull('parent_id')
+                                  ->with(['subreport' => function($query){
+                                      $query->orderBy('id', 'desc');
+                                  }]);
+                          }]);
+                  }]);
         }])
         ->withCount(['vendorEngage' => function($query){
             $query->where('status', 'acc')
@@ -95,15 +95,18 @@ class EmployeeController extends Controller
         ->with(['vendorEngage' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')
-                          ->where(function($query){
-                            $query->where('status', 'doneCustomer')
-                                  ->orWhere('status', 'donePayed');
-                          })->with(['subreport' => function($query){
-                        $query->orderBy('id', 'desc');
-                    }]);
-            }]);
+                  ->with(['service', 'vendor', 'termin' => function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed')
+                          ->with(['report' => function($query){
+                              $query->whereNull('parent_id')
+                                ->with(['subreport' => function($query){
+                                  $query->orderBy('id', 'desc');
+                                }]);
+                          }])->with(['payment' => function($query){
+                              $query->where('status', 'success');
+                          }]);
+                  }]);
         }])
         ->withCount(['vendorEngage' => function($query){
             $query->where('status', 'acc')
@@ -117,26 +120,29 @@ class EmployeeController extends Controller
 
     public function getProgressCustomer()
     {
-        $data = Vendor::select('id', 'name')
-        ->where('customer', 'yes')
-        ->whereHas('customerEngage', function($query){
+        $data = User::select('id', 'name')
+        ->where('role', 4)
+        ->whereHas('engageCustomer', function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal');
         })
-        ->with(['customerEngage' => function($query){
+        ->with(['engageCustomer' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')
-                          ->where(function($query){
-                            $query->where('status', '!=', 'doneCustomer')
-                                  ->where('status', '!=','donePayed');
-                          })->with(['subreport' => function($query){
-                        $query->orderBy('id', 'desc');
-                    }]);
-            }]);
+                  ->with(['service', 'termin' => function ($query) {
+                    $query->whereNull('status')
+                          ->with(['report' => function($query){
+                              $query->whereNull('parent_id')
+                                    ->with(['subreport' => function($query){
+                                        $query->orderBy('id', 'desc');
+                                    }]);
+                          }])
+                          ->with(['payment' => function($query){
+                              $query->where('status', 'success');
+                          }]);
+                  }]);
         }])
-        ->withCount(['customerEngage' => function($query){
+        ->withCount(['engageCustomer' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal');
         }])
@@ -148,28 +154,33 @@ class EmployeeController extends Controller
 
     public function getPaymentCustomer()
     {
-        $data = Vendor::select('id', 'name')
-        ->where('customer', 'yes')
-        ->whereHas('customerEngage', function($query){
+        $data = User::select('id', 'name')
+        ->when(auth()->guard('api')->user()->role == 4, function ($query) {
+          $query->where('id', auth()->guard('api')->user()->id);
+        })
+        ->where('role', 4)
+        ->whereHas('engageCustomer', function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal');
         })
-        ->with(['customerEngage' => function($query){
+        ->with(['engageCustomer' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->with(['service', 'vendor', 'report' => function($query){
-                    $query->whereNull('parent_id')
-                          ->where(function($query){
-                            $query->where('status', 'doneCustomer')
-                                  ->orWhere('status', 'donePayed');
-                          })->with(['subreport' => function($query){
-                            $query->orderBy('id', 'desc');
-                          }])->with(['payment' => function($query){
-                            $query->where('status', 'success')->limit(1);
+                  ->with(['service', 'vendor', 'termin' => function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed')
+                          ->with(['payment' => function($query){
+                            $query->where('status', 'success');
+                          }])
+                          ->with(['report' => function($query){
+                            $query->whereNull('parent_id')
+                                  ->with(['subreport' => function($query){
+                                    $query->orderBy('id', 'desc');
+                                  }]);
                           }]);
                   }]);
         }])
-        ->withCount(['customerEngage' => function($query){
+        ->withCount(['engageCustomer' => function($query){
             $query->where('status', 'acc')
                   ->where('locked', 'deal');
         }])

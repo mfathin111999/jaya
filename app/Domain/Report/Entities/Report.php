@@ -2,14 +2,15 @@
 
 namespace App\Domain\Report\Entities;
 
-use App\Domain\Engagement\Entities\Engagement;
-use App\Domain\Report\Entities\Report as ParentCategory;
-use App\Domain\Report\Entities\Report as SubCategory;
-use App\Domain\Report\Entities\ReportGalleries;
 use App\Models\PaymentLog;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Domain\Engagement\Entities\Engagement;
+use App\Domain\Payment\Entities\Termin;
+use App\Domain\Report\Entities\ReportGalleries;
+use App\Domain\Report\Entities\Report as SubCategory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Domain\Report\Entities\Report as ParentCategory;
 
 class Report extends Model
 {
@@ -41,9 +42,8 @@ class Report extends Model
         return $this->hasMany(PaymentLog::class, 'order_id', 'id');
     }
 
-    public function isPaid()
-    {
-        return $this->status == 'donePayed';
+    public function termin(){
+        return $this->belongsTo(Termin::class, 'termin', 'id');
     }
 
 }

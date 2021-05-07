@@ -34,6 +34,7 @@ Route::get('/engagement', [EngagementController::class, 'index']);
 Route::post('/engagementSurveyer', [EngagementController::class, 'indexSurveyer']);
 Route::post('/engagementMandor', [EngagementController::class, 'indexMandor']);
 Route::post('/engagementVendor', [EngagementController::class, 'indexVendor']);
+Route::post('/engagementCustomer', [EngagementController::class, 'indexCustomer']);
 Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
 Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
 Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
@@ -56,6 +57,8 @@ Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']
 Route::get('/termin/getByEngagementId/{id}', [PaymentController::class, 'getByEngagementId']);
 Route::get('/termin/view/{id}', [PaymentController::class, 'view']);
 Route::post('/termin', [PaymentController::class, 'store']);
+Route::post('/termin/addToTermin', [PaymentController::class, 'addToTermin']);
+Route::post('/termin/update', [PaymentController::class, 'update']);
 Route::post('/termin/destroy/{id}', [PaymentController::class, 'destroy']);
 
 Route::post('/payment/notification', [PaymentController::class, 'notification']);

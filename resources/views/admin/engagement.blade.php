@@ -197,7 +197,7 @@
           this.valid();
         },
         methods: {
-           getData : function(){
+          getData : function(){
             if ('{{ session("role") }}' == 1) {
               axios.get("{{ url('api/engagement') }}").then(function(response){
                 this.data = response.data.data;

@@ -154,30 +154,30 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(report, index) in view_report.report' v-if='report.date_invoice != null'>
+                            <tr v-for='(termins, index) in view_report.termin'>>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice }}
+                                @{{ termins.date_pay }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.document_no }}
+                                @{{ termins.document_no }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ report.name }}</strong>
+                                <strong>@{{ mapUh(termins.report) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                PMT/AA/@{{ index++ }}/@{{ moment().format('YYYY') }}/@{{ view_report.id }}
+                                @{{ termins.payment[0].number }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ report.date_invoice }}
+                                @{{ moment(termins.date_pay).format('YYYY-MM-DD') }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ formatPrice(report.price_dirt) }}
+                                @{{ formatPrice(termins.price_clean) }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                BCA 233334448884
+                                @{{ termins.payment[0].payment_type }}
                               </td>
                             </tr>
                             <tr>
@@ -393,6 +393,17 @@
           },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
+          },
+          mapUh(x){
+            let data = [];
+            for (var i = 0; i < x.length; i++) {
+              data.push(x[i].name);
+            }
+
+            if (data.length <= 1 )
+              return 'Tahap '+data[0];
+            else
+              return 'Tahap '+data.join(', ');
           },
         }
       });

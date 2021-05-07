@@ -64,7 +64,7 @@ class PaymentController extends Controller
         $statusCode = null;
 
         $paymentNotification = new \Midtrans\Notification();
-        $order = Report::where('id', $paymentNotification->order_id)->with('engagement')->firstOrFail();
+        $order = Termin::where('id', $paymentNotification->order_id)->with('engagement')->firstOrFail();
 
         if ($order->isPaid()) {
             return response(['message' => 'The order has been paid before'], 422);
@@ -163,16 +163,8 @@ class PaymentController extends Controller
         // \Session::flash('success', "Thank you for completing the payment process!");
 
         return redirect('/');
-
     }
 
-    /**
-     * Show unfinish payment page
-     *
-     * @param Request $request payment data
-     *
-     * @return void
-     */
     public function unfinish(Request $request)
     {
         $code = $request->query('order_id');
@@ -193,13 +185,6 @@ class PaymentController extends Controller
         return redirect('/');
     }
 
-    /**
-     * Show failed payment page
-     *
-     * @param Request $request payment data
-     *
-     * @return void
-     */
     public function failed(Request $request)
     {
         $code = $request->query('order_id');
@@ -212,58 +197,101 @@ class PaymentController extends Controller
 
     public function addCheckout($id)
     {
-        $report = Report::with(['engagement', 'subreport' => function($query){
-                                    $query->orderBy('id', 'desc');
+        $termin = Termin::with(['engagement','report' => function($query){
+                                    $query->whereNull('parent_id')
+                                          ->with('subreport');
                                 }])->where('id', $id)->first();
 
         $all = 0;
-        foreach ($report->subreport as $key) {
-            $all += $key->price_dirt;
+        foreach ($termin->report as $key) {
+            foreach ($key->subreport as $value) {
+                $all += $value->price_dirt;
+            }
 
         }
         
-        $data = $this->getPaymentToken($report, $all);
+        $data = $this->getPaymentToken($termin, $all);
 
-        Mail::to($report->engagement->email)
-             ->send(new PayMail($report, $all));
+        Mail::to($termin->engagement->email)
+             ->send(new PayMail($termin, $all));
 
 
-        return apiResponseBuilder(200, $report);
+        return apiResponseBuilder(200, $termin);
     }
 
     public function getByEngagementId($id)
     {
-        $termin = Termin::with(['report' => function($query){
-                                $query->whereNull('parent_id')->with(['subreport' => function($query){
-                                    $query->orderBy('id', 'desc');
-                                }]);
-                            }])->where('reservation_id', $id)->get();
-        $termins = [];
+        $termin = Termin::where('reservation_id', $id)
+            ->with(['report' => function ($query) use ($id) {
+                $query->whereNull('parent_id')
+                  ->where('reservation_id', $id)
+                  ->with('subreport', function ($query) {
+                    $query->orderBy('id', 'asc');
+                  });
+                }])
+            ->withCount(['report' => function ($query) use ($id){
+                $query->where('reservation_id', $id);
+            }])->get();
+
+        $price_dirt     = 0;
+        $price_clean    = 0;
+        $data = [];
         foreach ($termin as $key) {
-            $key[] = [
+            $data[] = [
+                'id'                => $key->id,
+                'reservation_id'    => $key->reservation_id,
                 'termin'            => $key->termin,
-                'persetase'         => $key->persetase,
-                'total_customer'    => $key->total_customer,
-                'total_vendor'      => $key->total_vendor,
+                'termins'           => $key->report,
+                'total_customer'    => self::factory($key->report, 0),
+                'total_vendor'      => self::factory($key->report, 1),
+                'report_count'      => $key->report_count,
             ];
         }
 
-        return apiResponseBuilder(200, $termin);
+        return apiResponseBuilder(200, $data);
+    }
+
+    public static function factory($items, $type = 0){
+        $price = 0;
+        if ($type == 0) {
+            foreach ($items as $item) {
+                foreach ($item->subreport as $value) {
+                    $price += $value->price_dirt;
+                }
+            }
+        }elseif ($type == 1) {
+            foreach ($items as $item) {
+                foreach ($item->subreport as $value) {
+                    $price += $value->price_clean;
+                }
+            }
+        }
+
+        return $price;
     }
 
     public function store(Request $request){
+        $reservation = Termin::where('reservation_id', $request->reservation_id)->count();
+
         $termin = new Termin;
 
-        $termin->termin         = $request->termin;
+        $termin->termin         = $reservation + 1;
         $termin->reservation_id = $request->reservation_id;
-        $termin->total_customer = $request->total_customer;
-        $termin->total_vendor   = $request->total_vendor;
-        $termin->persetase      = $request->persetase;
-        $termin->report_id      = $request->report_id;
+        // $termin->persetase      = $request->persetase;
 
         $termin->save();
 
         return apiResponseBuilder(200, $termin);
+    }
+
+    public function addToTermin(Request $request){
+        $data = Report::where('id', $request->id)->first();
+
+        $data->termin = $request->termin;
+
+        $data->save();
+
+        return apiResponseBuilder(200, 'Updated', 'success');
     }
 
     public function update($id){

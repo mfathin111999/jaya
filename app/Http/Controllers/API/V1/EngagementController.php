@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Engagement\Application\EngagementManagement;
 use App\Domain\Engagement\Factories\EngagementFactory;
 
@@ -47,6 +48,17 @@ class EngagementController extends Controller
 
         return apiResponseBuilder(200, EngagementFactory::vendorFactory($data));
         // return $data;
+    }
+
+    public function indexCustomer()
+    {
+    //     $data = Engagement::whereHas('user', function($query) {
+    //             $query->where('user_id', auth()->guard('api')->user()->id);
+    //         })->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+
+    //     return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+        $data = ['user' => auth()->guard('api')->user()->role];
+        return $data;
     }
 
     // GET CALENDAR
