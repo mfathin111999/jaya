@@ -5,6 +5,7 @@ namespace App\Domain\Employee\Application;
 use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Employee\Entities\Employee;
 use App\Domain\Employee\Entities\EmployeeHasWork;
+use App\Domain\User\Entities\User;
 use App\Shared\Uploader;
 
 class EmployeeManagement
@@ -23,7 +24,7 @@ class EmployeeManagement
 	}
 
 	public function allBusiness(){
-		$data = Vendor::all();
+		$data = Vendor::with('user')->get();
 
 		return $data;
 	}

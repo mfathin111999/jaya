@@ -154,7 +154,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for='(termins, index) in view_report.termin'>>
+                            <tr v-for='(termins, index) in view_report.termin'>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ partner.name }}
                               </td>
@@ -185,7 +185,7 @@
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                <strong>@{{ formatPrice(view_report.allprice_dirt == null ? 0 : view_report.allprice_dirt) }}</strong>
+                                <strong>@{{ formatPrice(view_report.allprice_clean == null ? 0 : view_report.allprice_clean) }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 <strong>-</strong>

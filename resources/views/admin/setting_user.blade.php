@@ -33,7 +33,7 @@
             <form v-on:submit.prevent="submitEditForm(view.id)" id="form-edit">
               <div class="modal-body">
                 <div class="row align-items-center">
-                  <div class="col-6">
+                  <div class="col-12">
                     <div class="form-group">
                       <label for="name">Name</label>
                       <input type="text" class="form-control" id="name" v-model="view.name" name="name" required>
@@ -41,29 +41,55 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="ktp">Email</label>
+                      <label for="email">Email</label>
                       <input type="email" class="form-control" id="email" v-model="view.email" name="email" required>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="phone">Phone Number</label>
+                      <label for="phone">No Handphone</label>
                       <input type="text" class="form-control" id="phone" v-model="view.phone" name="phone" required>
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
                     <div class="form-group">
-                      <label for="statuss">Status</label>
-                      <select name="status" id="statuss" class="form-control" v-model="view.status" required>
-                        <option value="">Choose</option>
-                        <option value="active">Active</option>
-                        <option value="deactive">Deactive</option>
-                      </select>
+                      <label for="phone">Kartu Tanda Pengenal</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.ktp" name="ktp" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Tax ID</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.tax_id" name="tax_id" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Nama Bank</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.bank_name" name="bank_name" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Atas Nama</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.bank_account_name" name="bank_account_name" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">No Rekening</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.bank_account_number" name="bank_account_number" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='typed == "edit" && type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Owner</label>
+                      <input type="text" class="form-control" id="phone" v-model="view.partner.owner" name="owner" required>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="address">Address</label>
+                      <label for="address">Alamat</label>
                       <input type="text" class="form-control" id="address" v-model="view.address" name="address" required>
                     </div>
                   </div>
@@ -120,7 +146,7 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Add Worker</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Add Pekerja</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -148,13 +174,49 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="phones">Phone Number</label>
+                      <label for="phones">No Handphone</label>
                       <input type="text" class="form-control" id="phones" name="phone" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Kartu Tanda Pengenal</label>
+                      <input type="text" class="form-control" id="phone" name="ktp" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Tax ID</label>
+                      <input type="text" class="form-control" id="phone" name="tax_id" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Nama Bank</label>
+                      <input type="text" class="form-control" id="phone" name="bank_name" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Atas Nama</label>
+                      <input type="text" class="form-control" id="phone" name="bank_account_name" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">No Rekening</label>
+                      <input type="text" class="form-control" id="phone" name="bank_account_number" required>
+                    </div>
+                  </div>
+                  <div class="col-6" v-if='type_form == 3'>
+                    <div class="form-group">
+                      <label for="phone">Owner</label>
+                      <input type="text" class="form-control" id="phone" name="owner" required>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="passwords">Password</label>
+                      <label for="passwords">Password @{{ type_form }}</label>
                       <input type="text" class="form-control" id="passwords" name="password" required>
                     </div>
                   </div>
@@ -170,7 +232,7 @@
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="addresss">Address</label>
+                      <label for="addresss">Alamat</label>
                       <input type="text" class="form-control" id="addresss" name="address" required>
                     </div>
                   </div>
@@ -229,12 +291,12 @@
               <h1 class="h4 font-weight-bold">SURVEYER</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(1)"><i class="fa fa-plus pr-2"></i>Add</button>
                 </div>
               </div>
             </div>
 
-            <div class="table">
+            <div class="table table-responsive">
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -242,7 +304,6 @@
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>email</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -252,9 +313,8 @@
                       <td>@{{ item.address }}</td>
                       <td>@{{ item.phone }}</td>
                       <td>@{{ item.email }}</td>
-                      <td>@{{ item.status }}</td>
                       <td>
-                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id, 1)'><i class="fa fa-pencil"></i></a>
                         <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'active'"><i class="fa fa-trash"></i></a>
                         <a class="btn btn-warning text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'deactive'"><i class="fa fa-trash"></i></a>
                       </td>
@@ -267,12 +327,12 @@
               <h1 class="h4 font-weight-bold">MANDOR</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(2)"><i class="fa fa-plus pr-2"></i>Add</button>
                 </div>
               </div>
             </div>
 
-            <div class="table">
+            <div class="table table-responsive">
               <table id="example2" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -280,7 +340,6 @@
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>email</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -290,9 +349,8 @@
                       <td>@{{ item.address }}</td>
                       <td>@{{ item.phone }}</td>
                       <td>@{{ item.email }}</td>
-                      <td>@{{ item.status }}</td>
                       <td>
-                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id, 2)'><i class="fa fa-pencil"></i></a>
                         <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'active'"><i class="fa fa-trash"></i></a>
                         <a class="btn btn-warning text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'deactive'"><i class="fa fa-trash"></i></a>
                       </td>
@@ -305,12 +363,12 @@
               <h1 class="h4 font-weight-bold">VENDOR</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal" @click="addForm()"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(3)"><i class="fa fa-plus pr-2"></i>Add</button>
                 </div>
               </div>
             </div>
 
-            <div class="table">
+            <div class="table table-responsive">
               <table id="example3" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -318,7 +376,6 @@
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>email</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -328,9 +385,8 @@
                       <td>@{{ item.address }}</td>
                       <td>@{{ item.phone }}</td>
                       <td>@{{ item.email }}</td>
-                      <td>@{{ item.status }}</td>
                       <td>
-                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id, 3)'><i class="fa fa-pencil"></i></a>
                         <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'active'"><i class="fa fa-trash"></i></a>
                         <a class="btn btn-warning text-light" type="button" v-on:click='deleteItem(item.id, index, 1)' v-if="item.status == 'deactive'"><i class="fa fa-trash"></i></a>
                       </td>
@@ -357,6 +413,8 @@
             dataMandor: [],
             defaultImg : '{{ asset('img/default.png') }}',
             view: {},
+            type_form: '',
+            typed: '',
             newImg: '',
             viewImage: '',
             addViewImage: '',
@@ -407,20 +465,39 @@
               });
             }.bind(this));
           },
-          viewData : function(id){
+          viewData : function(id, type){
+            if (type == 1) {
+              this.type_form = 1;
+            } else if (type == 2) {
+              this.type_form = 2;
+            } else if (type == 3) {
+              this.type_form = 3;  
+            }
+
+
             axios.get("{{ url('api/user/getSurveyerById') }}/"+id).then(function(response){
               this.view = response.data.data;
               console.log(response.data.data);
               $("#editModal").modal('show');
             }.bind(this)).then(() => { 
               this.getAllAddress();
+              this.typed = 'edit';
             });
           },
           submitAddForm : function(){
             let form = document.getElementById('form-add');
             let forms = new FormData(form);
+            let url = '';
 
-            axios.post("{{ url('api/user/createWorker') }}", forms).then(function(response){
+            if (this.type_form == 1) {
+              url = '{{ url('api/user/createWorker') }}'
+            }else if (this.type_form == 2) {
+              url = '{{ url('api/user/createMandor') }}'
+            }else if (this.type_form == 3) {
+              url = '{{ url('api/user/createVendor') }}'
+            }
+
+            axios.post(url, forms).then(function(response){
               app.$nextTick(() => {
                 $("#addModal").modal('hide');
                 $("#example").DataTable().destroy();
@@ -433,9 +510,18 @@
           submitEditForm: function(id){
             let form = document.getElementById('form-edit');
             let forms = new FormData(form);
+            let url = '';
+
+            if (this.type_form == 1) {
+              url = '{{ url('api/user/updateWorker') }}/'
+            }else if (this.type_form == 2) {
+              url = '{{ url('api/user/updateMandor') }}/'
+            }else if (this.type_form == 3) {
+              url = '{{ url('api/user/updateVendor') }}/'
+            }
 
             axios.post(
-              "{{ url('api/user/updateWorker') }}/"+id,
+              url+id,
               forms,
               {
                 headers: {
@@ -479,14 +565,24 @@
               }
             })
           },
-          addForm: function(){
+          addForm: function(type){
               this.thisProvince = '';
               this.regency = {};
               this.thisRegency = '';
               this.district = {};
               this.thisDistrict = '';
               this.village = {};
-              this.thisVillage = '';        
+              this.thisVillage = '';    
+              if (type == 1) {
+                this.type_form = 1;
+              } else if (type == 2) {
+                this.type_form = 2;
+              } else if (type == 3) {
+                this.type_form = 3;  
+              }
+              this.typed == 'add';
+
+              $('#addModal').modal('show');
           },
           loadProvince(){
             axios.get("{{ url('api/province') }}").then(function(response){

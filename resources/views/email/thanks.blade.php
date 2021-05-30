@@ -17,7 +17,7 @@
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr style="line-height: 25px;">
 						<td style="text-align: center;"><strong>Hallo, {{ $engagement->name }}</strong><br>
-							Terima Kasih telah mengirim permintaan survey, reservasi survey anda sedang kami tinjau terlebih dahulu. Untuk kode booking anda adalah <strong>{{ $engagement->code }}</strong>. Tunggu email balasan dari kami.
+							Terima kasih sudah melakukan reservasi di servisrumah.com, kami akan segera menghubungi anda.
 						</td>
 					</tr>
 					<tr height="30px">
@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#0fbdd2" height="50px" style="text-align: center; color: white; font-size: 12px;">
-				© 2021 NRU.
+				© 2021 PT. Nurani Rejeki Unggul
 			</td>
 		</tr>
 	</table>

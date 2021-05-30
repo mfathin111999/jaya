@@ -21,24 +21,24 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Kode Booking</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
+                      <div class="col-md-3 col-8">Kode Booking</div>
+                      <div class="col-md-1 col-4 text-center">:</div>
+                      <div class="col-md-8 col-12"><strong>@{{ data.code }}</strong></div>
+                      <div class="col-md-3 col-8">Nama Pelanggan</div>
+                      <div class="col-md-1 col-4 text-center">:</div>
+                      <div class="col-md-8 col-12"><strong>@{{ data.name }}</strong></div>
+                      <div class="col-md-3 col-8">Tanggal Survey</div>
+                      <div class="col-md-1 col-4 text-center">:</div>
+                      <div class="col-md-8 col-12"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
+                      <div class="col-md-3 col-8">Vendor</div>
+                      <div class="col-md-1 col-4 text-center">:</div>
+                      <div class="col-md-8 col-12"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
+                      <div class="col-md-3 col-8">Tanggal Mulai</div>
+                      <div class="col-md-1 col-4 text-center">:</div>
+                      <div class="col-md-8 col-12" v-if= 'data.date_work != null' >
                         <strong>@{{ data.date_work }},</strong>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
+                      <div class="col-md-8 col-12" v-if= 'data.date_work == null' >
                         <strong>Belum Ditentukan</strong>
                       </div>
                     </div>
@@ -157,8 +157,8 @@
                         <label class="font-weight-bold h3">Penawaran</label><br>
                         <label class="font-weight-bold">Terima Semua Penawaran diatas ?</label>
                         <br>
-                        <button class="btn btn-warning" @click='accAccept'><strong>Terima Penawaran</strong></button>
-                        <button class="btn btn-danger" @click='notAccept'><strong>Tolak Penawaran</strong></button>
+                        <button class="btn btn-warning mb-2" @click='accAccept'><strong>Terima Penawaran</strong></button>
+                        <button class="btn btn-danger mb-2" @click='notAccept'><strong>Tolak Penawaran</strong></button>
                       </div>
                     </div>
                     <div class="col-md-6 rounded text-center mx-auto" v-if='data.vendor_is == 1'>
@@ -345,6 +345,8 @@
                 axios.post("{{ url('api/engagement/accVendor') }}/"+this.id, forms).then(function(response){
                 }).then(() => {
                   this.getData(this.id);
+                }).then(() => {
+                  window.location.href = '{{ url("engagement_vendor") }}';
                 });
               }
             })

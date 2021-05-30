@@ -120,12 +120,15 @@ class EngagementManagement
 		return $data;
 	}
 
-	public function actionEngagement($id, $employee = [], $type = 'acc'){
+	public function actionEngagement($id, $employee = [], $type = 'acc', $reason = null){
 		$data = Engagement::find($id);
 
 		$data->status = $type;
+		if ($type == 'ignore')
+			$data->reason_id = $reason;
 
 		$data->save();
+
 		if ($type == 'acc') {
 			Mail::to($data->email)
         		->send(new AccMail($data));
@@ -182,6 +185,7 @@ class EngagementManagement
 		$data = Engagement::where('id', $request['id'])->first();
 
 		$data->vendor_id = $request['vendor'];
+		$data->vendor_is = 0;
 		$data->save();
 
 		return $data;

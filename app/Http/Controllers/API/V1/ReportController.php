@@ -81,6 +81,13 @@ class ReportController extends Controller
     {
         $data = $this->report->getByIdEngagement($id);
 
+        // return $data;
+
+        if (auth()->guard('api')->user()->role == 4){
+            if ($data->user_id !== auth()->guard('api')->user()->id)
+                return apiResponseBuilder(403, 'Unautorize');
+        }
+
         return apiResponseBuilder(200, ReportFactory::call($data), 'Success');
     }
 
@@ -161,9 +168,9 @@ class ReportController extends Controller
 
     public function printPDFVendor($id)
     {
-        $data = $this->engagement->getById($id);
+        $datas = $this->engagement->getById($id);
 
-        $pdf = PDF::loadView('admin/vendor', $data);  
+        $pdf = PDF::loadView('export.customer', compact('datas'));
         return $pdf->stream('Penawaran.pdf', array('Attachment' => false));
         // return $pdf->download('engagement.pdf');
     }

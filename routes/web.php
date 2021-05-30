@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ReportController;
@@ -27,6 +27,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/login', function(){
+	if (Auth::check()) {
+		return redirect()->route('home');
+	}
 	return view('public.login');
 })->name('login');
 
@@ -54,9 +57,13 @@ Route::get('/consult', function(){
 	return view('public.consult');
 })->name('consult');
 
-Route::get('/history', function(){
+Route::get('/history/all', function(){
 	return view('public.history');
-})->name('history');
+})->name('history.all');
+
+Route::get('/history/detail/{id}', function($id){
+	return view('public.history_detail', compact('id'));
+})->name('history.detail');
 
 Route::get('/dashboard', function(){
 	return view('admin.dashboard');
@@ -141,6 +148,10 @@ Route::get('/report_supervisor_action/{id}', function($id){
 Route::get('/debt_supervisor_card_vendor', function(){
 	return view('admin.debt_supervisor_card_vendor');
 })->name('supervisor.debt.card.vendor');
+
+Route::get('/debt_supervisor_card_all', function(){
+	return view('admin.debt_supervisor_card_all');
+})->name('supervisor.debt.card.all');
 
 Route::get('/debt_supervisor_card_user', function(){
 	return view('admin.debt_supervisor_card_user');

@@ -37,8 +37,9 @@
                 <div class="card">
                   <div class="card-header text-center">
                     <label class="m-0 font-weight-bold">PEKERJAAN</label><br>
-                    <label class="m-0 font-weight-bold p-2 bg-warning mt-2 rounded" v-if= 'engage.locked == "offer"'>Proses Penawaran</label>
+                    <label class="m-0 font-weight-bold p-2 bg-warning mt-2 rounded" v-if= 'engage.locked == "offer" && engage.vendor_is == 0'>Proses Penawaran</label>
                     <label class="m-0 font-weight-bold p-2 bg-success text-white mt-2 rounded" v-if= 'engage.locked == "deal"'>Penawaran Telah Disetujui</label>
+                    <label class="m-0 font-weight-bold p-2 bg-danger text-white mt-2 rounded" v-if= 'engage.vendor_is == 99'>Anda telah menolak penawaran</label>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">

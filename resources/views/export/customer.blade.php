@@ -10,7 +10,7 @@
     <div class="container">
         <center>
             <h4>SURAT PENAWARAN</h4>
-            <h6>NRU/0/1/III/2021</h6>
+            <h6>SR/{{ $datas->code }}/1/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
         </center>
 
         <div class="mt-4">
@@ -53,19 +53,19 @@
                             <th width="5%" style="vertical-align: middle; text-align: center;">
                                 No
                             </th>
-                            <th width="20%" style="vertical-align: middle; text-align: center;">
+                            <th width="15%" style="vertical-align: middle; text-align: center;">
                                 Keterangan
                             </th>
-                            <th width="15" style="vertical-align: middle; text-align: center;">
+                            <th width="10" style="vertical-align: middle; text-align: center;">
                                 Vol
                             </th>
                             <th width="10" style="vertical-align: middle; text-align: center;">
                                 Sat
                             </th>
-                            <th width="10" style="vertical-align: middle; text-align: center;">
+                            <th width="15" style="vertical-align: middle; text-align: center;">
                                 Mulai
                             </th>
-                            <th width="10" style="vertical-align: middle; text-align: center;">
+                            <th width="15" style="vertical-align: middle; text-align: center;">
                                 Selesai
                             </th>
                             <th width="15" style="vertical-align: middle; text-align: center;">
@@ -78,28 +78,43 @@
                     </thead>
                     @php
                         $i = 1;
+                        $date_after = $datas->date_work;
+                        $date_before = $datas->date_work;
                     @endphp
                     @foreach($datas->report as $data)
 
                     @php
                         $j = 1;
+                        $k = 1;
+                        $price = 0;
                     @endphp
                     <tbody>
                         <tr>
                             <td colspan="8">{{'Tahapan '.$i++.' '.$data->name }}</td>
                         </tr>
                         @foreach($data->subreport as $detail)
+                        @php
+                            $price += $detail->price_dirt;
+                            $date_before = date('Y/m/d', strtotime($date_after));
+                            $date_after = date('Y/m/d', strtotime($date_before.' +1 day'));
+                        @endphp
                         <tr>
                             <td>{{ $j++ }}</td>
                             <td>{{ $detail->name }}</td>
                             <td>{{ $detail->volume }}</td>
                             <td>{{ $detail->unit }}</td>
-                            <td>{{ $detail->date_work }}</td>
-                            <td>{{ $detail->time }}</td>
+                            <td>{{ $date_before }}</td>
+                            <td>{{ $date_after }}</td>
                             <td>{{ round(($detail->price_dirt / $detail->volume), 0) }}</td>
                             <td>{{ $detail->price_dirt }}</td>
                         </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="7">Total</td>
+                            <td>
+                                {{ $price }}
+                            </td>
+                        </tr>
                     </tbody>
                     @endforeach
 
@@ -111,13 +126,14 @@
                 Demikian rincian harga ini kami ajukan, atas perhatian dan kerjasamanya kami ucapkan terima kasih
             </label>
             <br>
+            <br>
             <label>
                 Jakarta, {{ date('d M Y') }}
             </label>
             <br>
             <label class="mt-3">
-                Jaedi<br>
-                PT. Nurani Rejeki Unggul
+                <br>
+                servicerumah.com
             </label>
         </div>
     </div>

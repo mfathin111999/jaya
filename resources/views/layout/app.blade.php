@@ -16,7 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/styles.css') }}">
 
 		<style>
-			@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,800;1,400;1,500;1,800&display=swap');
+			@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 			.swal2-popup {
 				font-size: 0.8rem !important;
 			}
@@ -24,12 +24,16 @@
 			.font-12{
 				font-size: 12px !important;
 			}
+
+			.font-14{
+				font-size: 14px !important;
+			}
 		</style>
 		@yield('header-css')
 		@yield('sec-css')
 		@yield('footer-css')
 	</head>
-	<body style="font-family: 'Montserrat', sans-serif; font-size: 12px; overflow-x: hidden;">
+	<body style="font-family: 'Poppins', sans-serif; font-size: 12px; overflow-x: hidden;">
 
 		@yield('content')
 

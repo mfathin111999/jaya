@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Domain\Payment\Entities\Termin;
 use App\Domain\Employee\Entities\Vendor;
 use App\Domain\Service\Entities\Service;
+use App\Domain\Resource\Entities\Reason;
 use App\Domain\Employee\Entities\Employee;
 use App\Domain\User\Entities\User as Mandor;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -97,5 +98,9 @@ class Engagement extends Model
 
     public function partner(){
         return $this->hasOne(Vendor::class, 'user_id', 'id');
+    }
+
+    public function reason(){
+        return $this->belongsTo(Reason::class);
     }
 }

@@ -52,13 +52,11 @@ class EngagementController extends Controller
 
     public function indexCustomer()
     {
-    //     $data = Engagement::whereHas('user', function($query) {
-    //             $query->where('user_id', auth()->guard('api')->user()->id);
-    //         })->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+        $data = Engagement::whereHas('user', function($query) {
+                $query->where('user_id', auth()->guard('api')->user()->id);
+            })->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
 
-    //     return apiResponseBuilder(200, EngagementFactory::allFactory($data));
-        $data = ['user' => auth()->guard('api')->user()->role];
-        return $data;
+        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
     }
 
     // GET CALENDAR
@@ -157,7 +155,11 @@ class EngagementController extends Controller
 
     public function action(Request $request)
     {
-        $data = $this->engagement->actionEngagement($request['id'], $request['employee'], $request['action']);
+        if (auth()->guard('api')->user()->role != 1)
+            return apiResponseBuilder(403, 'Unauthorized', 'Unsuccessfully');
+
+        $data = $this->engagement->actionEngagement($request['id'], $request['employee'], $request['action'], $request['reason']);
+
 
         return apiResponseBuilder(200, $data);
     }

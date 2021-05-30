@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Domain\User\Entities\User;
+use App\Domain\Employee\Entities\Vendor;
 use App\Domain\User\Factories\UserFactory;
 use Session;
 
@@ -74,13 +75,13 @@ class UserController extends Controller
     }
 
     public function getVendor(){
-        $data = User::where('role', 5)->get();
+        $data = User::with('partner')->where('role', 5)->get();
 
         return apiResponseBuilder(200, $data, 'success');
     }
 
     public function getSurveyerById($id){
-        $data = User::where('id', $id)->with('province', 'district', 'regency', 'village')->first();
+        $data = User::where('id', $id)->with('province', 'district', 'regency', 'village', 'partner')->first();
 
         return apiResponseBuilder(200, $data, 'success');
     }
@@ -221,8 +222,19 @@ class UserController extends Controller
         $user->address      = $request['address'];
         $user->phone        = $request['phone'];
         $user->password     = bcrypt($request['password']);
-        $user->role         = 2;
+        $user->role         = 5;
         $user->save();
+
+        $vendor             = new Vendor;
+        $vendor->user_id    = $user->id;
+        $vendor->vendor     = 'yes';
+        $vendor->tax_id     = $request['tax_id'];
+        $vendor->ktp        = $request['ktp'];
+        $vendor->owner      = $request['owner'];
+        $vendor->bank_name  = $request['bank_name'];
+        $vendor->bank_account_name      = $request['bank_account_name'];
+        $vendor->bank_account_number    = $request['bank_account_number'];
+        $vendor->save();
 
         return apiResponseBuilder(200, $user, 'Registrasi Pekerja Berhasil');
     }
@@ -239,8 +251,18 @@ class UserController extends Controller
         $user->village_id   = $request['village_id'] ?? null;
         $user->address      = $request['address'] ?? null;
         $user->phone        = $request['phone'] ?? null;
-        $user->status       = $request['status'] ?? null;
         $user->save();
+
+        $vendor             = Vendor::find($user->id);
+        $vendor->user_id    = $user->id;
+        $vendor->vendor     = 'yes';
+        $vendor->tax_id     = $request['tax_id'];
+        $vendor->ktp        = $request['ktp'];
+        $vendor->owner      = $request['owner'];
+        $vendor->bank_name  = $request['bank_name'];
+        $vendor->bank_account_name      = $request['bank_account_name'];
+        $vendor->bank_account_number    = $request['bank_account_number'];
+        $vendor->save();
 
         return apiResponseBuilder(200, $user, 'Update Pekerja Berhasil');
     }

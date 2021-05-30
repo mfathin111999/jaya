@@ -60,6 +60,13 @@
                             <option v-for='(employee, index) in employee' :value='employee.id'>@{{ employee.name }}</option>
                           </select>
                         </div>
+                        <div class="col-12 mb-3" v-if = 'action == "ignore"'>
+                          <label for="reason">Alasan</label>
+                          <select class="form-control" v-model="thisReason" name="reason" id="reason" style="width: 100%;">
+                            <option value="">Pilih Alasan</option>
+                            <option v-for='(item, index) in reason' :value='item.id'>@{{ item.reason }}</option>
+                          </select>
+                        </div>
                         <div class="col-12 col-md-12">
                           <button type="button" class="btn btn-success btn-block" @click='actionEngagement()'>Kirim Aksi</button>
                         </div>
@@ -203,6 +210,7 @@
          this.getCalendar();
          this.getEmployee();
          this.valid();
+         this.getReason();
         },
         methods: {
           getData : function(){
@@ -211,6 +219,11 @@
               this.$nextTick(() => {
                  $("#example").DataTable();
               });
+            }.bind(this));
+          },
+          getReason : function(){
+            axios.get("{{ url('api/getReason') }}").then(function(response){
+              this.reason = response.data.data;
             }.bind(this));
           },
           getEmployee : function(){
@@ -242,19 +255,27 @@
                   'warning'
               );
             }else{
-              axios.post("{{ url('api/engagement/action') }}", data).then(function(response){
-                app.$nextTick(() => {
-                  $('#actionModal').modal('hide');
-                  $('#calendar').html('');
-                });
+              if (this.action == 'ignore' && (this.thisReason == null || this.thisReason == '' )) {
                 Swal.fire(
-                    'Success!',
-                    'Survey diterima.',
-                    'success'
+                  'Warning!',
+                  'Harap isi alasan penolakan.',
+                  'warning'
                 );
-              }).then(()=>{
-                this.getCalendar();
-              });
+              }else{
+                axios.post("{{ url('api/engagement/action') }}", data).then(function(response){
+                  app.$nextTick(() => {
+                    $('#actionModal').modal('hide');
+                    $('#calendar').html('');
+                  });
+                  Swal.fire(
+                      'Success!',
+                      'Survey diterima.',
+                      'success'
+                  );
+                }).then(()=>{
+                  this.getCalendar();
+                });
+              }
             }
           },
           deleteItem: function(id){

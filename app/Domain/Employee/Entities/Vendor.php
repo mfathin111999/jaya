@@ -6,6 +6,7 @@ use App\Models\Village;
 use App\Models\District;
 use App\Models\Regency;
 use App\Models\Province;
+use App\Domain\User\Entities\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,6 +23,11 @@ class Vendor extends Model
     public function customerEngage()
     {
     	return $this->hasMany(Engagement::class, 'partner_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function village(){

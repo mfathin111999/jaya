@@ -10,7 +10,7 @@
     		<td colspan="3" align="center">SURAT PERSETUJUAN KERJA</td>
     	</tr>
     	<tr>
-    		<td colspan="3" align="center">NRU/0/1/III/2021</td>
+    		<td colspan="3" align="center">AKAD/{{ $code }}/1/{{ integerToRoman(date('n')) }}/{{date('Y')}}</td>
     	</tr>
     	<tr>
     		<td colspan="3">Yang bertanda tangan dibawah ini :</td>

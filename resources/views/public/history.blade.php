@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.public')
 
 @if(session('id') == null || session('role') != 4)
   <script type="text/javascript">
@@ -42,67 +42,97 @@
 			border-bottom-right-radius: 20px !important;
 			border-bottom-left-radius: 20px !important;
 		}
+
+    .dataTables_filter{
+      text-align: right;
+    }
+
+    .dataTables_filter label{
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .dataTables_info, .dataTables_length{
+      font-size: 12px;
+    }
+
+    .pagination{
+      justify-content: flex-end;
+      font-size: 12px;
+      margin-bottom: 0px !important;
+    }
+
+    .activated{
+      color: white !important;
+    }
 	</style>
 @endsection
 
 @section('content')
 	@include('layout.header')
-  	<div id="app" v-cloak>
-      <div class="row">
-        <div class="col-md-9 mx-auto">
-          <div class="rounded text-center mt-5 mb-5">
-            <label class="m-0 h4 font-weight-bold">
-              Daftar History Pemesanan
-            </label>
-          </div>
-        </div>
-        <div class="col-md-9 mx-auto">
-          <div class="table">
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Service</th>
-                      <th>Email</th>
-                      <th>Tanggal</th>
-                      <th>Kota</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr v-for = "(item, index) in data" v-bind:class = 'item.status == "acc" ? "table-success" : (item.status == "pending" ? "table-warning" : "table-danger")'>
-                    <td>@{{ item.name }} </td>
-                    <td>@{{ item.service }}</td>
-                    <td>@{{ item.email }}</td>
-                    <td>@{{ item.date }} @{{ item.time }}</td>
-                    <td>@{{ item.regency }}</td>
+    <div id="app" v-cloak>
 
-                    <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Diterima</td>
-                    <td v-if='item.status == "ignore"'>Ditolak</td>
-                    <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>Telah Disurvei</td>
-                    <td v-if='item.status == "acc" && item.locked == "deal"'>Telah Disepakati</td>
-                    <td v-if='item.status == "pending"'>Belum Dikonfirmasi</td>
-
-                    <td>
-                      @if(auth()->user()->role == 1)
-                      <a class="btn btn-info" href="#" type="button" data-toggle="modal" data-target="#actionModal" v-on:click='viewData(item.id)' v-if = 'item.status == "pending"'><i class="fa fa-eye"></i></a>
-                      <!-- <a class="btn btn-danger" href="#" type="button" v-on:click='deleteItem(item.id)' v-if='item-status'><i class="fa fa-trash"></i></a> -->
-                      <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" && item.count == 0'><i class="fa fa-pencil"></i></a>
-                      <a class="btn btn-primary" href="#" type="button" v-on:click='seeReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" &&  item.count > 0'><i class="fa fa-list-alt"></i></a>
-                      <a class="btn btn-info" href="#" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></a>
-                      <!-- <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a> -->
-                      @elseif(auth()->user()->role == 2)
-                      <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.count == 0'><i class="fa fa-pencil"></i></a>
-                      @elseif(auth()->user()->role == 3)
-                      <a class="btn btn-primary" href="#" type="button" v-on:click='seeReportMandor(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
-                      @endif
-                    </td>
-                  </tr>
-              </tbody>
-            </table>
+      <div class="page-header py-4">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                      <h2>History</h2>
+                  </div>
+                  <div class="col-12" v-if='data.length != 0'>
+                      <a href="" class="activated">Semua</a>
+                      <a href="">Proses</a>
+                      <a href="">Progres</a>
+                  </div>
+              </div>
           </div>
-          
+      </div>
+
+      <div class="container">
+        <div class="panel">
+          <div class="panel-body">
+            <div class="col-12 text-center" v-if='data.length == 0'>
+                <a href="">Anda belum melakukan transaksi apapun</a>
+            </div>
+            <div class="row" v-if='data.length != 0'>
+              <div class="col-md-12 mx-auto">
+                <div class="table table-responsive">
+                  <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Service</th>
+                            <th>Tanggal Survei</th>
+                            <th>Kota</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-12">
+                        <tr v-for = "(item, index) in data">
+                          <td>@{{ item.name }} </td>
+                          <td>@{{ item.service }}</td>
+                          <td>@{{ item.date }} @{{ item.time }}</td>
+                          <td>@{{ ucwords(item.regency) }}</td>
+
+                          <td v-if='item.status == "ignore"'>Ditolak</td>
+                          <td v-if='item.status == "pending"'>Belum Dikonfirmasi</td>
+                          <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Diterima</td>
+                          <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>Telah Disurvei</td>
+                          <td v-if='item.status == "acc" && item.locked == "deal"'>Telah Disepakati</td>
+
+                          <td class="text-center">
+                            @if(auth()->user()->role == 4)
+                              <button class="btn btn-info" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></button>
+                            @endif
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 	</div>
@@ -133,10 +163,9 @@
         this.getData();
       },
       methods: {
-          getData : function(){
-              axios.get("{{ url('api/engagementCustomer') }}").then(function(response){
+          getData : function(type = 'all'){
+              axios.post("{{ url('api/engagementCustomer') }}").then(function(response){
                 this.data = response.data.data;
-                console.log(this.data);
                 this.$nextTick(() => {
                    $("#example").DataTable();
                 });
@@ -167,14 +196,8 @@
 
               return str;
           },
-          seeReport : function(id){
-            window.location ="{{ url('report_view') }}/"+id;
-          },
-          seeReportMandor : function(id){
-            window.location ="{{ url('/report_mandor') }}/"+id;
-          },
           seeWork : function(id){
-            window.location ="{{ url('/report_supervisor_action') }}/"+id;
+            window.location ="{{ url('/history/detail') }}/"+id;
           },
           addReport : function(id){
             // axios.get("{{ url('api/report') }}/"+id).then(function(response){

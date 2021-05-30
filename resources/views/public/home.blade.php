@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.public')
 
 @section('sec-css')
 	<style type="text/css">
@@ -36,92 +36,182 @@
 			border-bottom-right-radius: 20px !important;
 			border-bottom-left-radius: 20px !important;
 		}
+
+		.btn-submited{
+			padding: 16px 30px;
+			font-size: 16px;
+			font-weight: 600;
+			color: #ffffff;
+			background: #030f27;
+			border: none;
+			border-radius: 0;
+			transition: .3s;
+		}
 	</style>
 @endsection
 
 @section('content')
 	@include('layout.header')
-  	<div id="app" v-cloak>
-		<section class="mb-3 mt-5 bg-image">
-			<div class="row align-items-center" style="height: 100%">
-				<div class="col-12 col-md-8 p-0 mb-0">
-					<img class="img-fluid" src="{{ asset('img/back.png') }}" style="max-height: 600px;">
-				</div>
-				<div class="col-12 col-md-4 text-left mt-3">
-					<div class="text-center" style="height: 100%">
-						<h1 class="font-weight-bold" style="line-height: 3rem;">Bingung cari jasa renovasi rumah ?</h1>
-						<button class="btn btn-info mt-3 shadow" style="border-radius: 30px; width: 300px;"><h3 class="font-weight-bold">Yuk Gabung .. !</h3></button>
-					</div>
-				</div>
-			</div>
-		</section>
+	<div id="app" v-cloak>
 
-		@guest
-		<section class="mb-3 mt-5 pt-5 pb-5 bg-info shadow">
-			<div class="container">
-				<div class="d-block text-center mb-5 text-white">
-					<h1><strong>Apa Yang Anda Butuhkan ?</strong></h1>
-					<p>Reservasi sesuai dengan kebutuhan anda</p>
-				</div>
-				<div class="text-center">
-					<button class="btn btn-warning p-4" data-toggle="modal" data-target="#signUp">
-						<span class="h3 font-weight-bold">Ayo daftar untuk memulai ..</span>
-					</button>
-				</div>
-			</div>
-		</section>
-		@endguest
+	    <!-- Carousel Start -->
+	    <div id="carousel" class="carousel slide" data-ride="carousel">
+	        <ol class="carousel-indicators">
+	            <li data-target="#carousel" data-slide-to="0" class="active"></li>
+	            <li data-target="#carousel" data-slide-to="1"></li>
+	            <li data-target="#carousel" data-slide-to="2"></li>
+	        </ol>
+	        <div class="carousel-inner">
+	            <div class="carousel-item active">
+	                <img src="{{ asset('img/carousel-1.jpg') }}" alt="Carousel Image">
+	                <div class="carousel-caption">
+	                    <p class="animated fadeInRight">Profesionalitas</p>
+	                    <h1 class="animated fadeInLeft">For Your Dream Project</h1>
 
-		@auth
-		<!-- Form Reservasi Survey -->
-		<section class="mb-3 mt-5 pt-5 pb-5 bg-info shadow">
-			<div class="container">
-				<div class="d-block text-center mb-5 text-white">
-					<h1><strong>Apa Yang Anda Butuhkan ?</strong></h1>
-					<p>Reservasi sesuai dengan kebutuhan anda</p>
-				</div>
-				<form v-on:submit.prevent="sendReservation" id="form-engagement">
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<div class="form-group">
-					            <label for="name">Name</label>
+	                    @auth
+	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    @endauth
+
+	                    @guest
+	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    @endguest
+	                </div>
+	            </div>
+
+	            <div class="carousel-item">
+	                <img src="{{ asset('img/carousel-2.jpg') }}" alt="Carousel Image">
+	                <div class="carousel-caption">
+	                    <p class="animated fadeInRight">Pekerja Profesional</p>
+	                    <h1 class="animated fadeInLeft">We Build Your Home</h1>
+	                    @auth
+	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    @endauth
+
+	                    @guest
+	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    @endguest
+	                </div>
+	            </div>
+
+	            <div class="carousel-item">
+	                <img src="{{ asset('img/carousel-3.jpg') }}" alt="Carousel Image">
+	                <div class="carousel-caption">
+	                    <p class="animated fadeInRight">Terpercaya</p>
+	                    <h1 class="animated fadeInLeft">For Your Dream Home</h1>
+	                    @auth
+	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    @endauth
+
+	                    @guest
+	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    @endguest
+	                </div>
+	            </div>
+	        </div>
+
+	        <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+	            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	            <span class="sr-only">Previous</span>
+	        </a>
+	        <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+	            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	            <span class="sr-only">Next</span>
+	        </a>
+	    </div>
+	    <!-- Carousel End -->
+
+		<!-- Feature Start-->
+	    <div class="feature wow fadeInUp" data-wow-delay="0.1s">
+	        <div class="container-fluid">
+	            <div class="row align-items-center">
+	                <div class="col-lg-4 col-md-12">
+	                    <div class="feature-item">
+	                        <div class="feature-icon">
+	                            <i class="flaticon-worker"></i>
+	                        </div>
+	                        <div class="feature-text">
+	                            <h3>Pekerja Profesional</h3>
+	                            <p>Pekerja yang telah mengikuti proses training dan dituntut memiliki kemampuan dalam bidang konstruksi.</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-12">
+	                    <div class="feature-item">
+	                        <div class="feature-icon">
+	                            <i class="flaticon-building"></i>
+	                        </div>
+	                        <div class="feature-text">
+	                            <h3>Ahli Dibidangnya</h3>
+	                            <p>Teruji dengan banyak nya pekerjaan dengan feedback baik.</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-12">
+	                    <div class="feature-item">
+	                        <div class="feature-icon">
+	                            <i class="flaticon-call"></i>
+	                        </div>
+	                        <div class="feature-text">
+	                            <h3>Fast Response</h3>
+	                            <p>Pelayanan yang cepat, mudah dan praktis.</p>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Feature End-->
+
+		<!-- Contact Start-->
+	    <div class="contact wow fadeInUp" id="reservation-selection">
+	        <div class="container">
+	            <div class="section-header text-center">
+	                <p>Apa Yang Anda Butuhkan ?</p>
+	                <h2>Beri tahu kami kebutuhan anda .. !</h2>
+	            </div>
+	            @auth
+		            <form v-on:submit.prevent="sendReservation" id="form-engagement">
+		            <div class="row">
+		                <div class="col-md-6">
+		                    <div class="control-group">
+					            <label class="font-12 text-white" for="name">Nama</label>
 					            <input type="text" class="form-control" id="name" name="name" placeholder="Nama" required="">
 					        </div>
-					        <div class="form-group">
-					            <label for="phone_number">No Handphone</label>
-					            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Whatsapp" required="">
+					        <div class="control-group pt-2">
+					            <label class="font-12 text-white" for="phone_number">No Handphone</label>
+					            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Whatsapp / Handphone" required="">
 					        </div>
 					        <div class="row">
-					        	<div class="col-md-6">
-						        	<div class="form-group">
-							            <label for="province">Provinsi</label>
+					        	<div class="col-md-6 py-2">
+						        	<div class="control-group">
+							            <label class="font-12 text-white" for="province">Provinsi</label>
 							            <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
 							            	<option value="">Pilih</option>
 							            	<option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
 							            </select>
 							        </div>
 						        </div>
-						        <div class="col-md-6">
-						        	<div class="form-group">
-							            <label for="regency">Kota/Kabupaten</label>
+						        <div class="col-md-6 py-2">
+						        	<div class="control-group">
+							            <label class="font-12 text-white" for="regency">Kota/Kabupaten</label>
 							            <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
 							            	<option value="">Pilih</option>
-                      						<option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
+		              						<option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
 							            </select>
 							        </div>
 						        </div>
-						        <div class="col-md-6">
-						        	<div class="form-group">
-							            <label for="district">Kecamatan</label>
+						        <div class="col-md-6 py-2">
+						        	<div class="control-group">
+							            <label class="font-12 text-white" for="district">Kecamatan</label>
 							            <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
 							            	<option value="">Pilih</option>
 							            	<option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
 							            </select>
 							        </div>
 						        </div>
-						        <div class="col-md-6">
-						        	<div class="form-group">
-							            <label for="village">Kelurahan</label>
+						        <div class="col-md-6 py-2" style="background-color: #030f27;">
+						        	<div class="control-group">
+							            <label class="font-12 text-white" for="village">Kelurahan</label>
 							            <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
 							            	<option value="">Pilih</option>
 							            	<option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
@@ -129,22 +219,22 @@
 							        </div>
 						        </div>
 					        </div>
-					         <div class="form-group">
-					            <label for="address">Alamat</label>
+					         <div class="control-group">
+					            <label class="font-12 text-white" for="address">Alamat</label>
 					            <input type="text" class="form-control" id="address" name="address" placeholder="Masukan Alamat Rumah" required="">
 					        </div>
-						</div>
-						<div class="col-12 col-md-6">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-							            <label for="date">Date</label>
+		                </div>
+		                <div class="col-md-6">
+		                    <div class="row">
+								<div class="col-md-6 pt-0 pb-0" style="background-color: #fdbe33;">
+									<div class="control-group">
+							            <label class="font-12 text-black" for="date">Tanggal</label>
 							            <input type="text" class="form-control datePicker" id="date" name="date" placeholder="YYYY-MM-DD" required="">
 							        </div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-							            <label for="time">Waktu</label>
+								<div class="col-md-6 pt-0 pb-0" style="background-color: #fdbe33;">
+									<div class="control-group">
+							            <label class="font-12 text-black" for="time">Waktu</label>
 							            <select class="form-control" name="time" id="time" required="">
 							            	<option value="">Pilih</option>
 							            	<option v-for= 'times in time' :value="times">@{{ times }}</option>
@@ -152,287 +242,727 @@
 							        </div>
 								</div>
 							</div>
-							<div class="form-group">
-					            <label for="service">Servis</label>
+							<div class="control-group pt-2">
+					            <label class="font-12 text-black" for="service">Servis</label>
 					            <select type="text" class="form-control select2" id="service" name="service[]" multiple="" required="">
 					            	<option v-for = "(service, index) in service" :value = 'service.id'>@{{ service.name }}</option>
 					            </select>
 					        </div>
-							<div class="form-group">
-					            <label for="description">Deskripsi ( 300 Karakter )</label>
-					            <textarea type="text" class="form-control" id="description" name="description" placeholder="Description Keperluan" rows="5" maxlength="300" required=""></textarea>
-					            <label id="maxDescription" class="mb-0 mt-2">300 Karakter tersisa</label>
+							<div class="control-group pt-2">
+					            <label class="font-12 text-black" for="description">Deskripsi ( 300 Karakter )</label>
+					            <textarea type="text" class="form-control" id="description" name="description" placeholder="Deskripsi Keperluan" rows="6" maxlength="300" required=""></textarea>
+					            <label id="maxDescription" class="mb-0 mt-2 font-12 text-black">300 Karakter tersisa</label>
 					        </div>
-						</div>
-					</div>
-					<button class="btn-block btn btn-warning mt-3 shadow">Kirim Reservasi Survey Lapangan</button>
-				</form>
-			</div>
-		</section>
-		@endauth
+					        <div class="mt-5 text-right">
+		                        <button class="btn-theme btn-submited" type="submit" id="sendMessageButton">Kirim Reservasi Survei Lapangan</button>			        	
+					        </div>
+		                </div>
+		            </div>
+		            </form>
+	            @endauth
 
-		<!-- List Service -->
-		<section class="container-fluid mt-5 mb-5 pt-5">
-			<div class="container">
-				<div class="d-block text-center mb-5">
-					<h1><strong>Service</strong></h1>
-					<p>Pelajari dan mulai coba layanan kami</p>
-				</div>
-				<div class="row">
-					<div class="col-12 col-md-6 col-lg-4 pb-3">
-						<div class="card mx-auto shadow" style="max-width: 400px;">
-						  	<div class="card-body" style="max-height: 300px; overflow: hidden;">
-						  		<div style="display: flex; justify-content: center; align-items: center;" class="text-center">
-						  			<div style="width: 100px; height: 100px; background-color: #fed136; border-radius: 100%;">
-						  				<i class="fa fa-home text-white" style="font-size: 85px; margin-top: 6px;"></i>
-						  			</div>
-						  		</div>
-						  		<h5 class="text-center mt-3 font-weight-bold pb-2 pt-3">PERBAIKAN RUMAH</h5>
-						  		<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						  		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-						  		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-						  		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-						  		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-						  		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-						  	</div>
-						  	<div class="card-footer text-center mt-3">
-						  		<a type="button" class="btn btn-info text-white pl-2 pr-2 f-small font-weight-bold">Pelajari dan Mulai Reservasi .. !</a>
-						  	</div>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4 pb-3">
-						<div class="card mx-auto shadow" style="max-width: 400px;">
-						  	<div class="card-body" style="max-height: 300px; overflow: hidden;">
-						  		<div style="display: flex; justify-content: center; align-items: center;" class="text-center">
-						  			<div style="width: 100px; height: 100px; background-color: #59b1ff; border-radius: 100%;">
-						  				<i class="fa fa-tint text-white" style="font-size: 85px; margin-top: 6px;"></i>
-						  			</div>
-						  		</div>
-						  		<h5 class="text-center mt-3 font-weight-bold pb-2 pt-3">PERBAIKAN SALURAN AIR</h5>
-						  		<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						  		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-						  		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-						  		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-						  		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-						  		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-						  	</div>
-						  	<div class="card-footer text-center mt-3">
-						  		<a type="button" class="btn btn-info text-white pl-2 pr-2 f-small font-weight-bold">Pelajari dan Mulai Reservasi .. !</a>
-						  	</div>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4 pb-3">
-						<div class="card mx-auto shadow" style="max-width: 400px;">
-						  	<div class="card-body" style="max-height: 300px; overflow: hidden;">
-						  		<div style="display: flex; justify-content: center; align-items: center;" class="text-center">
-						  			<div style="width: 100px; height: 100px; background-color: #ffa94f; border-radius: 100%;">
-						  				<i class="fa fa-bolt text-white" style="font-size: 85px; margin-top: 6px;"></i>
-						  			</div>
-						  		</div>
-						  		<h5 class="text-center mt-3 font-weight-bold pb-2 pt-3">PERBAIKAN LISTRIK</h5>
-						  		<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-						  		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-						  		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-						  		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-						  		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-						  		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-						  	</div>
-						  	<div class="card-footer text-center mt-3">
-						  		<a type="button" class="btn btn-info text-white pl-2 pr-2 f-small font-weight-bold">Pelajari dan Mulai Reservasi .. !</a>
-						  	</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+	            @guest
+		            <div class="text-center mt-5 mb-5">
+		                <button class="btn-theme btn-submited" href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</button>
+		            </div>
+	            @endguest
+	        </div>
+	    </div> 
+	    <!-- Contact End-->
 
-		<!-- Petunjuk Reservasi -->
-		<section class="mt-5 mb-5">
+	    <!-- About Start -->
+	    <div class="about wow fadeInUp" id="about_us" data-wow-delay="0.1s">
+	        <div class="container">
+	            <div class="row align-items-center">
+	                <div class="col-lg-5 col-md-6">
+	                    <div class="about-img">
+	                        <img src="img/about.jpg" alt="Image">
+	                    </div>
+	                </div>
+	                <div class="col-lg-7 col-md-6">
+	                    <div class="section-header text-left">
+	                        <p>Selamat Datang di Servis Rumah</p>
+	                        <h2>Dengan Pengalaman Bertahun Tahun</h2>
+	                    </div>
+	                    <div class="about-text">
+	                        <p class="text-justify">
+	                            Puji syukur kita panjatkan kehadirat Allah SWT. Pada kesempatan ini perkenankanlah kami memperkenalkan diri, bahwa kami adalah perusahaan yang bergerak dalam bidang :
+							</p>
+							<ul>
+								<li>
+							Kontraktor Sipil Bangunan
+								</li>
+								<li>
+							Perdagangan dan Supplier
+								</li>
+								<li>
+							Refrigerasi dan Teknologi Mesin Pendingin (AC)
+								</li>
+							</ul>
+							<p class="text-justify">
+								Sejak didirikan sampai dengan sekarang, alhamdulillah PT. Nurani Rejeki Unggul telah mampu menjalin kerjasama dan memberikan kontribusi terbaik dalam mengoptimalkan kinerja customernya dalam mencapai target yang diharapkan. 
+								<br>
+								<br>
+								Insya Allah kami senantiasa berupaya amanah dan bekerja optimal dalam mengemban kepercayaan customer kami.
+								<br>
+								<br>
+								<strong>
+									Hormat kami,
+									<br>
+									PT. Nurani Rejeki Unggul 
+								</strong>
+	                        </p>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- About End -->
+
+	    <!-- Fact Start -->
+	    <div class="fact">
+	        <div class="container-fluid">
+	            <div class="row counters">
+	                <div class="col-md-6 fact-left wow slideInLeft">
+	                    <div class="row">
+	                        <div class="col-6">
+	                            <div class="fact-icon">
+	                                <i class="flaticon-worker"></i>
+	                            </div>
+	                            <div class="fact-text">
+	                                <h2 data-toggle="counter-up">109</h2>
+	                                <p>Expert Workers</p>
+	                            </div>
+	                        </div>
+	                        <div class="col-6">
+	                            <div class="fact-icon">
+	                                <i class="flaticon-building"></i>
+	                            </div>
+	                            <div class="fact-text">
+	                                <h2 data-toggle="counter-up">485</h2>
+	                                <p>Happy Clients</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-md-6 fact-right wow slideInRight">
+	                    <div class="row">
+	                        <div class="col-6">
+	                            <div class="fact-icon">
+	                                <i class="flaticon-address"></i>
+	                            </div>
+	                            <div class="fact-text">
+	                                <h2 data-toggle="counter-up">789</h2>
+	                                <p>Completed Projects</p>
+	                            </div>
+	                        </div>
+	                        <div class="col-6">
+	                            <div class="fact-icon">
+	                                <i class="flaticon-crane"></i>
+	                            </div>
+	                            <div class="fact-text">
+	                                <h2 data-toggle="counter-up">890</h2>
+	                                <p>Running Projects</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Fact End -->
+
+	    <!-- Service Start -->
+	    <div class="service" id="services">
+	        <div class="container">
+	            <div class="section-header text-center">
+	                <p>Servis Kami</p>
+	                <h3 class="font-weight-bold">Kami Menyediakan Berbagai Macam Servis</h3>
+	            </div>
+	            <div class="row">
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-5.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+	                                    Kami menyediakan jasa interior, renovasi bangungan, jalan, pagar, pengecatan, pekerjaan pipa, tanki timbun, pemeliharaan gedung, dan penataan taman.
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Design Interior</h3>
+	                            <a class="btn-theme" href="img/service-1.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-2.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+                                      	Pengadaan alat dan barang diantaranya alat – alat komponen sipil, alat kelistrikan, serta berbagai peralatan perlengkapan keselamatan Kerja dan Kesehatan Kerja
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Umum dan Supplier</h3>
+	                            <a class="btn-theme" href="img/service-2.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-3.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+	                                    Mengerjakan Perbaikan Instalasi Listrik, Mesin Pompa serta Jasa Service dan Pengadaan AC
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Mekanikal Elektrikal & Refrigerasi serta Teknologi Pendingin</h3>
+	                            <a class="btn-theme" href="img/service-3.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-4.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Desain Interior</h3>
+	                            <a class="btn-theme" href="img/service-4.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-5.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Maintenance</h3>
+	                            <a class="btn-theme" href="img/service-5.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+	                    <div class="service-item">
+	                        <div class="service-img">
+	                            <img src="img/service-6.jpg" alt="Image">
+	                            <div class="service-overlay">
+	                                <p>
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
+	                                </p>
+	                            </div>
+	                        </div>
+	                        <div class="service-text">
+	                            <h3>Pengecatan</h3>
+	                            <a class="btn-theme" href="img/service-6.jpg" data-lightbox="service">+</a>
+	                        </div>
+	                    </div> --}}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Service End -->
+
+	    <!-- Team Start -->
+	    <div class="team">
+	        <div class="container">
+	            <div class="section-header text-center">
+	                <p>Team Kami</p>
+	                <h2>Bekerja dengan Kami</h2>
+	            </div>
+	            <div class="row">
+	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+	                    <div class="team-item">
+	                        <div class="team-img">
+	                            <img src="img/team-1.jpg" alt="Team Image">
+	                        </div>
+	                        <div class="team-text">
+	                            <h2>Firman</h2>
+	                            <p>CEO & Founder</p>
+	                        </div>
+	                        <div class="team-social">
+	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
+	                            <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>
+	                            <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
+	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+	                    <div class="team-item">
+	                        <div class="team-img">
+	                            <img src="img/team-2.jpg" alt="Team Image">
+	                        </div>
+	                        <div class="team-text">
+	                            <h2>Firman</h2>
+	                            <p>Civil Engineer</p>
+	                        </div>
+	                        <div class="team-social">
+	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
+	                            <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>
+	                            <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
+	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+	                    <div class="team-item">
+	                        <div class="team-img">
+	                            <img src="img/team-3.jpg" alt="Team Image">
+	                        </div>
+	                        <div class="team-text">
+	                            <h2>Agus</h2>
+	                            <p>Interior Designer</p>
+	                        </div>
+	                        <div class="team-social">
+	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
+	                            <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>
+	                            <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
+	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+	                    <div class="team-item">
+	                        <div class="team-img">
+	                            <img src="img/team-4.jpg" alt="Team Image">
+	                        </div>
+	                        <div class="team-text">
+	                            <h2>Sandi</h2>
+	                            <p>Painter</p>
+	                        </div>
+	                        <div class="team-social">
+	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
+	                            <a class="social-fb" href=""><i class="fab fa-facebook-f"></i></a>
+	                            <a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
+	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Team End -->
+
+
+	    <!-- Portofolio Start -->
+	    <div class="portfolio" id="works">
             <div class="container">
-                <div class="text-center">
-                    <h1 class="font-weight-bold">Ayo Coba</h1>
-                    <p class="pt-3 pb-4">Ikut petunjuk reservasi untuk memulai service kami</p>
+                <div class="section-header text-center">
+                    <p>Our Projects</p>
+                    <h2>Visit Our Projects</h2>
                 </div>
-                <ul class="timeline">
-                    <li>
-                        <div class="timeline-image">
-                        	<i class="fa fa-calendar icon-step"></i>
-                        </div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="font-weight-bold">Step 1</h4>
-                                <h4 class="subheading">Pilih kebutuhan Anda</h4>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 first wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-1.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
                             </div>
-                            <div class="timeline-body">
-                            	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-inverted">
-                        <div class="timeline-image bg-info">
-                        	<i class="fa fa-plane icon-step"></i>
-                        </div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="font-weight-bold">Step 2</h4>
-                                <h4 class="subheading">Survei</h4>
-                            </div>
-                            <div class="timeline-body">
-                            	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-1.jpg" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
-                    </li>
-                    <li>
-                        <div class="timeline-image bg-danger">
-                        	<i class="fa fa-handshake-o icon-step"></i>
-                    	</div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="font-weight-bold">Step 3</h4>
-                                <h4 class="subheading">Negosiasi</h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 second wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-2.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
                             </div>
-                            <div class="timeline-body">
-                            	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-inverted">
-                        <div class="timeline-image bg-warning">
-                        	<i class="fa fa-suitcase icon-step"></i>
-                    	</div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="font-weight-bold">Step 4</h4>
-                                <h4 class="subheading">Mulai Bekerja</h4>
-                            </div>
-                            <div class="timeline-body">
-                            	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-2.jpg" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
-                    </li>
-                    <li class="timeline-inverted">
-                        <div class="timeline-image bg-success">
-                            <h4>
-                                Selesai
-                                <br>
-                                &
-                                <br>
-                                Review
-                            </h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-3.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-3.jpg" data-lightbox="portfolio">+</a>
+                            </div>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 first wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-4.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-4.jpg" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 second wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-5.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-5.jpg" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="img/portfolio-6.jpg" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Project Name</h3>
+                                <a class="btn" href="img/portfolio-6.jpg" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 load-more">
+                        <a class="btn" href="#">Load More</a>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+	    <!-- Portofolio End -->
 
-        <!-- Portofolio -->
-		<section class="mt-5 mb-5 shadow rounded bg-light">
-			<div class="pt-5 pb-3">
-				<div class="d-block text-center">
-					<h1><strong>Portofolio</strong></h1>
-					<p>Kami bekerja keras untuk hasil yang terbaik</p>
-				</div>
-			</div>
-			<div class="content pb-5">
-				<div class="row">
-			      <div class="col-12">
-			        <div class="owl-carousel owl-theme">
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			          <div class="item text-center" style="width: 100%;">
-			          	<div class="card mx-auto border border-secondary" style="width: 18rem;">
-			          		<div class="text-center mt-3">
-			            		<img class="img-fluid d-inline" src="{{ asset('img/default.png') }}" style="width: 100px;">
-			          		</div>
-						  	<div class="card-body">
-						    	<p class="card-text font-italic">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-						  	</div>
-						</div>
-			          </div>
-			        </div>
-			      </div>
-			    </div>
-			</div>
-		</section>
+	    <!-- FAQs Start -->
+	    <div class="faqs">
+	        <div class="container">
+	            <div class="section-header text-center">
+	                <p>Pertanyaan Yang Sering Diajukan</p>
+	                <h2>Hubungi Kami</h2>
+	            </div>
+	            <div class="row">
+	                <div class="col-md-6">
+	                    <div id="accordion-1">
+	                        <div class="card wow fadeInLeft" data-wow-delay="0.1s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseOne">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseOne" class="collapse" data-parent="#accordion-1">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInLeft" data-wow-delay="0.2s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseTwo">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseTwo" class="collapse" data-parent="#accordion-1">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInLeft" data-wow-delay="0.3s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseThree">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseThree" class="collapse" data-parent="#accordion-1">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInLeft" data-wow-delay="0.4s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseFour">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseFour" class="collapse" data-parent="#accordion-1">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInLeft" data-wow-delay="0.5s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseFive">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseFive" class="collapse" data-parent="#accordion-1">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-md-6">
+	                    <div id="accordion-2">
+	                        <div class="card wow fadeInRight" data-wow-delay="0.1s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseSix">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseSix" class="collapse" data-parent="#accordion-2">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInRight" data-wow-delay="0.2s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseSeven">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseSeven" class="collapse" data-parent="#accordion-2">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInRight" data-wow-delay="0.3s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseEight">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseEight" class="collapse" data-parent="#accordion-2">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInRight" data-wow-delay="0.4s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseNine">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseNine" class="collapse" data-parent="#accordion-2">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card wow fadeInRight" data-wow-delay="0.5s">
+	                            <div class="card-header">
+	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseTen">
+	                                    Lorem ipsum dolor sit amet?
+	                                </a>
+	                            </div>
+	                            <div id="collapseTen" class="collapse" data-parent="#accordion-2">
+	                                <div class="card-body">
+	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- FAQs End -->
+
+	    <!-- Testimonial Start -->
+	    {{-- <div class="testimonial wow fadeIn" data-wow-delay="0.1s">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-12">
+	                    <div class="testimonial-slider-nav">
+	                        <div class="slider-nav"><img src="img/testimonial-1.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-2.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-3.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-4.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-1.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-2.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-3.jpg" alt="Testimonial"></div>
+	                        <div class="slider-nav"><img src="img/testimonial-4.jpg" alt="Testimonial"></div>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-12">
+	                    <div class="testimonial-slider">
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                        <div class="slider-item">
+	                            <h3>Customer Name</h3>
+	                            <h4>profession</h4>
+	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div> --}}
+	    <!-- Testimonial End -->
+
+	    <!-- Blog Start -->
+	    {{-- <div class="blog">
+	        <div class="container">
+	            <div class="section-header text-center">
+	                <p>Blog Terbaru</p>
+	                <h2>Terbaru dari Blog Kami</h2>
+	            </div>
+	            <div class="row">
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+	                    <div class="blog-item">
+	                        <div class="blog-img">
+	                            <img src="img/blog-1.jpg" alt="Image">
+	                        </div>
+	                        <div class="blog-title">
+	                            <h3>Lorem ipsum dolor sit</h3>
+	                            <a class="btn-theme" href="">+</a>
+	                        </div>
+	                        <div class="blog-meta">
+	                            <p>By<a href="">Admin</a></p>
+	                            <p>In<a href="">Construction</a></p>
+	                        </div>
+	                        <div class="blog-text">
+	                            <p>
+	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
+	                            </p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp">
+	                    <div class="blog-item">
+	                        <div class="blog-img">
+	                            <img src="img/blog-2.jpg" alt="Image">
+	                        </div>
+	                        <div class="blog-title">
+	                            <h3>Lorem ipsum dolor sit</h3>
+	                            <a class="btn-theme" href="">+</a>
+	                        </div>
+	                        <div class="blog-meta">
+	                            <p>By<a href="">Admin</a></p>
+	                            <p>In<a href="">Construction</a></p>
+	                        </div>
+	                        <div class="blog-text">
+	                            <p>
+	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
+	                            </p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+	                    <div class="blog-item">
+	                        <div class="blog-img">
+	                            <img src="img/blog-3.jpg" alt="Image">
+	                        </div>
+	                        <div class="blog-title">
+	                            <h3>Lorem ipsum dolor sit</h3>
+	                            <a class="btn-theme" href="">+</a>
+	                        </div>
+	                        <div class="blog-meta">
+	                            <p>By<a href="">Admin</a></p>
+	                            <p>In<a href="">Construction</a></p>
+	                        </div>
+	                        <div class="blog-text">
+	                            <p>
+	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
+	                            </p>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div> --}}
+	    <!-- Blog End -->
+
+	    <!-- Footer Start -->            
+	    <!-- Footer End -->
+
 	</div>
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 	@include('layout.footer')
 @endsection
 
@@ -455,10 +985,11 @@
           village: {},
           thisVillage: '',
       },
-      created: function(){
+      mounted: function(){
         this.loadProvince();
         this.loadService();
         this.loadTime();
+        this.isInvalidDated();
       },
       methods: {
         viewData : function(id){
@@ -468,6 +999,26 @@
           }.bind(this)).then(() => { 
             this.getAllAddress();
           });
+        },
+        isInvalidDated : function(){
+          axios.get("{{ url('api/getDisableDate') }}").then(function(response){
+          	app.$nextTick(()=>{
+				$('.datePicker').daterangepicker({
+				    singleDatePicker: true,
+				    autoApply: true,
+			        disableTouchKeyboard: true,
+				    startDate: moment().add(7, 'days'),
+				    minDate: moment().add(7, 'days'),
+				    isInvalidDate: function(ele) {
+					    var currDate = moment(ele._d).format('YYYY-MM-DD');
+					    return response.data.data.indexOf(currDate) != -1;
+					},
+				    locale: {
+				      format: 'YYYY-MM-DD'
+				    }
+				});
+	        });
+          }.bind(this));
         },
         submitform : function(){
           axios.post("{{ url('api/employee/create-employee') }}", this.form).then(function(response){
@@ -552,9 +1103,16 @@
             ).then((response) => {
         		form.reset();
         		console.log(response);
-              	Swal.fire('Success', response.data.message, 'success');
+              	Swal.fire('Success', 'Terima Kasih! Reservasi anda akan kami tinjau', 'success');
+              	app.$nextTick(()=>{
+              		$(".select2").val("");
+					$(".select2").trigger("change");
+              	});
             });
-         }
+        },
+        toSelection(){
+        	$("html, body").animate({ scrollTop: $('#reservation-selection').offset().top }, 1000);
+        }
       }
     });
 
@@ -588,19 +1146,7 @@
 	});
 
 	$('.select2').select2({
-		placeholder: "Pilih service"
+		placeholder: "Pilih service ( Bisa lebih dari 1 )"
 	});
-
-	$('.datePicker').daterangepicker({
-	    singleDatePicker: true,
-	    autoApply: true,
-        disableTouchKeyboard: true,
-	    startDate: moment().add(7, 'days'),
-	    minDate: moment().add(7, 'days'),
-	    locale: {
-	      format: 'YYYY-MM-DD'
-	    }
-	});
-
 </script>
 @endsection

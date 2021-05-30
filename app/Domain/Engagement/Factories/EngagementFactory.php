@@ -29,6 +29,7 @@ class EngagementFactory
                 'status'            => $item->status,
                 'locked'            => $item->locked,
                 'phone_number'      => $item->phone_number,
+                'customer_is'       => $item->customer_is,
                 'service'           => self::serviceFactory($item->service),
                 'count'             => $item->report_count,
                 'created_at'        => Date('Y-m-d', strtotime($item->created_at))
@@ -61,6 +62,7 @@ class EngagementFactory
                 'description'       => $item->description,
                 'status'            => $item->status,
                 'locked'            => $item->locked,
+                'vendor_is'         => $item->vendor_is,
                 'phone_number'      => $item->phone_number,
                 'service'           => self::serviceFactory($item->service),
                 'price'             => self::allPrice($item->report),

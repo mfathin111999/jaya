@@ -56,7 +56,10 @@ class EmployeeController extends Controller
         ->where('role', 5)
         ->whereHas('vendorEngage', function($query){
             $query->where('status', 'acc')
-                  ->where('locked', 'deal');
+                  ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer');
+                  });
         })
         ->with(['vendorEngage' => function($query){
             $query->where('status', 'acc')
@@ -226,6 +229,7 @@ class EmployeeController extends Controller
         $reservation->pdistrict_id  = $request['district_id'];
         $reservation->pregency_id   = $request['regency_id'];
         $reservation->pprovince_id  = $request['province_id'];
+        $reservation->paddress      = $request['paddress'];
 
         $reservation->save();
 

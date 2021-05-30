@@ -17,16 +17,11 @@
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr style="line-height: 25px;">
 						<td style="text-align: center;"><strong>Hallo, {{ $engagement->name }}</strong><br>
-							Mohon maaf reservasi anda dengan kode booking <strong>{{ $engagement->code }}</strong>
-						</td>
-					</tr>
-					<tr height="30px">
-						<td style="text-align: center;">
-							<h3><strong style="color: #de2537;">Di Tolak</strong></h3>
+							Mohon maaf reservasi anda dengan kode booking <strong>{{ $engagement->code }}</strong> tidak bisa kami proses dikarenankan <strong>{{ $engagement->reason->reason }}</strong>
 						</td>
 					</tr>
 					<tr>
-						<td style="text-align: center;">
+						<td style="text-align: center; padding-top:15px;">
 							<img src="{{ $message->embed('img/ignore.png') }}" style="max-width: 100px;">
 						</td>
 					</tr>

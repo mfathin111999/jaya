@@ -41,7 +41,7 @@
                       <label for="unit">Unit</label>
                       <select class="form-control" required="" name= 'unit' id="unit" v-model='view_report.unit'>
                           <option value=''>Pilih Unit</option>
-                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data2 }}</option>
+                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data1 }}</option>
                         </select>
                     </div>
                   </div>
@@ -95,7 +95,7 @@
                       <label for="unit1">Unit</label>
                       <select class="form-control" required="" name="unit" id="unit1">
                           <option value=''>Pilih Unit</option>
-                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data2 }}</option>
+                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data1 }}</option>
                       </select>
                     </div>
                   </div>
@@ -164,7 +164,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="name_step">Nama Tahapan</label>
-                      <input type="text" id="name_step" class="form-control" v-model='add_step.name' name="name" required>
+                      <input type="text" id="name_step" class="form-control" name="name" required>
                     </div>
                   </div>
                 </div>
@@ -283,6 +283,12 @@
                           </select>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for='address'>Alamat</label>
+                        <input type="text" class="form-control" id="address" name="paddress" placeholder="Jln. Soekarno Hatta No 25, Kp. Moch Toha" v-model='data.paddress' required="">
+                      </div>
+                    </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -368,6 +374,12 @@
                           </select>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for='paddress'>Alamat</label>
+                        <input type="text" class="form-control" id="paddress" name="paddress" placeholder="Jln. Soekarno Hatta No 25, Kp. Moch Toha" v-model='data.paddress' required="">
+                      </div>
+                    </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -386,19 +398,25 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
-      					<h3 class="text-center mb-4"><strong>TAMBAH LAPORAN SURVEY</strong></h3>
+      					<h3 class="text-center my-4"><strong>TAMBAH LAPORAN SURVEY</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Kode Booking</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Kode Booking</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.code }}</strong></label>
+                      </div>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Tanggal Survey</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.date }} @{{ data.time }}</strong></label>
+                      </div>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Nama Pelanggan</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.name }}</strong></label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -444,14 +462,14 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for="ktp">Address</label>
+                      <label for="ktp">Alamat Pekerjaan</label>
                       <textarea type="text" rows="2" class="form-control" id="ktp" name="address" v-model='allPlace' disabled></textarea>
                     </div>
                   </div>
-                  <div class="col-md-12 text-right">
-                    <button class="btn btn-info" data-toggle="modal" data-target="#showPartner" @click='showPartner()'>
-                      <i class="fa fa-pencil mr-2"></i><span>Edit Data Customer</span>
-                    </button>
+                  <div class="col-md-12 text-md-right text-center">
+                      <button class="btn btn-info" data-toggle="modal" data-target="#showPartner" @click='showPartner()'>
+                        <i class="fa fa-pencil mr-2"></i><span>Edit Data Customer</span>
+                      </button>
                   </div>
                 </div>
 
@@ -464,7 +482,7 @@
                   <div class="col-md-12 mb-4 mt-3 text-center">
                     <div class="pt-3 pb-3 pl-2 pr-2 rounded" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan</label>
-                      <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
+                      <i class="btn btn-success fa fa-plus float-md-right mt-1" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
                     </div>
                   </div>
                   <div class="col-12 table-responsive" v-for='(report, index) in data.report'>
@@ -509,7 +527,7 @@
                  -->
                 <div class="row mt-4">
                   <div class="col-md-12">
-                    <div class="pt-3 pb-3 pl-2 pr-2 rounded" style="background-color: #00000008; border: 1px solid #00000020;">
+                    <div class="pt-3 pb-3 pl-2 pr-2 rounded text-md-right text-center" style="background-color: #00000008; border: 1px solid #00000020;">
 
                       <label for="image_report" class="btn btn-sm btn-outline-secondary font-weight-bold m-0"><i class="fa fa-plus pr-2" v-if="view_image.length <= 8"></i>Tambah Gambar Report</label>
                       <input type="file" name="gambar" id="image_report" class="form-control" @change="onFileChange" style="display: none;" v-if="view_image.length <= 8">
@@ -598,7 +616,7 @@
               };
               this.data = response.data.data;
               this.partner = response.data.data.partner == null ? partner : response.data.data.partner;
-              this.allPlace = response.data.data.partner == null ? '' : response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
+              this.allPlace = response.data.data.partner == null ? '' : ucwords(response.data.data.paddress+', '+response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name);
               this.view_image = response.data.data.gallery;
             }.bind(this));
           },
@@ -689,6 +707,7 @@
             .then(function (response) {
               report.$nextTick(() => {
                 $("#addStep").modal('hide');
+                $('#form-add-step').trigger("reset");
               });
             }).then(() => {
               this.getData(this.id);
@@ -753,6 +772,7 @@
               report.$nextTick(() => {
                 form.reset();
                 $("#addModal").modal('hide');
+                $('#form-add').trigger("reset");
               });
             }).then(() => {
               this.getData(this.id);
@@ -805,6 +825,7 @@
             .then(function (response) {
               report.$nextTick(() => {
                 $("#editStep").modal('hide');
+                $('#form-update-step').trigger("reset");
               });
             }).then(() => {
               this.getData(this.id);

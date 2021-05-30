@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Domain\Resource\Application\ResourceManagement;
+use App\Domain\Engagement\Entities\Engagement;
+use App\Domain\Resource\Entities\Reason;
 
 class ResourceController extends Controller
 {
@@ -25,7 +27,7 @@ class ResourceController extends Controller
 
         return response()->json([
             'status'    => 200,
-            'data'      => $data,
+            'data'      => $data['unit'],
         ]);
     }
 
@@ -37,6 +39,12 @@ class ResourceController extends Controller
             'status'    => 200,
             'data'      => $data,
         ]);
+    }
+
+    public function getDisableDate(){
+        $data = Engagement::where('date', '>', date('Y-m-d'))->pluck('date');
+
+        return apiResponseBuilder(200, $data);
     }
 
     /**
@@ -153,5 +161,64 @@ class ResourceController extends Controller
             'status'    => 200,
             'data'      => $data,
         ]);
+    }
+
+    public function getReason(Request $request)
+    {
+        $data = Reason::all();
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function viewReason(Request $request)
+    {
+        $data = Reason::find($request->id);
+
+        if (auth()->guard('api')->user()->role != 1) {
+            return apiResponseBuilder(404, 'unauthorize');
+        }
+
+        return apiResponseBuilder(200, $data);
+    }
+
+    public function storeReason(Request $request)
+    {
+        $data = new Reason;
+
+        $data->reason = $request->reason;
+
+        $data->save();
+
+        if (auth()->guard('api')->user()->role != 1) {
+            return apiResponseBuilder(404, 'unauthorize');
+        }
+
+        return apiResponseBuilder(200, $data, 'success');
+    }
+
+    public function updateReason(Request $request)
+    {
+        $data = Reason::find($request->id);
+
+        $data->reason = $request->reason;
+
+        $data->save();
+
+        if (auth()->guard('api')->user()->role != 1) {
+            return apiResponseBuilder(404, 'unauthorize');
+        }
+
+        return apiResponseBuilder(200, $data, 'success');
+    }
+
+    public function destroyReason(Request $request)
+    {
+        $data = Reason::find($request->id)->delete();
+
+        if (auth()->guard('api')->user()->role != 1) {
+            return apiResponseBuilder(404, 'unauthorize');
+        }
+
+        return apiResponseBuilder(200, $data, 'success');
     }
 }

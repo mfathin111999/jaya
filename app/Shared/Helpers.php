@@ -17,4 +17,30 @@ function apiResponseBuilder($statusCode = 500, $data = [], $msg = "Oke")
     ], $statusCode);
 }
 
+function integerToRoman($integer)
+    {
+    	
+		$integer = intval($integer);
+		$result = '';
+
+		$lookup = array(
+			'X' 	=> 10,
+			'IX' 	=> 9,
+			'V' 	=> 5,
+			'IV' 	=> 4,
+			'I' 	=> 1
+		);
+
+		foreach($lookup as $roman => $value){
+
+		$matches = intval($integer/$value);
+
+		$result .= str_repeat($roman,$matches);
+
+		$integer = $integer % $value;
+		}
+
+		return $result;
+}
+
 ?>

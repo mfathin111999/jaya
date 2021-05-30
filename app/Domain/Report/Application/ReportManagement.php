@@ -32,6 +32,14 @@ class ReportManagement
 							  ->when(auth()->guard('api')->user()->role == 1, function ($query){
 									$query->with('termin');
 								})
+							  ->when(auth()->guard('api')->user()->role == 5, function ($query){
+									$query->with(['termins.payment' => function ($query) {
+										$query->where('payment_log.status', 'success');
+									}]);
+								})
+							  ->when(auth()->guard('api')->user()->role == 4, function ($query){
+									$query->with('termin');
+								})
 							  ->with(['subreport' => function($query){
 									$query->orderBy('id', 'asc');
 								}]);

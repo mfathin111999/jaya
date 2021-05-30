@@ -5,6 +5,19 @@
     window.location = "{{ route('home') }}";
   </script>
 @else
+  
+  @section('sec-css')
+  <style type="text/css">
+    .buttoned{
+      border: 0px;
+      background-color: transparent;
+      cursor: pointer;
+      margin: 0px;
+      padding: 0px;
+    }
+  </style>
+  @endsection
+
 
   @section('content')
   	@include('layout.admin_header')
@@ -47,7 +60,7 @@
                       <label for="unit">Unit</label>
                       <select class="form-control" required="" name= 'unit' id="unit" v-model='view_report.unit'>
                           <option value=''>Pilih Unit</option>
-                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data2 }}</option>
+                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data1 }}</option>
                         </select>
                     </div>
                   </div>
@@ -60,13 +73,13 @@
                   <div class="col-6">
                     <div class="form-group">
                       <label for="price_clean">Harga Vendor</label>
-                      <input type="text" class="form-control" id="price_clean" v-model="view_report.price_clean" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="price_clean" v-model="view_report.price_clean" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.vendor_is != 1 ? false : true" required>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="price_dirt">Harga Customer</label>
-                      <input type="text" class="form-control" id="price_dirt" v-model="view_report.price_dirt" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="price_dirt" v-model="view_report.price_dirt" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.customer_is != 1 ? false : true" required>
                     </div>
                   </div>
                 </div>
@@ -119,7 +132,7 @@
                       <label for="unit1">Unit</label>
                       <select class="form-control" required="" name="unit" id="unit1">
                           <option value=''>Pilih Unit</option>
-                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data2 }}</option>
+                          <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data1 }}</option>
                       </select>
                     </div>
                   </div>
@@ -252,45 +265,56 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
-      					<h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
+      					<h3 class="text-center my-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Kode Booking</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
-                        <a href="#" class="mb-2" data-toggle="modal" data-target="#addDate" style="font-size: 12px;" v-if='data.locked == "offer"'>Ubah Tanggal</a><br>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Kode Booking</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.code }}</strong></label>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <a href="#" class="mb-2" data-toggle="modal" data-target="#addDate" style="font-size: 12px;">Belum Ditentukan, Ubah Tanggal</a><br>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Tanggal Survey</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.date }} @{{ data.time }}</strong></label>
                       </div>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Nama Pelanggan</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.name }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Vendor</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12">Tanggal Mulai</label>
+                        <br>
+                        <strong>
+                          <label class="m-0" v-if= 'data.date_work != null' >
+                            @{{ data.date_work }},
+                            <button class="mb-2 buttoned" data-toggle="modal" data-target="#addDate" v-if='data.locked == "offer"'><strong>Ubah Tanggal</strong></button><br>
+                          </label>
+                          <label class="m-0" v-if= 'data.date_work == null' >
+                            <button class="mb-2 buttoned" data-toggle="modal" data-target="#addDate"><strong>Belum Ditentukan, Ubah Tanggal</strong></button>
+                          </label>
+                        </strong>
+                      </div>
+
                     </div>
                   </div>
-                  <div class="col-md-3 align-self-center text-center">
-                    <div class="row">
+                  <div class="col-md-6 align-self-center text-center">
+                    <div class="row" v-if='data.customer_is == 0'>
                       <div class="col-md-12">
                         <label class="btn-block">Penawaran</label>
                       </div>
                       <div class="col-md-12">
-                        <a href="https://api.whatsapp.com/send?phone=6288023554758&text=Penawaran%20Home%20Service%20Telah%20terkirim.%20Check%20Email%20untuk%20menyetujui" target="_blank" class="btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>Kirim Customer</a><br>
+                        <button class="btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>Kirim Customer</button><br>
                         <!-- <a href="{{ url('report/printOrderCustomer') }}/{{ $id }}" class="btn btn-warning" style="font-size: 12px;">Kirim Vendor</a> -->
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3 align-self-center text-center">
+                    </div> 
                     <div class="row">
                       <div class="col-md-12">
                         <label class="btn-block">Print</label>
@@ -352,7 +376,7 @@
                   <div class="col-md-12 mb-4 mt-3 rounded text-center">
                     <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan</label>
-                      <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
+                      <i class="btn btn-success fa fa-plus mt-1 float-md-right " data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer" && data.customer_is != 1' @click='addDetail(report.id)'></i>
                     </div>
                   </div>
                   <div class="col-12 table-responsive" v-for='(report, index) in data.report'>
@@ -361,9 +385,9 @@
                         <tr>
                           <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
                           <th class="text-center">
-                            <i class="btn btn-info fa fa-plus" data-toggle="modal" data-target="#addModal" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
-                            <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editStep" v-if='data.locked == "offer"' @click="getReport(report.id)"></i>
-                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer"' @click="delStep(report.id, index)"></i>
+                            <i class="btn btn-info fa fa-plus" data-toggle="modal" data-target="#addModal" v-if='data.locked == "offer" && data.customer_is == 0' @click='addDetail(report.id)'></i>
+                            <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editStep" v-if='data.locked == "offer" && data.customer_is == 0' @click="getReport(report.id)"></i>
+                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer" && data.customer_is == 0' @click="delStep(report.id, index)"></i>
                           </th>
                         </tr>
                         <tr>
@@ -430,7 +454,7 @@
                   <div class="col-md-12 rounded text-center">
                     <div class="pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Pembagian Termin</label><br>
-                      <button type="button" class="btn btn-sm btn-outline-secondary font-weight-bold" @click='addTermin' v-if='data.locked != "deal"'><i class="fa fa-plus pr-2"></i>Tambah Termin</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary font-weight-bold" @click='addTermin' v-if='data.locked != "deal" && data.customer_is != 1'><i class="fa fa-plus pr-2"></i>Tambah Termin</button>
                     </div>
                   </div>
                   <div class="col-12 mt-4">
@@ -469,6 +493,12 @@
                                 <span v-else>-</span>
                               </td>
                             </tr>
+                            <tr>
+                              <td colspan="2" class="text-center"><strong>Total</strong></td>
+                              <td class="text-center"><strong>@{{ formatPrice(allPriceCustomer) }}</strong></td>
+                              <td class="text-center"><strong>@{{ formatPrice(allPriceVendor) }}</strong></td>
+                              <td colspan="2" class="text-center"><strong>-</strong></td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -506,25 +536,34 @@
                 <!-- VENDOR & KUNCI PENAWARAN -->
 
                 <div class="row mt-4" v-if='data.locked != "deal"'>
-                  <div class="col-md-6 pt-3 pb-3 rounded text-center" v-if='data.customer_is == 0'>
+                  <div class="col-md-6 pt-3 pb-3 rounded text-center" v-if='data.vendor_is != 1'>
                     <div class="rounded p-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Vendor</label><br>
-                      <label class="font-weight-bold" v-if = "data.vendor == null">Tentukan vendor yang akan bergabung.</label><br v-if = "data.vendor == null">
-                      <select class="form-control" v-if = "data.vendor == null" v-model = 'data.vendor' @change="addVendor">
-                        <option value="">Pilih Vendor</option>
-                        <option v-for="(vendors, indexv) in vendor" :value="vendors.id">@{{ vendors.name }}</option>
-                      </select>
-                      <label class="font-weight-bold" v-if = "data.vendor != null">Vendor telah anda tentukan, apakah anda ingin mengubahnya ?</label><br v-if = "data.vendor != null">
-                      <button class="btn btn-danger" v-if = "data.vendor != null" @click='removeVendor'>Kosongkan Vendor</button>
+                      <div v-if='data.vendor_is == 0'>
+                        <label class="font-weight-bold" v-if = "data.vendor == null">Tentukan vendor yang akan bergabung.</label><br v-if = "data.vendor == null">
+                        <select class="form-control" v-if = "data.vendor == null" v-model = 'data.vendor' @change="addVendor">
+                          <option value="">Pilih Vendor</option>
+                          <option v-for="(vendors, indexv) in vendor" :value="vendors.id">@{{ vendors.name }}</option>
+                        </select>
+                        <label class="font-weight-bold" v-if = "data.vendor != null">Vendor telah anda tentukan, apakah anda ingin mengubahnya ?</label><br v-if = "data.vendor != null">
+                        <button class="btn btn-danger" v-if = "data.vendor != null" @click='removeVendor'>Kosongkan Vendor</button>
+                      </div>
+                      <div v-if='data.vendor_is == 99'>
+                        <label class="font-weight-bold">Vendor sebelumnya telah menolak penawaran, silahkan pilih vendor yang lain</label><br>
+                        <select class="form-control" v-model = 'data.vendor' @change="addVendor">
+                          <option value="">Pilih Vendor</option>
+                          <option v-for="(vendors, indexv) in vendor" :value="vendors.id">@{{ vendors.name }}</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-5 pt-3 pb-3 text-center mx-auto" v-if='data.customer_is != 0 && data.vendor_is == 0'>
+                  <div class="col-md-6 pt-3 pb-3 text-center mx-auto" v-if='data.customer_is != 0 && data.vendor_is != 1'>
                     <div class="rounded p-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Customer</label><br>
                       <label class="font-weight-bold">Penawaran Telah Disetujui</label>
                     </div>
                   </div>
-                  <div class="col-md-6 align-self-center text-center" v-if='data.customer_is != 0 && data.vendor_is != 0'>
+                  <div class="col-md-6 align-self-center text-center" v-if='data.customer_is != 0 && data.vendor_is == 1'>
                     <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Penawaran</label><br>
                       <label class="font-weight-bold">Setelah Penawaran terkunci, anda tidak bisa mengubah isian</label>
@@ -532,10 +571,16 @@
                       <button class="btn btn-warning" @click='dealed'><strong>Kunci Penawaran</strong></button>
                     </div>
                   </div>
+                  <div class="col-md-6 pt-3 pb-3 text-center" v-if='data.customer_is != 0 && data.vendor_is != 0'>
+                    <div class="rounded p-3" style="background-color: #00000008; border: 1px solid #00000020;">
+                      <label class="font-weight-bold h3">Customer & Vendor</label><br>
+                      <label class="font-weight-bold">Penawaran Telah Disetujui</label>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="row mt-4" v-if='data.locked == "deal"'>
-                  <div class="col-md-6 rounded text-center">
+                  <div class="col-md-6 rounded text-center mb-3">
                     <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Vendor</label><br>
                       <label class="font-weight-bold">Penawaran Telah Terkunci</label>
@@ -592,6 +637,8 @@
             allunit : [],
             province: {},
             allPlace: '',
+            allPriceCustomer: 0,
+            allPriceVendor: 0,
             thisProvince: '',
             regency: {},
             thisRegency: '',
@@ -625,8 +672,11 @@
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
               this.partner = response.data.data.partner;
-              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
-
+              this.allPlace = ucwords(response.data.data.paddress+', '+response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name);
+              for (var i = 0; i < this.data.report.length; i++) {
+                this.allPriceCustomer += parseInt(this.data.report[i].all_price[0]);
+                this.allPriceVendor += parseInt(this.data.report[i].all_price[1]);
+              }
             }.bind(this));
           },
           allUnit: function(){
@@ -1044,6 +1094,8 @@
                 }).then(()=>{
                     this.getData(this.id);
                 }); 
+              }else{
+                this.data.vendor = null;
               }
             });
           },
@@ -1114,7 +1166,46 @@
             }
           },
           sendMail:function(id){
-            window.location.href = "{{ url('report/sendEngagement') }}/"+id;
+            if (this.data.date_work == null || this.data.date_work == '') {
+              Swal.fire(
+                'Opss !',
+                'Tanggal mulai pekerjaan belum terisi !',
+                'warning'
+              )
+            }else if (this.data.vendor == null || this.data.vendor == '' || this.data.vendor.length == 0) {
+              Swal.fire(
+                'Opss',
+                'Vendor belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else if(this.termin == null || this.termin == '' || this.termin.length == 0){
+              Swal.fire(
+                'Opss',
+                'Termin belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else if(this.data.gallery == null || this.data.gallery == '' || this.data.gallery.length == 0){
+              Swal.fire(
+                'Opss',
+                'Gambar belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else{
+              Swal.fire({
+                title: 'Apakah kamu yakin ?',
+                text: "Pastikan harga sudah benar",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Iya'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.open('https://api.whatsapp.com/send?phone=6288023554758&text=Penawaran%20Home%20Service%20Telah%20terkirim.%20Check%20Email%20untuk%20menyetujui', '_blank');
+                  window.location.href = "{{ url('report/sendEngagement') }}/"+id;
+                }
+              });
+            }
           },
           formatRupiah: function(e){
             var number_string = e.target.value.replace(/[^,\d]/g, '').toString(),

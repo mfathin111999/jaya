@@ -16,6 +16,7 @@
   @endsection
 
   @section('content')
+  
     @include('layout.admin_header')
     <div id="app" v-cloak>
 
@@ -209,7 +210,7 @@
                 </div>
               </div>
             </div>
-            <div class="table">
+            <div class="table table-responsive">
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -229,9 +230,9 @@
                     <tr v-for = "(item, index) in data">
                       <td>@{{ item.tax_id }}</td>
                       <td>@{{ item.search_key }}</td>
-                      <td>@{{ item.customer }}</td>
-                      <td>@{{ item.vendor }}</td>
-                      <td>@{{ item.name }}</td>
+                      <td>@{{ item.customer == null ? 'no' : item.customer }}</td>
+                      <td>@{{ item.vendor == null ? 'no' : item.vendor }}</td>
+                      <td>@{{ item.user.name }}</td>
                       <td>@{{ item.bank_name }}</td>
                       <td>@{{ item.bank_account_number }}</td>
                       <td>@{{ item.bank_account_name }}</td>
@@ -249,7 +250,6 @@
       </div> 
     </div>
     
-
   @endsection
   @section('sec-js')
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>

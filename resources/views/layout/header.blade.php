@@ -1,133 +1,197 @@
 <header id="headerApp" v-cloak>
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 400px;">
+            <div class="modal-content">
+                <form v-on:submit.prevent='onSubmitLogin' id="login-form">
+                    <div class="modal-header d-flex align-items-center justify-content-between">
+                        <h5 class="modal-title">Servis Rumah</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="emailLogin" class="font-12">Email</label>
+                            <input type="email" class="form-control" id="emailLogin" name="email" placeholder="Masukan email" required="" autocomplete="false">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordLogin" class="font-12">Kata Sandi</label>
+                            <input type="password" class="form-control" id="passwordLogin" name="password" placeholder="Kata Sandi" required="" autocomplete="false">
+                        </div>
+                        <div class="custom-control custom-checkbox mb-2">
+                          <input type="checkbox" class="custom-control-input" id="customCheck1">
+                          <label class="custom-control-label font-12" for="customCheck1">Ingat Saya !</label>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block text-center">Login</button>
+                    </div>
+                    <div class="modal-footer font-12">
+                        <p class="m-0">Belum punya akun ? &nbsp</p>
+                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" @click='signup'>Daftar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 400px;">
+            <div class="modal-content">
+                <form id="registration" method="POST" action="{{ url('register') }}">
+                    <div class="modal-header d-flex align-items-center justify-content-between">
+                        <h5 class="modal-title">Servis Rumah</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @csrf
+                    <div class="modal-body pl-4 pr-4">
+                        <div class="form-group">
+                            <label for="nameSign" class="font-12">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="nameSign" placeholder="Nama Lengkap" name="name" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="font-12">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username" name="username" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailSign" class="font-12">Email</label>
+                            <input type="email" class="form-control" id="emailSign" aria-describedby="emailHelp" name="email" placeholder="Enter email" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordSign" class="font-12">Password</label>
+                            <input type="password" class="form-control" id="passwordSign" placeholder="Password" name="password" minlength="8" required="">
+                        </div>
+                        <button type="submit" class="btn btn-info btn btn-block text-center">Daftar</button>
+                    </div>
+                    <div class="modal-footer font-12" style="justify-content: center;">
+                        <p class="m-0">Sudah punya akun ? &nbsp</p>
+                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" @click='signup'>Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Top Bar Start -->
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <a href="index.html">
+                            <h1 style="font-size: 40px !important;">Servis Rumah</h1>
+                            <!-- <img src="img/logo.jpg" alt="Logo"> -->
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-7 d-none d-lg-block">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="flaticon-calendar"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Jam Kerja</h3>
+                                    <p>Senin - Jumat, 08:00 - 17:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="flaticon-call"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Kontak Kami</h3>
+                                    <p>+62 8810 2355 4758</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="flaticon-send-mail"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Email Us</h3>
+                                    <p>nru@servisrumah.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Top Bar End -->
 
-	<div class="modal fade" id="loginModal" role="dialog">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <img class="modal-title" src="{{ asset('img/logo.png') }}" style="max-width: 50px;">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <form id="login-form" v-on:submit.prevent="onSubmitLogin()">
-	        <div class="modal-body pl-4 pr-4">
-	          <div class="form-group">
-	            <label for="emailLogin">Email address</label>
-	            <input type="email" class="form-control" id="emailLogin" name="email" placeholder="Enter email" required="" autocomplete="false">
-	          </div>
-	          <div class="form-group">
-	            <label for="passwordLogin">Password</label>
-	            <input type="password" class="form-control" id="passwordLogin" name="password" placeholder="Password" required="" autocomplete="false">
-	          </div>
-	          <div class="form-group form-check">
-	            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-	            <label class="form-check-label" for="exampleCheck1">Ingat saya !</label>
-	          </div>
-	          <button type="submit" class="btn btn-info btn btn-block text-center">Login</button>
-	        </div>
-	        <div class="modal-footer" style="justify-content: center;">
-	          <p class="m-0">Belum punya akun ?</p>
-	          <a class="text-info" data-dismiss="modal" style="cursor: pointer;" @click='signup'>Login</a>
-	        </div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+    <!-- Nav Bar Start -->
+    <div class="nav-bar p-0">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                <a href="#" class="navbar-brand">MENU</a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-	<div class="modal fade" id="signUp" role="dialog">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <img class="modal-title" src="{{ asset('img/logo.png') }}" style="max-width: 50px;">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <form id="registration" method="POST" action="{{ url('register') }}">
-	      	@csrf
-	        <div class="modal-body pl-4 pr-4">
-	          <div class="form-group">
-	            <label for="nameSign">Nama Lengkap</label>
-	            <input type="text" class="form-control" id="nameSign" placeholder="Nama Lengkap" name="name" required="">
-	          </div>
-	          <div class="form-group">
-	            <label for="username">Username</label>
-	            <input type="text" class="form-control" id="username" placeholder="Username" name="username" required="">
-	          </div>
-	          <div class="form-group">
-	            <label for="emailSign">Email</label>
-	            <input type="email" class="form-control" id="emailSign" aria-describedby="emailHelp" name="email" placeholder="Enter email" required="">
-	          </div>
-	          <div class="form-group">
-	            <label for="passwordSign">Password</label>
-	            <input type="password" class="form-control" id="passwordSign" placeholder="Password" name="password" minlength="8" required="">
-	          </div>
-	          <button type="submit" class="btn btn-info btn btn-block text-center">Daftar</button>
-	        </div>
-	        <div class="modal-footer" style="justify-content: center;">
-	          <p class="m-0">Sudah punya akun ?</p>
-	          <a class="text-info" data-dismiss="modal" style="cursor: pointer;" @click='login'>Login</a>
-	        </div>
-	      </form>
-	    </div>
-	  </div>
-	</div>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse" v-if="'{{ !request()->is('history/*') }}'">
+                    <div class="navbar-nav mr-auto">
+                        <a href="#" v-on:click.prevent='goto("homes")' :class="class_menu == 'homes' ? 'nav-item nav-link active' : 'nav-item nav-link'">Home</a>
+                        <a href="#" v-on:click.prevent='goto("services")' :class="class_menu == 'services' ? 'nav-item nav-link active' : 'nav-item nav-link'">Servis</a>
+                        <a href="#" v-on:click.prevent='goto("works")' :class="class_menu == 'works' ? 'nav-item nav-link active' : 'nav-item nav-link'">Pekerjaan</a>
+                        <a href="#" v-on:click.prevent='goto("about_us")' :class="class_menu == 'about_us' ? 'nav-item nav-link active' : 'nav-item nav-link'">Tentang Kami</a>
+                        {{-- <a href="{{ url('profile') }}" class="nav-item nav-link {{ request()->is('profile') ? 'active' : '' }}">Tentang Kami</a> --}}
+                    </div>
+                    <div class="navbar-nav ml-auto">
+                    	@auth
+                    	<div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Hallo .. ! {{ auth()->user()->name }}</a>
+                            <div class="dropdown-menu" style="width: 100%;">
+                                <form method="post" action="{{ url('logout') }}">
+                                @csrf
+                                <button class="dropdown-item" style="cursor: pointer;">Logout</button>
+                                </form>
+                        		<a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                            </div>
+                        </div>
+                        @endauth
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-		<a class="navbar-brand" href="#">
-			<img src="img/logo.png" style="max-width: 30px;">
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+                        @guest
+                        <a class="btn-navbar nav-item nav-link mr-2" href="#" data-target='#loginModal' data-toggle="modal">Login</a>
+                        <a class="btn-navbar nav-item nav-link" href="#" data-target='#signModal' data-toggle="modal">Daftar</a>
+                        @endguest
+                    </div>
+                </div>
 
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active ml-4">
-					<a class="nav-link" href="#">Home</a>
-				</li>
-				<li class="nav-item dropdown ml-4">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Service
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown" style="font-size: 12px;">
-						<a class="dropdown-item" href="#" v-for='(service, index) in data'>@{{ service.name }}</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Petunjuk Reservasi</a>
-					</div>
-				</li>
-				<!-- <li class="nav-item ml-4">
-					<a class="nav-link" href="#">Reservasi Survey</a>
-				</li>
-				<li class="nav-item ml-4">
-					<a class="nav-link" href="#">Konsultasi</a>
-				</li> -->
-				@if(session('role') == 4)
-				<li class="nav-item ml-4">
-					<a class="nav-link" href="{{ route('history') }}">History</a>
-				</li>
-				@endif
-			</ul>
-			<ul class="navbar-nav">
-				@auth
-				<li class="nav-item ml-4">
-					<a class="nav-link" href="#">Hallo, {{ auth()->user()->name }} !</a>
-				</li>
-				<li class="nav-item ml-4">
-					<a class="nav-link" type="submit" @click='logout' href="#">Logout</a>
-				</li>
-				@endauth
-				@guest
-				<li class="nav-item ml-4">
-					<a class="nav-link" data-toggle="modal" data-target="#loginModal" href="#">Login</a>
-				</li>
-				<li class="nav-item ml-4">
-					<a class="nav-link" data-toggle="modal" data-target="#signUp" href="#">Daftar</a>
-				</li>
-				@endguest
-			</ul>
-		</div>
-	</nav>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse" v-else>
+                    <div class="navbar-nav mr-auto">
+                        <a href="{{ url('/') }}" :class="class_menu == 'homes' ? 'nav-item nav-link active' : 'nav-item nav-link'">Home</a>
+                    </div>
+                    <div class="navbar-nav ml-auto">
+                        @auth
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Hallo .. ! {{ auth()->user()->name }}</a>
+                            <div class="dropdown-menu" style="width: 100%;">
+                                <form method="post" action="{{ url('logout') }}">
+                                    @csrf
+                                <button class="dropdown-item" style="cursor: pointer;">Logout</button>
+                                </form>
+                                @if(auth()->user()->role == 4)
+                                <a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                @endif
+                            </div>
+                        </div>
+                        @endauth
+
+                        @guest
+                        <a class="btn-navbar nav-item nav-link mr-2" href="#" data-target='#loginModal' data-toggle="modal">Login</a>
+                        <a class="btn-navbar nav-item nav-link" href="#" data-target='#signModal' data-toggle="modal">Daftar</a>
+                        @endguest
+                    </div>
+                </div>
+
+            </nav>
+        </div>
+    </div>
 </header>
 
 @section('header-js')
@@ -136,6 +200,7 @@
 		el: '#headerApp', 
 		data: {
 			data: [],
+            class_menu : '{{ request()->is('history/*') }}' ? '' : 'homes',
 		},
 		created: function(){
 			this.getData();
@@ -209,9 +274,36 @@
 					console.log(response);
 				});
 			},
+            goto : function(data){
+                if (data == 'homes') {
+                    this.class_menu = data;
+                    console.log(this.class_menu);
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 2000, 'easeInOutExpo');
+                }else if (data == 'works') {
+                    this.class_menu = data;
+                    console.log(this.class_menu);
+                    $('html, body').animate({
+                        scrollTop: $("#works").offset().top
+                    }, 2000);
+                }else if (data == 'services') {
+                    this.class_menu = data;
+                    console.log(this.class_menu);
+                    $('html, body').animate({
+                        scrollTop: $("#services").offset().top
+                    }, 2000);
+                }else if (data == 'about_us') {
+                    this.class_menu = data;
+                    console.log(this.class_menu);
+                    $('html, body').animate({
+                        scrollTop: $("#about_us").offset().top
+                    }, 2000);
+                }
+            },
 			signup: function(){
 				this.$nextTick(() => {
-					$('#signUp').modal('show');
+					$('#signModal').modal('show');
 				});
 			},
 			login: function(){

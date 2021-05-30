@@ -74,7 +74,7 @@ Route::post('/notification/{id}', [NotificationController::class, 'view']);
 Route::post('/notification/update-notification/{id}', [NotificationController::class, 'updateNotification']);
 Route::post('/notification/destroy/{id}', [NotificationController::class, 'destroy']);
 
-// Route::middleware('auth:api')->group(function(){
+Route::middleware('auth:api')->group(function(){
 	Route::post('/service/create-service', [ServiceController::class, 'createService']);
 	Route::get('/service/{id}', [ServiceController::class, 'view']);
 	Route::post('/service/update-service/{id}', [ServiceController::class, 'updateService']);
@@ -110,6 +110,7 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/mandor/action/{id}', [ReportController::class, 'mandorAction']);
 
 	Route::post('/supervisor/addPay/{id}', [ReportController::class, 'addPay']);
+	Route::post('/supervisor/addPayMultiple', [PaymentController::class, 'addPayMultiple']);
 	Route::post('/supervisor/addCheckout/{id}', [PaymentController::class, 'addCheckout']);
 	Route::post('/supervisor/history', [EngagementController::class, 'historySupervisor']);
 
@@ -152,11 +153,19 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 	Route::post('/user/updateWorker/{id}', [UserController::class, 'updateSurveyer']);
 	Route::post('/user/createMandor', [UserController::class, 'registerSurveyer']);
 	Route::post('/user/updateMandor/{id}', [UserController::class, 'updateSurveyer']);
+	Route::post('/user/createVendor', [UserController::class, 'registerVendor']);
+	Route::post('/user/updateVendor/{id}', [UserController::class, 'updateVendor']);
 	Route::post('/user/actionSurveyer/{id}', [UserController::class, 'actionSurveyer']);
-// });
+
+	Route::get('/getReason', [ResourceController::class, 'getReason']);
+	Route::get('/viewReason', [ResourceController::class, 'viewReason']);
+	Route::post('/storeReason', [ResourceController::class, 'storeReason']);
+	Route::post('/updateReason', [ResourceController::class, 'updateReason']);
+	Route::post('/destroyReason', [ResourceController::class, 'destroyReason']);
+});
 
 Route::get('/service', [ServiceController::class, 'index']);
-
+Route::get('/getDisableDate', [ResourceController::class, 'getDisableDate']);
 
 Route::get('/province', [ResourceController::class, 'getProvince']);
 Route::post('/district', [ResourceController::class, 'getDistrict']);

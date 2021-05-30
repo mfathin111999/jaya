@@ -43,6 +43,13 @@
                             <option v-for='(employee, index) in employee' :value='employee.id'>@{{ employee.name }}</option>
                           </select>
                         </div>
+                        <div class="col-12 mb-3" v-if = 'action == "ignore"'>
+                          <label for="reason">Alasan</label>
+                          <select class="form-control" v-model="thisReason" name="reason" id="reason" style="width: 100%;">
+                            <option value="">Pilih Alasan</option>
+                            <option v-for='(item, index) in reason' :value='item.id'>@{{ item.reason }}</option>
+                          </select>
+                        </div>
                         <div class="col-12 col-md-12">
                           <button type="button" class="btn btn-success btn-block" @click='actionEngagement()'>Kirim Aksi</button>
                         </div>
@@ -93,7 +100,7 @@
                   <div class="col-md-6 col-12">
                     <div class="form-group">
                       <label for="address">Address</label>
-                      <textarea type="text" class="form-control" id="address" name="address" disabled="" :value='view.address+ ", " + view.village+ ", " + view.district+ ", " + view.regency+ ", " + view.province'></textarea>
+                      <textarea type="text" class="form-control" id="address" name="address" disabled="" :value='ucwords(view.address+ ", " + view.village+ ", " + view.district+ ", " + view.regency+ ", " + view.province)'></textarea>
                     </div>
                   </div>
                   <div class="col-md-6 col-12">
@@ -126,21 +133,23 @@
               </div>
             </div>
             
-            <div class="table">
+            <div class="table table-responsive">
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Service</th>
+                        <th>Code</th>
+                        <th>Nama</th>
+                        <th>Servis</th>
                         <th>Email</th>
                         <th>Tanggal</th>
                         <th>Kota</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for = "(item, index) in data" v-bind:class = 'item.status == "acc" ? "table-success" : (item.status == "pending" ? "table-warning" : "table-danger")'>
+                      <td>@{{ item.code }} </td>
                       <td>@{{ item.name }} </td>
                       <td>@{{ item.service }}</td>
                       <td>@{{ item.email }}</td>
@@ -162,7 +171,7 @@
                         <a class="btn btn-info" href="#" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></a>
                         <!-- <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a> -->
                         @elseif(auth()->user()->role == 2)
-                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.count == 0'><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.customer_is != 1'><i class="fa fa-pencil"></i></a>
                         @elseif(auth()->user()->role == 3)
                         <a class="btn btn-primary" href="#" type="button" v-on:click='seeReportMandor(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
                         @endif
@@ -187,13 +196,16 @@
             data: [],
             view: [],
             form: {},
+            reason: {},
             action: '',
             employee: [],
             thisEmployee: [],
+            thisReason: '',
         },
         created: function(){
           this.getData();
           this.getEmployee();
+          this.getReason();
           this.valid();
         },
         methods: {
@@ -231,7 +243,11 @@
                 });
               }.bind(this));
             }
-
+          },
+          getReason : function(){
+            axios.get("{{ url('api/getReason') }}").then(function(response){
+              this.reason = response.data.data;
+            }.bind(this));
           },
           viewData : function(id){
             axios.get("{{ url('api/engagement') }}/"+id).then(function(response){
@@ -291,19 +307,35 @@
                   'warning'
               );
             }else{
-              axios.post("{{ url('api/engagement/action') }}", data).then(function(response){
-                app.$nextTick(() => {
-                  $('#actionModal').modal('hide');
-                  $("#example").DataTable();
-                });
+              if (this.action == 'ignore' && (this.thisReason == null || this.thisReason == '' )) {
                 Swal.fire(
-                    'Success!',
-                    'Survey diterima.',
-                    'success'
+                  'Warning!',
+                  'Harap isi alasan penolakan.',
+                  'warning'
                 );
-              }).then(()=>{
-                this.getData();
-              });
+              }else{
+                axios.post("{{ url('api/engagement/action') }}", data).then(function(response){
+                  app.$nextTick(() => {
+                    $('#actionModal').modal('hide');
+                    $("#example").DataTable();
+                  });
+                  if (this.action == 'ignore') {
+                    Swal.fire(
+                        'Success!',
+                        'OK! Reservasi Ditolak.',
+                        'success'
+                    );
+                  }else{
+                    Swal.fire(
+                        'Success!',
+                        'Survey diterima.',
+                        'success'
+                    );
+                  }
+                }).then(()=>{
+                  this.getData();
+                });
+              }
             }
           },
           deleteItem: function(id){

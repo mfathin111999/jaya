@@ -1,37 +1,73 @@
-<section class="mt-5 bg-info">
-    <div class="container pt-4">
-        <div class="row" style="line-height: 1.5rem;">
-            <div class="col-12 col-md-4 text-white">
-                <div class="max-height-100 text-center">
-                    <img src="{{ asset('img/logo.png') }}" class="img-fluid" style="max-width: 50px;">
-                </div>
-                <div class="mb-3 mt-5">
-                    <p class="text-center f-light">Memberikan solusi terbaik untuk kebutuhan rumah anda, dengan perencanaan yang baik dan hasil yang maksimal.</p>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 text-center text-white">
-                <div class="max-height-100">
-                    <h4 class="font-weight-bold">Social Media</h4>
-                </div>
-                <div class="mb-3 mt-3">
-                    <i class="fa fa-facebook fa-lg pr-3"></i>
-                    <i class="fa fa-instagram fa-lg pr-3"></i>
-                    <i class="fa fa-twitter fa-lg"></i>
+<div class="footer wow fadeIn" data-wow-delay="0.3s">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="footer-contact">
+                    <h2>Kantor</h2>
+                    <p><i class="fa fa-map-marker-alt"></i>123 Street, Jakarta, Indonesia</p>
+                    <p><i class="fa fa-phone-alt"></i>+62 8810 2355 4758</p>
+                    <p><i class="fa fa-envelope"></i>nru@servisrumah.com</p>
+                    <div class="footer-social">
+                        <a href=""><i class="fab fa-twitter"></i></a>
+                        <a href=""><i class="fab fa-facebook-f"></i></a>
+                        <a href=""><i class="fab fa-youtube"></i></a>
+                        <a href=""><i class="fab fa-instagram"></i></a>
+                        <a href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4 text-center text-white">
-                <div class="max-height-100">
-                    <h4 class="font-weight-bold text-center">Hubungi Kami</h4>
+            <div class="col-md-6 col-lg-3">
+                <div class="footer-link">
+                    <h2>Servis Kami</h2>
+                    <a href="">Building Construction</a>
+                    <a href="">Renovasi Rumah</a>
+                    <a href="">Desain Arsitektur</a>
+                    <a href="">Desain Interior</a>
+                    <a href="">Pengecatan</a>
                 </div>
-                <div class="mb-3 mt-3">
-                    <p class="mb-0 f-light">+62881023554758 (WA / Tlp)</p>
-                    <p class="mb-0 f-light">mfathin111999@gmail.com</p>
-                    <p class="f-light">Jln. Perkasa No.322 Ds. Citalugtug Kec. Arjamulya Kab. Kulonuwon - Jawa Barat</p>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="footer-link">
+                    <h2>Menu</h2>
+                    <a href="">Tentang Kami</a>
+                    <a href="">Hubungi Kami</a>
+                    <a href="">Team Kami</a>
+                    <a href="">Pekerjaan</a>
+                    <a href="">Testimoni</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="newsletter">
+                    <h2>Berlangganan</h2>
+                    <p>
+                        Dapatkan informasi dan penawaran kami secara berkala
+                    </p>
+                    <div class="form">
+                        <input class="form-control" placeholder="Email here">
+                        <button class="btn">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+    <div class="container footer-menu">
+        <div class="f-menu">
+            <a href="">Syarat dan Ketentuan</a>
+            <a href="">Privacy policy</a>
+            <a href="">Bantuan</a>
+        </div>
+    </div>
+    <div class="container copyright">
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; <a href="#">Servis Rumah</a>, All Right Reserved.</p>
+            </div>
+            <div class="col-md-6">
+                <p>Designed By <a href="https://htmlcodex.com">HTML Codex</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('footer-js')
     <script type="text/javascript">

@@ -30,25 +30,19 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="name">Nama Customer</label>
-                    <input type="text" class="form-control" id="name" v-model='partner.name' disabled>
+                    <input type="text" class="form-control" id="name" v-model='data.name' disabled>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="phone_number">No. Handphone</label>
-                    <input type="text" class="form-control" id="phone_number" v-model='partner.phone_number' disabled>
+                    <input type="text" class="form-control" id="phone_number" v-model='data.phone_number' disabled>
                   </div>
                 </div>
                <div class="col-md-12">
                   <div class="form-group">
                       <label for="province">Alamat Pekerjaan</label>
                       <textarea rows="3" class="form-control" id="allPlace" name="allPlace" v-model='allPlace' disabled=""></textarea>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                      <label for="village">Alamat</label>
-                      <input type="text" class="form-control" name="address" v-model='partner.address' disabled="">
                   </div>
                 </div>
               </div>
@@ -271,7 +265,7 @@
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
               this.partner = response.data.data.partner;
-              this.allPlace = response.data.data.partner.village.name+', '+response.data.data.partner.district.name+', '+response.data.data.partner.regency.name+', '+response.data.data.partner.province.name;
+              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
             }.bind(this));
           },
           allUnit: function(){

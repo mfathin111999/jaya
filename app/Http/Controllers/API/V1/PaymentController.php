@@ -270,6 +270,12 @@ class PaymentController extends Controller
         return $price;
     }
 
+    public function addPayMultiple(Request $request){
+        $data = Termin::whereIn('id', $request->id)->update(['status' => 'donePayed']);
+
+        return $data;
+    }
+
     public function store(Request $request){
         $reservation = Termin::where('reservation_id', $request->reservation_id)->count();
 

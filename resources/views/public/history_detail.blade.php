@@ -1,100 +1,137 @@
-@extends('layout.app')
+@extends('layout.public')
 
-@if(session('id') == null || session('role') != 5)
+@if(session('id') == null || session('role') != 4)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
 @else
 
   @section('content')
-    @include('layout.admin_header')
+    @include('layout.header')
+
     <div id="app" v-cloak>
+
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #ffc3c3;">
+              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form v-on:submit.prevent="saveAddReport()" id="form-add">
+              <div class="modal-body">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="price_clean1">Tanggal Laporan</label>
+                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' v-model='view_report.updated_at' required disabled="">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label class="">Gambar Lapangan</label>
+                  </div>
+                  <div class="col-12" v-for="(img, index) in view_report.gallery">
+                    <div class="form-group">
+                      <img :src="'../storage/'+img.image" class="img-fluid">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
       <!-- Content -->
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
-          @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
+          <main role="main" class="col-md-9 mx-auto">
             <div class="card">
               <div class="card-header">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
+                      <div class="col-md-12">
+                        <label class="font-12">Kode Booking</label>
+                        <br>
+                        <label class="m-0"><strong>@{{ data.code }}</strong></label>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
+                      <div class="col-md-12">
+                        <label class="font-12">Tanggal Survey</label>
+                        <br>
+                        <label class="m-0"><strong>@{{ data.date }} @{{ data.time }}</strong></label>
+                      </div>
+                      <div class="col-md-12">
+                        <label class="font-12">Tanggal Mulai</label>
+                        <br>
+                        <label class="m-0" v-if= 'data.date_work != null'><strong>@{{ data.date_work }}</strong></label>
+                        <label class="m-0" v-if= 'data.date_work == null'><strong>Dalam Proses</strong></label>
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-6 d-flex align-items-center justify-content-center">
+                    <div>
+                      <label class="font-12">Status</label>
+                      <br>
+                      <label class="font-weight-bold text-warning h-3" v-if='data.status != "finish"'>Dalam Progres</label>
+                      <label class="font-weight-bold text-info h-3" v-if='data.status == "finish"'>Selesai</label>
+                    </div>
+                  </div>
                 </div>
-
               </div>
               <div class="card-body">
 
-                <!-- TAHAPAN PEKERJAAN -->
+                <!-- PEKERJAAN VENDOR -->
 
                 <div class="row">
                   <div class="col-md-12 mb-4 mt-3 rounded text-center">
                     <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                      <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan</label>
+                      <label class="font-weight-bold m-0 h3">Progres Pekerjaan</label>
+                      <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
                     </div>
                   </div>
                   <div class="col-12 table-responsive" v-for='(report, index) in data.report'>
                     <table class="table table-bordered" width="100%">
                       <thead>
                         <tr>
-                          <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
+                          <th colspan="7" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
+                          <th align="center" class="text-center font-12" style="vertical-align: middle;">
+                            <label class="m-0" v-if='report.status != "done" && report.status != "doneMandor" && report.status != "donePayed"'>Belum ada Laporan</label>
+                            <label class="m-0" v-if='report.status == "doneMandor"'>Lengkap</label>
+                            <label class="m-0" v-if='report.status == "donePayed"'>Selesai</label>
+                            {{-- <a href="#" class="btn btn-info font-12"><i class="fa fa-pencil mr-2"></i><span>Bayar</span></a> --}}
+                          </th>
                         </tr>
-                        <tr>
-                          <td align="center"><strong>No</strong></td>
-                          <td align="center" scope="col"><strong>Nama</strong></td>
-                          <td align="center" scope="col"><strong>keterangan</strong></td>
-                          <td align="center" scope="col"><strong>Volume</strong></td>
-                          <td align="center" scope="col"><strong>Unit</strong></td>
-                          <td align="center" scope="col"><strong>Waktu</strong></td>
-                          <td align="center" scope="col"><strong>Harga</strong></td>
-                          <td align="center" scope="col"><strong>Aksi</strong></td>
+                        <tr class="font-12">
+                          <td align="center" width="5%"><strong>No</strong></td>
+                          <td align="center" width="20%"><strong>Nama</strong></td>
+                          <td align="center" width="20%"><strong>Keterangan</strong></td>
+                          <td align="center" width="10%"><strong>Volume</strong></td>
+                          <td align="center" width="10%"><strong>Unit</strong></td>
+                          <td align="center" width="10%"><strong>Waktu</strong></td>
+                          <td align="center" width="10%"><strong>Harga</strong></td>
+                          <td align="center" width="15%"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody class="font-12">
                         <tr v-for='(detail, index3) in data.report[index].detail'>
                           <td align="center" style="vertical-align: middle;">@{{ index3+1 }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.description }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.volume }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.price_clean }}</td>
                           <td align="center" style="vertical-align: middle;">
-                            @{{ formatPrice(detail.price_dirt) }}
-                          </td>
-                          <td align="center" style="vertical-align: middle;">
-                            <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
-                            <label class="m-0 text-success" v-if='report.status == "deal" && detail.status == "done"'>Selesai</label>
-                            <label class="m-0 text-success" v-if='report.status == "done"'>Selesai</label>
-                            <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Disetujui</label>
-                            <label class="m-0 text-success" v-if='report.status == "donePayed"'>Lunas</label>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colspan="6" align="center" style="vertical-align: middle;"><strong>Total Harga</strong></td>
-                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[1]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;">
-                            <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
-                            <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
-                            <button class="btn btn-info font-12" @click='infoCard' v-if='report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-info-circle"></i></button>
+                            <label class="m-0 text-success" v-if='(report.status == "deal" || report.status == "offer") && (detail.status == "deal" || detail.status == "offer")'>Proses Pengerjaan</label>
+                            <label class="m-0 text-success" v-if='report.status == "done"'>Pengerjaan Selesai</label>
+                            <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Selesai</label>
+                            <label class="m-0 text-success" v-if='report.status == "donePayed"'>Selesai</label>
                           </td>
                         </tr>
                       </tbody>
@@ -103,15 +140,14 @@
                 </div>
 
               </div>
-              <div class="card-footer text-center">
-                <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
-              </div>
             </div>    
           </main>
         </div>
-      </div> 
+      </div>
+      <!-- End Content -->
     </div>
     
+    @include('layout.footer')
 
   @endsection
   @section('sec-js')
@@ -124,12 +160,17 @@
         el: '#app',
         data: {
             check : 0,
+            today : moment().format('YYYY-MM-DD'),
             id : '{{ $id }}',
             id_step : '',
-            id_detail : '',
             partner: {},
             view_report : {},
+            add_report : {},
+            add_form : {},
+            add_date : {},
+            add_step : {},
             data: {},
+            vone: '',
             report: {},
             step: [],
             image: [],
@@ -146,21 +187,22 @@
             thisDistrict: '',
             village: {},
             thisVillage: '',
-            allPlace: ''
+            priceCleanVendor: '',
+            allPlace: '',
         },
         mounted: function(){
           this.getData(this.id);
           this.allUnit();
           this.loadProvince();
           this.$nextTick(()=>{
-            let today = moment().format('YYYY-MM-DD');
-            let today7 = moment().add(-7, 'days').format('YYYY-MM-DD');
+            let data = moment().format('YYYY-MM-DD');
+            let data7 = moment().add(-7, 'days').format('YYYY-MM-DD');
             $('#date_start').daterangepicker({
                 singleDatePicker: true,
                 autoApply: true,
-                minDate: today7,
+                minDate: data7,
                 disableTouchKeyboard: true,
-                startDate: today,
+                startDate: data,
                 locale: {
                   format: 'YYYY-MM-DD'
                 },
@@ -171,51 +213,24 @@
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
               this.data = response.data.data;
-              this.partner = response.data.data.partner
+              console.log(this.data)
+              this.partner = response.data.data.partner;
               this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
+            }.bind(this)).catch((error) => {
+              console.log(error.response);
 
-              console.log(this.data);
-
-              let termin = 0;
-              for (var i = 0; i < this.data.report.length; i++) {
-                if (this.data.report[i].termin > termin){
-                  termin = this.data.report[i].termin
+              Swal.fire({
+                title: 'Ops !',
+                text: 'Anda tidak punya akses untuk data ini',
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Kembali'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '{{ url("/") }}';
                 }
-              }
-
-              if (termin != 0) {
-                this.termin = [];
-                for (var j = 0; j < termin; j++) {
-                  this.termin.push({
-                    step      : [],
-                    vendor    : 0,
-                    customer  : 0,
-                  });
-                  for (var k = 0; k < this.data.report.length; k++) {
-                    if (this.data.report[k].termin-1 == j){
-                      this.termin[j].step.push({
-                        id    : this.data.report[k].id,
-                        name  : this.data.report[k].name,
-                        clean : this.data.report[k].all_price[0],
-                        dirt  : this.data.report[k].all_price[1],
-                      });
-                    }
-                  }
-                }
-              }
-
-              for (var l = 0; l < this.termin.length; l++) {
-                let total_clean = 0;
-                let total_dirt  = 0;
-                for (var m = 0; m < this.termin[l].step.length; m++) {
-                  total_clean += this.termin[l].step[m].clean;
-                  total_dirt += this.termin[l].step[m].dirt;
-
-                  this.termin[l].vendor   = this.formatPrice(total_clean);
-                  this.termin[l].customer = this.formatPrice(total_dirt);
-                }
-              }
-            }.bind(this));
+              });
+            });
           },
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
@@ -227,9 +242,22 @@
               this.view_report = response.data.data;
             }.bind(this));
           },
-          infoCard : function(){
-            // Swal.fire('Informasi', 'Check kartu hutang pada menu history untuk melihat pendapatan anda pada pekerjaan ini', 'info');
-            Swal.fire('Informasi', 'Lihat pada status pekerjaan, jika terdapat keterangan Lunas (Telah Dibayarkan) maka pekerjaan telah dibayarkan', 'info');
+          addPayment : function(id, price){
+            this.getReport(id);
+            this.priceCleanVendor = price;
+          },
+          sendPayment : function(id){
+            let form = document.getElementById('form-add-pay');
+            let forms = new FormData(form);
+
+            axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
+              Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
+              report.$nextTick(()=>{
+                $('#addPayment').modal('hide');
+              });
+            }.bind(this)).then(()=>{
+              this.getData(this.id);
+            });
           },
           formatPrice(value) {
             let val = (value/1).toFixed(0).replace(',', ',')
@@ -237,46 +265,6 @@
           },
           addDetail : function(id){
             this.id_step = id;
-          },
-          setDetail : function(id){
-            this.id_detail = id;
-          },
-          addTermin : function(){
-
-            this.termin.push({
-              step      : [],
-              vendor    : 0,
-              customer  : 0,
-            });
-            // console.log(this.termin);
-          },
-          addWorkUpdate: function(){
-            let form = new FormData();
-            let date = $('#date_start').val();
-
-            form.append('id', JSON.stringify(parseInt(this.id_step)));
-            form.append('date', date);
-
-            for( var i = 0; i < this.image.length; i++ ){
-              let file = this.image[i];
-              form.append('image[' + i + ']', file);
-            }
-
-            axios.post("{{ url('api/vendor/report-step') }}/"+this.id_step, form).then(function(response) {
-              Swal.fire('Success', 'Terima Kasih sudah menyelesaikan pekerjaan', 'success');
-              report.$nextTick(()=>{
-                $('#addModal').modal('hide');
-              })
-            }).then(()=>{
-              this.getData(this.id);
-            });
-          },
-          setWorkUpdate: function(id){
-            axios.post("{{ url('api/vendor/report') }}/"+id).then(function(response) {
-              Swal.fire('Success', 'Terima Kasih sudah menyelesaikan pekerjaan', 'success');
-            }).then(()=>{
-              this.getData(this.id);
-            });
           },
           loadProvince(){
             axios.get("{{ url('api/province') }}").then(function(response){
@@ -316,10 +304,6 @@
               }.bind(this));
             }
           },
-          deleteItem:function(index){
-            this.view_image.splice(index, 1);
-            this.image.splice(index, 1);  
-          },
           formatRupiah: function(e){
             var number_string = e.target.value.replace(/[^,\d]/g, '').toString(),
             split         = number_string.split(','),
@@ -347,15 +331,6 @@
           },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
-          },
-          onFileChange(e) {
-            if (this.image.length < 2 ) {
-              this.image.push(e.target.files[0]);
-              const file = e.target.files[0];
-              this.view_image.push(URL.createObjectURL(file));
-            }else{
-              Swal.fire('Mohon Maaf ... !', 'Batas upload gambar adalah 2 File', 'warning');
-            }
           },
         }
       });

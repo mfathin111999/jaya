@@ -260,21 +260,27 @@
                           <td align="center" style="vertical-align: middle;">
                             @{{ formatPrice(detail.price_clean) }}
                           </td>
-                          <td align="center" style="vertical-align: middle;">
+                          <td align="center" style="vertical-align: middle;" v-if='index == 0 || (index != 0 && data.report[index-1].status == "doneMandor")'>
                             <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
                             <label class="m-0 text-success" v-if='report.status == "deal" && detail.status == "done"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Disetujui</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Lunas</label>
                           </td>
+                          <td class="text-center" colspan="8" v-if='index != 0 && data.report[index-1].status != "doneMandor"'>
+                            -
+                          </td>
                         </tr>
                         <tr>
                           <td colspan="6" align="center" style="vertical-align: middle;"><strong>Total Harga</strong></td>
                           <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;">
+                          <td align="center" style="vertical-align: middle;" v-if='index == 0 || (index != 0 && data.report[index-1].status == "doneMandor")'>
                             <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
                             <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
                             <button class="btn btn-info font-12" @click='infoCard' v-if='report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-info-circle"></i></button>
+                          </td>
+                          <td class="text-center" colspan="8" v-if='index != 0 && data.report[index-1].status != "doneMandor"'>
+                            -
                           </td>
                         </tr>
                       </tbody>

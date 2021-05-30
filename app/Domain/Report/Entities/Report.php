@@ -46,4 +46,8 @@ class Report extends Model
         return $this->belongsTo(Termin::class, 'termin', 'id');
     }
 
+    public function termins(){
+        return $this->belongsTo(Termin::class, 'termin', 'id');
+    }
+
 }
