@@ -114,26 +114,36 @@
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="card">
               <div class="card-header">
-                <h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN SURVEYER</strong></h3>
+                <h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN VENDOR</strong></h3>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Nama Pelanggan</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.name }}</strong></label>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Kode Booking</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.code }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Vendor</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Tanggal Mulai</label>
+                        <br>
+                        <strong>
+                          <label class="m-0 font-14" v-if= 'data.date_work != null' >
+                            @{{ data.date_work }}
+                          </label>
+                          <label class="m-0" v-if= 'data.date_work == null' >
+                            -
+                          </label>
+                        </strong>
                       </div>
                       <div class="col-12 mt-2">
                         <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
@@ -188,6 +198,7 @@
                             <label class="m-0 text-success" v-if='report.status == "done"'>Pengerjaan Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Selesai</label>
+                            <label class="m-0" v-if='report.status != "done" && report.status != "doneMandor" && report.status != "donePayed"'>-</label>
                           </td>
                         </tr>
                       </tbody>

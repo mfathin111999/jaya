@@ -137,11 +137,11 @@
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
+                        <th>Tanggal</th>
                         <th>Code</th>
                         <th>Nama</th>
                         <th>Servis</th>
                         <th>Email</th>
-                        <th>Tanggal</th>
                         <th>Kota</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -149,11 +149,11 @@
                 </thead>
                 <tbody>
                     <tr v-for = "(item, index) in data" v-bind:class = 'item.status == "acc" ? "table-success" : (item.status == "pending" ? "table-warning" : "table-danger")'>
+                      <td>@{{ item.date }} @{{ item.time }}</td>
                       <td>@{{ item.code }} </td>
                       <td>@{{ item.name }} </td>
                       <td>@{{ item.service }}</td>
                       <td>@{{ item.email }}</td>
-                      <td>@{{ item.date }} @{{ item.time }}</td>
                       <td>@{{ item.regency }}</td>
 
                       <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Diterima</td>
@@ -213,7 +213,7 @@
             if ('{{ session("role") }}' == 1) {
               axios.get("{{ url('api/engagement') }}").then(function(response){
                 this.data = response.data.data;
-                console.log(this.data);
+                // console.log(this.data);
                 this.$nextTick(() => {
                    $("#example").DataTable();
                 });
@@ -225,7 +225,7 @@
               };
               axios.post("{{ url('api/engagementSurveyer') }}", form).then(function(response){
                 this.data = response.data.data;
-                console.log(this.data);
+                // console.log(this.data);
                 this.$nextTick(() => {
                    $("#example").DataTable();
                 });
@@ -237,7 +237,7 @@
               };
               axios.post("{{ url('api/engagementMandor') }}", form).then(function(response){
                 this.data = response.data.data;
-                console.log(this.data);
+                // console.log(this.data);
                 this.$nextTick(() => {
                    $("#example").DataTable();
                 });

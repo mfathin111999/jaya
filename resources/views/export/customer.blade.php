@@ -78,9 +78,11 @@
                     </thead>
                     @php
                         $i = 1;
+                        $all_price = 0;
                         $date_after = $datas->date_work;
                         $date_before = $datas->date_work;
                     @endphp
+                    <tbody>
                     @foreach($datas->report as $data)
 
                     @php
@@ -88,13 +90,13 @@
                         $k = 1;
                         $price = 0;
                     @endphp
-                    <tbody>
                         <tr>
                             <td colspan="8">{{'Tahapan '.$i++.' '.$data->name }}</td>
                         </tr>
                         @foreach($data->subreport as $detail)
                         @php
                             $price += $detail->price_dirt;
+                            $all_price += $detail->price_dirt;
                             $date_before = date('Y/m/d', strtotime($date_after));
                             $date_after = date('Y/m/d', strtotime($date_before.' +1 day'));
                         @endphp
@@ -115,8 +117,12 @@
                                 {{ $price }}
                             </td>
                         </tr>
-                    </tbody>
                     @endforeach
+                        <tr>
+                            <td colspan="7">Total Keseluruhan</td>
+                            <td>{{ $all_price }}</td>
+                        </tr>
+                    </tbody>
 
                 </table>
             </div> 

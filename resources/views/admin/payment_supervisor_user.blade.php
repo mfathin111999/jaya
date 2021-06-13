@@ -16,7 +16,47 @@
           @include('layout.admin_side')
           <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
             <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="filter-find">Tahun</label>
+                  <select class="form-control font-12" v-model='year' v-on:change='getData'>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="all">Semua</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="filter-find">Bulan</label>
+                  <select class="form-control font-12" v-model='month' v-on:change='getData'>
+                    <option value="01">1</option>
+                    <option value="02">2</option>
+                    <option value="03">3</option>
+                    <option value="04">4</option>
+                    <option value="05">5</option>
+                    <option value="06">6</option>
+                    <option value="07">7</option>
+                    <option value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="all">Semua</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-3 mb-3 mb-md-0">
+                <div v-if='data.length == 0' class="text-center list-group">
+                  <div class="list-group-item">
+                    Data Kosong
+                  </div>
+                </div>
                 <div class="list-group" v-for='(datas, index) in data'>
                   <button type="button" 
                     :class="partner.id == datas.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" @click='showDetail(datas.id, index)' style="cursor: pointer; border-radius: 0px;">
@@ -158,6 +198,8 @@
             add_date : {},
             add_step : {},
             data: {},
+            month : moment().format('MM'),
+            year : moment().format('YYYY'),
             vone: '',
             report: {},
             step: [],
@@ -195,7 +237,7 @@
         },
         methods: {
           getData : function(){
-            axios.get("{{ url('api/vendor/getPaymentCustomer') }}").then(function(response){
+            axios.post("{{ url('api/vendor/getPaymentCustomer') }}", { 'year' : this.year, 'month' : this.month, _method: 'get'}).then(function(response){
               this.data = response.data.data;
               this.partner = {};
               this.view_report = {};

@@ -26,7 +26,7 @@
                     </div>
                     <div class="modal-footer font-12">
                         <p class="m-0">Belum punya akun ? &nbsp</p>
-                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" @click='signup'>Daftar</button>
+                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" data-target='#signModal' data-toggle="modal" >Daftar</button>
                     </div>
                 </form>
             </div>
@@ -44,27 +44,34 @@
                     </div>
                     @csrf
                     <div class="modal-body pl-4 pr-4">
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div class="alert alert-danger">
+                                    {{ $error }}
+                                </div>
+                            @endforeach
+                        @endif
                         <div class="form-group">
                             <label for="nameSign" class="font-12">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="nameSign" placeholder="Nama Lengkap" name="name" required="">
+                            <input type="text" value="{{request()->old('name')}}" class="form-control" id="nameSign" placeholder="Nama Lengkap" name="name" required="">
                         </div>
                         <div class="form-group">
                             <label for="username" class="font-12">Username</label>
-                            <input type="text" class="form-control" id="username" placeholder="Username" name="username" required="">
+                            <input type="text" value="{{request()->old('username')}}" class="form-control" id="username" placeholder="Username" name="username" required="">
                         </div>
                         <div class="form-group">
                             <label for="emailSign" class="font-12">Email</label>
-                            <input type="email" class="form-control" id="emailSign" aria-describedby="emailHelp" name="email" placeholder="Enter email" required="">
+                            <input type="email" value="{{request()->old('email')}}" class="form-control" id="emailSign" aria-describedby="emailHelp" name="email" placeholder="Enter email" required="">
                         </div>
                         <div class="form-group">
                             <label for="passwordSign" class="font-12">Password</label>
-                            <input type="password" class="form-control" id="passwordSign" placeholder="Password" name="password" minlength="8" required="">
+                            <input type="password" value="{{request()->old('password')}}" class="form-control" id="passwordSign" placeholder="Password" name="password" minlength="8" required="">
                         </div>
                         <button type="submit" class="btn btn-info btn btn-block text-center">Daftar</button>
                     </div>
                     <div class="modal-footer font-12" style="justify-content: center;">
                         <p class="m-0">Sudah punya akun ? &nbsp</p>
-                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" @click='signup'>Login</button>
+                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;"  data-target='#loginModal' data-toggle="modal" >Login</button>
                     </div>
                 </form>
             </div>
@@ -102,7 +109,7 @@
                                 </div>
                                 <div class="top-bar-text">
                                     <h3>Kontak Kami</h3>
-                                    <p>+62 8810 2355 4758</p>
+                                    <p>+62 812 1996 1904</p>
                                 </div>
                             </div>
                         </div>
@@ -200,10 +207,16 @@
 		el: '#headerApp', 
 		data: {
 			data: [],
+            signup: '{{ count($errors->all()) }}',
             class_menu : '{{ request()->is('history/*') }}' ? '' : 'homes',
 		},
 		created: function(){
 			this.getData();
+            if(this.signup != 0){
+                this.$nextTick(()=>{
+                    $('#signModal').modal('show');
+                });
+            }
 		},
 		methods: {
 			getData : function(){

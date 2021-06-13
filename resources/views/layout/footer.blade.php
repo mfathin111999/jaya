@@ -8,32 +8,30 @@
                     <p><i class="fa fa-phone-alt"></i>+62 8810 2355 4758</p>
                     <p><i class="fa fa-envelope"></i>nru@servisrumah.com</p>
                     <div class="footer-social">
-                        <a href=""><i class="fab fa-twitter"></i></a>
-                        <a href=""><i class="fab fa-facebook-f"></i></a>
-                        <a href=""><i class="fab fa-youtube"></i></a>
-                        <a href=""><i class="fab fa-instagram"></i></a>
-                        <a href=""><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="footer-link">
                     <h2>Servis Kami</h2>
-                    <a href="">Building Construction</a>
-                    <a href="">Renovasi Rumah</a>
-                    <a href="">Desain Arsitektur</a>
-                    <a href="">Desain Interior</a>
-                    <a href="">Pengecatan</a>
+                    <a style="cursor:pointer;" onclick="scroled('services')">Desain Interior</a>
+                    <a style="cursor:pointer;" onclick="scroled('services')">Umum dan Supplier</a>
+                    <a style="cursor:pointer;" onclick="scroled('services')">Mekanikal Elektrikal & Refrigerasi serta Teknologi Pendingin</a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="footer-link">
                     <h2>Menu</h2>
-                    <a href="">Tentang Kami</a>
-                    <a href="">Hubungi Kami</a>
-                    <a href="">Team Kami</a>
-                    <a href="">Pekerjaan</a>
-                    <a href="">Testimoni</a>
+                    <a style="cursor:pointer;" onclick="scroled('about_us')">Tentang Kami</a>
+                    <a style="cursor:pointer;" onclick="scroled('works')">Pekerjaan Kami</a>
+                    <a style="cursor:pointer;" onclick="scroled('team')">Team Kami</a>
+                    <a style="cursor:pointer;" onclick="scroled('services')">Servis</a>
+                    {{-- <a href="">Testimoni</a> --}}
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
@@ -43,7 +41,7 @@
                         Dapatkan informasi dan penawaran kami secara berkala
                     </p>
                     <div class="form">
-                        <input class="form-control" placeholder="Email here">
+                        <input class="form-control" placeholder="Masukan Email">
                         <button class="btn">Submit</button>
                     </div>
                 </div>
@@ -52,9 +50,9 @@
     </div>
     <div class="container footer-menu">
         <div class="f-menu">
-            <a href="">Syarat dan Ketentuan</a>
-            <a href="">Privacy policy</a>
-            <a href="">Bantuan</a>
+            <a href="#">Syarat dan Ketentuan</a>
+            <a href="#">Privacy policy</a>
+            <a href="#">Bantuan</a>
         </div>
     </div>
     <div class="container copyright">
@@ -71,6 +69,24 @@
 
 @section('footer-js')
     <script type="text/javascript">
-        
+        function scroled(data){
+            if (data == 'services') {
+                $('html, body').animate({
+                    scrollTop: $("#services").offset().top
+                }, 2000);
+            }else if(data == 'team'){
+                $('html, body').animate({
+                    scrollTop: $(".team").offset().top
+                }, 2000);
+            }else if(data == 'about_us'){
+                $('html, body').animate({
+                    scrollTop: $("#about_us").offset().top
+                }, 2000);
+            }else if(data == 'works'){
+                $('html, body').animate({
+                    scrollTop: $("#works").offset().top
+                }, 2000);
+            }
+        }
     </script>
 @endsection

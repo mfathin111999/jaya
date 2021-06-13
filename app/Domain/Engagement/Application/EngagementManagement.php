@@ -24,19 +24,19 @@ class EngagementManagement
 
 	public function allData($request = null){
 		if ($request == null || empty($request)) {		
-			$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+			$data = Engagement::with('province', 'regency', 'district', 'village', 'service')->withCount('report')->orderBy('date')->get();
 		}else {
 			$id = $request->id;
 			$data = Engagement::whereHas('employee', function($query) use ($id) {
 				$query->where('user_id', $id);
-			})->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+			})->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->orderBy('date')->get();
 		}
 
 		return $data;
 	}
 
 	public function allDataMandor($request){
-		$data = Engagement::where('mandor_id', $request->id)->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+		$data = Engagement::where('mandor_id', $request->id)->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->orderBy('date')->get();
 
 		return $data;
 	}
@@ -48,7 +48,7 @@ class EngagementManagement
 								$query->whereNull('parent_id')->with(['subreport' => function($query){
 									$query->orderBy('id', 'desc');
 								}]);
-							}])->get();
+							}])->orderBy('date')->get();
 
 		return $data;
 	}

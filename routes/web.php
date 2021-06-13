@@ -37,6 +37,10 @@ Route::get('/home', function(){
 	return view('public.home');
 })->name('home');
 
+Route::get('/action', function(){
+	return view('public.partial.success');
+})->name('action');
+
 Route::get('/profile', function(){
 	return view('public.profile');
 })->name('profile');
@@ -200,4 +204,9 @@ Route::prefix('auth')->group(function () {
 	Route::post('/set', [AuthController::class, 'setSession']);
 	Route::post('/update', [AuthController::class, 'updateSession']);
 	Route::get('/delete', [AuthController::class, 'deleteSession']);
+});
+
+Route::get('generate', function (){
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    echo 'ok';
 });

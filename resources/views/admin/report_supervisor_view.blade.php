@@ -302,7 +302,6 @@
                           </label>
                         </strong>
                       </div>
-
                     </div>
                   </div>
                   <div class="col-md-6 align-self-center text-center">
@@ -311,7 +310,8 @@
                         <label class="btn-block">Penawaran</label>
                       </div>
                       <div class="col-md-12">
-                        <button class="btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>Kirim Customer</button><br>
+                        <button class="mail-class btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>Kirim Customer</button><br>
+                        <label class="loading-class bg-info py-2 px-4 text-white d-none" style="border-radius: 3px;"><div class="loader"></div></label>
                         <!-- <a href="{{ url('report/printOrderCustomer') }}/{{ $id }}" class="btn btn-warning" style="font-size: 12px;">Kirim Vendor</a> -->
                       </div>
                     </div> 
@@ -326,7 +326,6 @@
                     </div>
                   </div>
                 </div>
-
       				</div>
     					<div class="card-body">
 
@@ -586,7 +585,7 @@
                       <label class="font-weight-bold">Penawaran Telah Terkunci</label>
                     </div>
                   </div>
-                  <div class="col-md-6 align-self-center text-center">
+                  <div class="col-md-6 align-self-center text-center mb-3">
                     <div class="rounded pt-3 pb-3" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold h3">Penawaran</label><br>
                       <label class="font-weight-bold">Penawaran Telah Terkunci</label>
@@ -673,6 +672,9 @@
               this.data = response.data.data;
               this.partner = response.data.data.partner;
               this.allPlace = ucwords(response.data.data.paddress+', '+response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name);
+
+              this.allPriceCustomer = 0;
+              this.allPriceVendor = 0;
               for (var i = 0; i < this.data.report.length; i++) {
                 this.allPriceCustomer += parseInt(this.data.report[i].all_price[0]);
                 this.allPriceVendor += parseInt(this.data.report[i].all_price[1]);
@@ -1110,22 +1112,48 @@
             });
           },
           dealed: function(){
-            Swal.fire({
-              title: 'Apakah kamu yakin ?',
-              text: "Kamu tidak bisa mengubah Penawaran setelah Penawaran ditetapkan",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                axios.post("{{ url('api/engagement/dealed') }}/"+this.id).then(function(response){
-                }).then(() => {
-                  this.getData(this.id);
-                });
-              }
-            })
+            if (this.data.date_work == null || this.data.date_work == '') {
+              Swal.fire(
+                'Opss !',
+                'Tanggal mulai pekerjaan belum terisi !',
+                'warning'
+              )
+            }else if (this.data.vendor == null || this.data.vendor == '' || this.data.vendor.length == 0) {
+              Swal.fire(
+                'Opss',
+                'Vendor belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else if(this.termin == null || this.termin == '' || this.termin.length == 0){
+              Swal.fire(
+                'Opss',
+                'Termin belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else if(this.data.gallery == null || this.data.gallery == '' || this.data.gallery.length == 0){
+              Swal.fire(
+                'Opss',
+                'Gambar belum terisi, harap isi terlebih dahulu .. !',
+                'warning'
+              )
+            }else{
+              Swal.fire({
+                title: 'Apakah kamu yakin ?',
+                text: "Kamu tidak bisa mengubah Penawaran setelah Penawaran ditetapkan",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.post("{{ url('api/engagement/dealed') }}/"+this.id).then(function(response){
+                  }).then(() => {
+                    this.getData(this.id);
+                  });
+                }
+              })
+            }
           },
           loadProvince(){
             axios.get("{{ url('api/province') }}").then(function(response){
@@ -1201,7 +1229,11 @@
                 confirmButtonText: 'Iya'
               }).then((result) => {
                 if (result.isConfirmed) {
-                  window.open('https://api.whatsapp.com/send?phone=6288023554758&text=Penawaran%20Home%20Service%20Telah%20terkirim.%20Check%20Email%20untuk%20menyetujui', '_blank');
+                  report.$nextTick(()=>{
+                    $('.loading-class').removeClass('d-none');
+                    $('.mail-class').addClass('d-none');
+                  });
+                  window.open("https://wa.me/62"+this.data.phone_number.substr(1)+"?text=Salam, Penawaran ServisRumah.com telah terkirim silahkan cek Email anda", '_blank');
                   window.location.href = "{{ url('report/sendEngagement') }}/"+id;
                 }
               });

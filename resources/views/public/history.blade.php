@@ -99,12 +99,12 @@
                   <table id="example" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Service</th>
-                            <th>Tanggal Survei</th>
-                            <th>Kota</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style="vertical-align: middle; text-align: center;">Name</th>
+                            <th style="vertical-align: middle; text-align: center;">Service</th>
+                            <th style="vertical-align: middle; text-align: center;">Tanggal Survei</th>
+                            <th style="vertical-align: middle; text-align: center;">Kota</th>
+                            <th style="vertical-align: middle; text-align: center;">Status</th>
+                            <th style="vertical-align: middle; text-align: center;">Action</th>
                         </tr>
                     </thead>
                     <tbody class="font-12">
@@ -123,6 +123,7 @@
                           <td class="text-center">
                             @if(auth()->user()->role == 4)
                               <button class="btn btn-info" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></button>
+                              <label v-if='item.status != "acc" || item.locked != "deal"'>-</label>
                             @endif
                           </td>
                         </tr>
@@ -167,7 +168,9 @@
               axios.post("{{ url('api/engagementCustomer') }}").then(function(response){
                 this.data = response.data.data;
                 this.$nextTick(() => {
-                   $("#example").DataTable();
+                   $("#example").DataTable({
+                      "order": [[ 0, "desc" ]]
+                   });
                 });
               }.bind(this));
           },

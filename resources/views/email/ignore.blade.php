@@ -5,10 +5,10 @@
 </head>
 <body style="margin: 0; padding: 0;">
 	<table align="center" cellpadding="0" cellspacing="0" width="600">
-		<tr height="20px" bgcolor="#0fbdd2">
+		<tr height="20px" bgcolor="#fdbe33">
 			<td>
 				<center>
-					<img src="{{ $message->embed('img/logo.png') }}" style="width: 30%; padding: 10px;">
+					<img src="{{ $message->embed('img/logo.png') }}" style="width: 15%; padding: 10px;">
 				</center>
 			</td>
 		</tr>
@@ -34,7 +34,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td bgcolor="#0fbdd2" height="50px" style="text-align: center; color: white; font-size: 12px;">
+			<td bgcolor="#030f27" height="50px" style="text-align: center; color: white; font-size: 12px;">
 				© 2021 NRU.
 			</td>
 		</tr>

@@ -197,22 +197,32 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Kode Booking</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.code }}</strong></label>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Nama Pelanggan</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.name }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12 m-0">Vendor</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                      </div>
+                      <div class="col-12">
+                        <label class="font-12">Tanggal Mulai</label>
+                        <br>
+                        <strong>
+                          <label class="m-0 font-14" v-if= 'data.date_work != null' >
+                            @{{ data.date_work }}
+                          </label>
+                          <label class="m-0" v-if= 'data.date_work == null' >
+                            -
+                          </label>
+                        </strong>
                       </div>
                       <div class="col-12 mt-2">
                         <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
@@ -260,27 +270,32 @@
                           <td align="center" style="vertical-align: middle;">
                             @{{ formatPrice(detail.price_clean) }}
                           </td>
-                          <td align="center" style="vertical-align: middle;" v-if='index == 0 || (index != 0 && data.report[index-1].status == "doneMandor")'>
+                          <td align="center" style="vertical-align: middle;" v-if='(index == 0 && data.report[index].termin.length != 0) || (index == 1 && data.report[index-1].status == "doneMandor") || (index > 1 && data.report[index-1].status == "doneMandor" && data.report[index-1].termin.length != 0)'>
                             <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
                             <label class="m-0 text-success" v-if='report.status == "deal" && detail.status == "done"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Selesai</label>
+                            <label class="m-0 text-success" v-if='report.status == "offer" && detail.status == "done"'>Menunggu</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Disetujui</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Lunas</label>
                           </td>
-                          <td class="text-center" colspan="8" v-if='index != 0 && data.report[index-1].status != "doneMandor"'>
-                            -
+                          <td class="text-center" v-if='(index == 0 && data.report[index].termin.length == 0) || (index == 1 && data.report[index-1].status != "doneMandor") || (index > 1)'>
+                            <label class="m-0" v-if='index > 1 && data.report[index-1].status != "doneMandor"'>-</label>
+                            <label class="m-0" v-if='index > 1 && data.report[index-1].status == "doneMandor" && data.report[index].termin.length == 0'>-</label>
+                            <label class="m-0" v-if='index <= 1'>-</label>
                           </td>
                         </tr>
                         <tr>
                           <td colspan="6" align="center" style="vertical-align: middle;"><strong>Total Harga</strong></td>
                           <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;" v-if='index == 0 || (index != 0 && data.report[index-1].status == "doneMandor")'>
+                          <td align="center" style="vertical-align: middle;" v-if='(index == 0 && data.report[index].termin.length != 0) || (index == 1 && data.report[index-1].status == "doneMandor") || (index > 1 && data.report[index-1].status == "doneMandor" && data.report[index-1].termin.length != 0)'>
                             <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
                             <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
                             <button class="btn btn-info font-12" @click='infoCard' v-if='report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-info-circle"></i></button>
                           </td>
-                          <td class="text-center" colspan="8" v-if='index != 0 && data.report[index-1].status != "doneMandor"'>
-                            -
+                          <td class="text-center" v-if='(index == 0 && data.report[index].termin.length == 0) || (index == 1 && data.report[index-1].status != "doneMandor") || (index > 1)'>
+                            <label class="m-0" v-if='index > 1 && data.report[index-1].status != "doneMandor"'>-</label>
+                            <label class="m-0" v-if='index > 1 && data.report[index-1].status == "doneMandor" && data.report[index].termin.length == 0'>-</label>
+                            <label class="index <= 1">-</label>
                           </td>
                         </tr>
                       </tbody>

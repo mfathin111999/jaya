@@ -30,28 +30,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 
-Route::get('/engagement', [EngagementController::class, 'index']);
-Route::post('/engagementSurveyer', [EngagementController::class, 'indexSurveyer']);
-Route::post('/engagementMandor', [EngagementController::class, 'indexMandor']);
-Route::post('/engagementVendor', [EngagementController::class, 'indexVendor']);
-Route::post('/engagementCustomer', [EngagementController::class, 'indexCustomer']);
-Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
-Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
-Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
-Route::get('/engagement/{id}', [EngagementController::class, 'view']);
-Route::get('/engagement/getBy/{id}', [EngagementController::class, 'getById']);
-Route::post('/engagement/getCalendarDataSurveyer', [EngagementController::class, 'getCalendarDataSurveyer']);
-Route::post('/engagement/getCalendarDataMandor', [EngagementController::class, 'getCalendarDataMandor']);
-Route::post('/engagement/dealed/{id}', [EngagementController::class, 'dealed']);
-Route::post('/engagement/addVendor', [EngagementController::class, 'addVendor']);
-Route::post('/engagement/create-engagement', [EngagementController::class, 'createEngagement']);
-Route::post('/engagement/action', [EngagementController::class, 'action']);
-Route::post('/engagement/ignore', [EngagementController::class, 'ignore']);
-Route::post('/engagement/finish', [EngagementController::class, 'finish']);
-Route::post('/engagement/accVendor/{id}', [EngagementController::class, 'accVendor']);
-Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
-Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
-Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']);
+
 
 
 Route::get('/termin/getByEngagementId/{id}', [PaymentController::class, 'getByEngagementId']);
@@ -74,7 +53,31 @@ Route::post('/notification/{id}', [NotificationController::class, 'view']);
 Route::post('/notification/update-notification/{id}', [NotificationController::class, 'updateNotification']);
 Route::post('/notification/destroy/{id}', [NotificationController::class, 'destroy']);
 
+	Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
+
 Route::middleware('auth:api')->group(function(){
+	Route::get('/engagement', [EngagementController::class, 'index']);
+	Route::post('/engagementSurveyer', [EngagementController::class, 'indexSurveyer']);
+	Route::post('/engagementMandor', [EngagementController::class, 'indexMandor']);
+	Route::post('/engagementVendor', [EngagementController::class, 'indexVendor']);
+	Route::post('/engagementCustomer', [EngagementController::class, 'indexCustomer']);
+	Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
+	Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
+	Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
+	Route::get('/engagement/{id}', [EngagementController::class, 'view']);
+	Route::get('/engagement/getBy/{id}', [EngagementController::class, 'getById']);
+	Route::post('/engagement/getCalendarDataSurveyer', [EngagementController::class, 'getCalendarDataSurveyer']);
+	Route::post('/engagement/getCalendarDataMandor', [EngagementController::class, 'getCalendarDataMandor']);
+	Route::post('/engagement/dealed/{id}', [EngagementController::class, 'dealed']);
+	Route::post('/engagement/addVendor', [EngagementController::class, 'addVendor']);
+	Route::post('/engagement/create-engagement', [EngagementController::class, 'createEngagement']);
+	Route::post('/engagement/action', [EngagementController::class, 'action']);
+	Route::post('/engagement/ignore', [EngagementController::class, 'ignore']);
+	Route::post('/engagement/finish', [EngagementController::class, 'finish']);
+	Route::post('/engagement/accVendor/{id}', [EngagementController::class, 'accVendor']);
+	Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
+	Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']);
+
 	Route::post('/service/create-service', [ServiceController::class, 'createService']);
 	Route::get('/service/{id}', [ServiceController::class, 'view']);
 	Route::post('/service/update-service/{id}', [ServiceController::class, 'updateService']);
@@ -92,8 +95,8 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/employee/update-employee/{id}', [EmployeeController::class, 'updateEmployee']);
 	Route::post('/employee/destroy/{id}', [EmployeeController::class, 'destroy']);
 
-	Route::get('/vendor/getProgress', [EmployeeController::class, 'getProgress'])->middleware('auth:api');
-	Route::get('/vendor/getPayment', [EmployeeController::class, 'getPayment'])->middleware('auth:api');
+	Route::get('/vendor/getProgress', [EmployeeController::class, 'getProgress']);
+	Route::get('/vendor/getPayment', [EmployeeController::class, 'getPayment']);
 	Route::get('/vendor/getProgressCustomer', [EmployeeController::class, 'getProgressCustomer']);
 	Route::get('/vendor/getPaymentCustomer', [EmployeeController::class, 'getPaymentCustomer']);
 	Route::get('/vendor/allBusiness', [EmployeeController::class, 'allBusiness']);

@@ -28,6 +28,23 @@
 			.font-14{
 				font-size: 14px !important;
 			}
+			[v-cloak]{
+				display: none;
+			}
+
+			.loader {
+			  	border: 5px solid #f3f3f3; /* Light grey */
+			  	border-top: 5px solid #fdbe33; /* Blue */
+			  	border-radius: 50%;
+			  	width: 15px;
+			  	height: 15px;
+			  	animation: spin 1s linear infinite;
+			}
+
+			@keyframes spin {
+			  	0% { transform: rotate(0deg); }
+			  	100% { transform: rotate(360deg); }
+			}
 		</style>
 		@yield('header-css')
 		@yield('sec-css')

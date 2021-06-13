@@ -147,7 +147,7 @@ class EngagementController extends Controller
     {
         $data = $this->engagement->accCustomer($id);
 
-        return view('public.home');
+        return redirect()->route('action');
 
     }
 

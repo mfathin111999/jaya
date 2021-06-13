@@ -47,6 +47,24 @@
 			border-radius: 0;
 			transition: .3s;
 		}
+
+		.back-to-whatsapp {
+		    position: fixed;
+		    display: inline;
+		    color: #121518;
+		    width: 75px;
+		    height: 75px;
+		    text-align: center;
+		    line-height: 1;
+		    font-size: 22px;
+		    right: 0px;
+		    bottom: 75px;
+		    z-index: 9;
+		}
+
+		.back-to-whatsapp:hover {
+		    transform: scale(1.5);
+		}
 	</style>
 @endsection
 
@@ -69,11 +87,11 @@
 	                    <h1 class="animated fadeInLeft">For Your Dream Project</h1>
 
 	                    @auth
-	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    	<a class="btn animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
 	                    @endauth
 
 	                    @guest
-	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    <a class="btn animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
 	                    @endguest
 	                </div>
 	            </div>
@@ -84,11 +102,11 @@
 	                    <p class="animated fadeInRight">Pekerja Profesional</p>
 	                    <h1 class="animated fadeInLeft">We Build Your Home</h1>
 	                    @auth
-	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    	<a class="btn animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
 	                    @endauth
 
 	                    @guest
-	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    <a class="btn animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
 	                    @endguest
 	                </div>
 	            </div>
@@ -99,11 +117,11 @@
 	                    <p class="animated fadeInRight">Terpercaya</p>
 	                    <h1 class="animated fadeInLeft">For Your Dream Home</h1>
 	                    @auth
-	                    	<a class="btn-theme animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    	<a class="btn animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
 	                    @endauth
 
 	                    @guest
-	                    <a class="btn-theme animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    <a class="btn animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
 	                    @endguest
 	                </div>
 	            </div>
@@ -223,6 +241,9 @@
 					            <label class="font-12 text-white" for="address">Alamat</label>
 					            <input type="text" class="form-control" id="address" name="address" placeholder="Masukan Alamat Rumah" required="">
 					        </div>
+					        <div class="loading-class justify-content-center align-items-center d-none" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: #0000007d;">
+						        <div class="loader" id="loading" style=""></div>
+					        </div>
 		                </div>
 		                <div class="col-md-6">
 		                    <div class="row">
@@ -254,7 +275,10 @@
 					            <label id="maxDescription" class="mb-0 mt-2 font-12 text-black">300 Karakter tersisa</label>
 					        </div>
 					        <div class="mt-5 text-right">
-		                        <button class="btn-theme btn-submited" type="submit" id="sendMessageButton">Kirim Reservasi Survei Lapangan</button>			        	
+		                        <button class="btn-theme btn-submited" type="submit" id="sendMessageButton">Kirim Reservasi Survei Lapangan</button>
+		                        <div class="loading-class justify-content-center align-items-center d-none" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: #0000007d;">
+							        <div class="loader" id="loading" style=""></div>
+						        </div>			        	
 					        </div>
 		                </div>
 		            </div>
@@ -383,7 +407,7 @@
 	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
 	                    <div class="service-item">
 	                        <div class="service-img">
-	                            <img src="img/service-5.jpg" alt="Image">
+	                            <img src="{{ asset('img/all/focus-interior.png') }}" alt="Image">
 	                            <div class="service-overlay">
 	                                <p>
 	                                    Kami menyediakan jasa interior, renovasi bangungan, jalan, pagar, pengecatan, pekerjaan pipa, tanki timbun, pemeliharaan gedung, dan penataan taman.
@@ -392,14 +416,14 @@
 	                        </div>
 	                        <div class="service-text">
 	                            <h3>Design Interior</h3>
-	                            <a class="btn-theme" href="img/service-1.jpg" data-lightbox="service">+</a>
+	                            <a class="btn" href="{{ asset('img/all/focus-interior.png') }}" data-lightbox="service">+</a>
 	                        </div>
 	                    </div>
 	                </div>
 	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
 	                    <div class="service-item">
 	                        <div class="service-img">
-	                            <img src="img/service-2.jpg" alt="Image">
+	                            <img src="{{ asset('img/all/focus-supplied.png') }}" alt="Image">
 	                            <div class="service-overlay">
 	                                <p>
                                       	Pengadaan alat dan barang diantaranya alat – alat komponen sipil, alat kelistrikan, serta berbagai peralatan perlengkapan keselamatan Kerja dan Kesehatan Kerja
@@ -408,14 +432,14 @@
 	                        </div>
 	                        <div class="service-text">
 	                            <h3>Umum dan Supplier</h3>
-	                            <a class="btn-theme" href="img/service-2.jpg" data-lightbox="service">+</a>
+	                            <a class="btn" href="{{ asset('img/all/focus-supplied.png') }}" data-lightbox="service">+</a>
 	                        </div>
 	                    </div>
 	                </div>
 	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
 	                    <div class="service-item">
 	                        <div class="service-img">
-	                            <img src="img/service-3.jpg" alt="Image">
+	                            <img src="{{ asset('img/all/focus-mechanical.png') }}" alt="Image">
 	                            <div class="service-overlay">
 	                                <p>
 	                                    Mengerjakan Perbaikan Instalasi Listrik, Mesin Pompa serta Jasa Service dan Pengadaan AC
@@ -424,7 +448,7 @@
 	                        </div>
 	                        <div class="service-text">
 	                            <h3>Mekanikal Elektrikal & Refrigerasi serta Teknologi Pendingin</h3>
-	                            <a class="btn-theme" href="img/service-3.jpg" data-lightbox="service">+</a>
+	                            <a class="btn" href="{{ asset('img/all/focus-mechanical.png') }}" data-lightbox="service">+</a>
 	                        </div>
 	                    </div>
 	                </div>
@@ -488,14 +512,14 @@
 	                <p>Team Kami</p>
 	                <h2>Bekerja dengan Kami</h2>
 	            </div>
-	            <div class="row">
+	            <div class="row align-items-center justify-content-between">
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="img/team-1.jpg" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-ceo.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
-	                            <h2>Firman</h2>
+	                            <h2>Jaedi</h2>
 	                            <p>CEO & Founder</p>
 	                        </div>
 	                        <div class="team-social">
@@ -509,11 +533,11 @@
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="img/team-2.jpg" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-head-operation.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
 	                            <h2>Firman</h2>
-	                            <p>Civil Engineer</p>
+	                            <p>Head of Operational</p>
 	                        </div>
 	                        <div class="team-social">
 	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
@@ -526,11 +550,11 @@
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="img/team-3.jpg" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-head-finance.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
-	                            <h2>Agus</h2>
-	                            <p>Interior Designer</p>
+	                            <h2>Andi</h2>
+	                            <p>Head of Finance</p>
 	                        </div>
 	                        <div class="team-social">
 	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
@@ -540,14 +564,14 @@
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+	                {{-- <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="img/team-4.jpg" alt="Team Image">
+	                            <img src="{{ asset('img/team-member.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
 	                            <h2>Sandi</h2>
-	                            <p>Painter</p>
+	                            <p>Profesional Team</p>
 	                        </div>
 	                        <div class="team-social">
 	                            <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
@@ -556,7 +580,7 @@
 	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
 	                        </div>
 	                    </div>
-	                </div>
+	                </div> --}}
 	            </div>
 	        </div>
 	    </div>
@@ -567,112 +591,160 @@
 	    <div class="portfolio" id="works">
             <div class="container">
                 <div class="section-header text-center">
-                    <p>Our Projects</p>
-                    <h2>Visit Our Projects</h2>
+                    <p>Pekerjaan Kami</p>
+                    <h3 class="font-weight-bold">Pekerjaan - pekerjaan yang telah kami selesaikan</h3>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-sm-12 first wow fadeInUp" data-wow-delay="0.1s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-1.jpg" alt="Image">
+                                <img src="{{ asset('img/project/atap-bp2ip-banten.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Perbaikan Atap di BP2IP Banten.
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-1.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Perbaikan Atap</h3>
+                                <a class="btn" href="{{ asset('img/project/atap-bp2ip-banten.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 second wow fadeInUp" data-wow-delay="0.2s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-2.jpg" alt="Image">
+                                <img src="{{ asset('img/project/cakar-ayam-stip-jakarta.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Pemasangan cakar ayam dan pondasi di STIP Jakarta.
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-2.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Pondasi Cakar Ayam</h3>
+                                <a class="btn" href="{{ asset('img/project/cakar-ayam-stip-jakarta.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.3s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-3.jpg" alt="Image">
+                                <img src="{{ asset('img/project/cat-pipa-hydran.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Pengecatan Pipa Hydran
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-3.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Pengecatan Hydran</h3>
+                                <a class="btn" href="{{ asset('img/project/cat-pipa-hydran.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 first wow fadeInUp" data-wow-delay="0.4s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-4.jpg" alt="Image">
+                                <img src="{{ asset('img/project/cat-stip-jakarta.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Project Pengecatan di STIP Jakarta.
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-4.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Pengecatan Bangunan</h3>
+                                <a class="btn" href="{{ asset('img/project/cat-stip-jakarta.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 second wow fadeInUp" data-wow-delay="0.5s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-5.jpg" alt="Image">
+                                <img src="{{ asset('img/project/hydran-stip-jakarta.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Perbaikan Pompa Hydran di STIP Jakarta.
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-5.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Perbaikan Hydran</h3>
+                                <a class="btn" href="{{ asset('img/project/hydran-stip-jakarta.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.6s">
                         <div class="portfolio-warp">
                             <div class="portfolio-img">
-                                <img src="img/portfolio-6.jpg" alt="Image">
+                                <img src="{{ asset('img/project/kramik-stip-jakarta.png') }}" alt="Image">
                                 <div class="portfolio-overlay">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasel nec pretium mi. Curabit facilis ornare velit non. Aliqu metus tortor, auctor id gravi condime, viverra quis sem.
+                                        Pemasangan Kramik Lantai di STIP Jakarta.
                                     </p>
                                 </div>
                             </div>
                             <div class="portfolio-text">
-                                <h3>Project Name</h3>
-                                <a class="btn" href="img/portfolio-6.jpg" data-lightbox="portfolio">+</a>
+                                <h3>Perbaikan Lantai</h3>
+                                <a class="btn" href="{{ asset('img/project/kramik-stip-jakarta.png') }}" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="{{ asset('img/project/paving-bp2ip-banten.png') }}" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Pemasangan Paving Blok di BP2IP Banten.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Pemasangan Paving</h3>
+                                <a class="btn" href="{{ asset('img/project/paving-bp2ip-banten.png') }}" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="{{ asset('img/project/perawatan-ac.png') }}" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Perawatan AC.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Perawatan AC</h3>
+                                <a class="btn" href="{{ asset('img/project/perawatan-ac.png') }}" data-lightbox="portfolio">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 third wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="portfolio-warp">
+                            <div class="portfolio-img">
+                                <img src="{{ asset('img/project/pemasangan-ac-split.png') }}" alt="Image">
+                                <div class="portfolio-overlay">
+                                    <p>
+                                        Pemasangan dan perawatan AC Split.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="portfolio-text">
+                                <h3>Pasang AC Split</h3>
+                                <a class="btn" href="{{ asset('img/project/pemasangan-ac-split.png') }}" data-lightbox="portfolio">+</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-12 load-more">
                         <a class="btn" href="#">Load More</a>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 	    <!-- Portofolio End -->
@@ -690,60 +762,61 @@
 	                        <div class="card wow fadeInLeft" data-wow-delay="0.1s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseOne">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Apa itu <strong>Servisrumah.com</strong> ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseOne" class="collapse" data-parent="#accordion-1">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    <strong>Servisrumah.com</strong> dalah layanan online yang dapat menghubungkan Anda dengan para penyedia layanan perbaikan professional, amanah dan terpercaya. <br><br>
+	                                    <strong>Servisrumah.com</strong> siap memudahkan Anda untuk mencari penyedia layanan servis/perbaikan profesional dengan dukungan transaksi secara aman dan nyaman berbasis online.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInLeft" data-wow-delay="0.2s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseTwo">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Apakah <strong>Servisrumah.com</strong> memberikan garansi untuk setiap pekerjaan yang di pesan ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseTwo" class="collapse" data-parent="#accordion-1">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Ya, kami menggaransi semua yang kami kerjakan, dan kami respon 1 x 24 jam.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInLeft" data-wow-delay="0.3s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseThree">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Bagaimana jika ada pertanyaan lain yang belum sempat saya tanyakan ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseThree" class="collapse" data-parent="#accordion-1">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Silahkan anda menghubungi kami melalui pesan whatsapp (0857-7768-6367).
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInLeft" data-wow-delay="0.4s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseFour">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Bagaimana cara memesan jasa servis rumah ini ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseFour" class="collapse" data-parent="#accordion-1">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Anda dapat menghubungi kami melalui website aplikasi kami di www.<strong>Servisrumah.com</strong> atau langsung menghubugi kami melalui WhatsApp 0857-7768-6367 dan bicarakan kepada kami mengenai rencana servis atau perbaikan property anda
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInLeft" data-wow-delay="0.5s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseFive">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Apakah dalam setiap pengerjaan harus membayar DP (Down Payment) ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseFive" class="collapse" data-parent="#accordion-1">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Ya, setiap pengerjaan harus di sertakan DP (down Payment) sebagai tanda keseriusan Anda dalam menggunakan layanan servis atau perbaikan kami
 	                                </div>
 	                            </div>
 	                        </div>
@@ -754,60 +827,60 @@
 	                        <div class="card wow fadeInRight" data-wow-delay="0.1s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseSix">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Apakah Harga dalam servis bisa ditawar ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseSix" class="collapse" data-parent="#accordion-2">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Kami menawarkan jasa servis dengan  professional dan terpercaya, sehingga untuk harga sudah disesuakan dengan se proporsinal mungkin.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInRight" data-wow-delay="0.2s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseSeven">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Sejauh mana jangkauan pelayanan <strong>Servisrumah.com</strong> ini ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseSeven" class="collapse" data-parent="#accordion-2">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Untuk saat ini  jasa servis kami melayani Area Jabodetabek.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInRight" data-wow-delay="0.3s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseEight">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Mengapa memilih <strong>Servisrumah.com</strong>?
 	                                </a>
 	                            </div>
 	                            <div id="collapseEight" class="collapse" data-parent="#accordion-2">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    <strong>Servisrumah.com</strong> didukung oleh tenaga-tenaga professional dibidang nya, dan  memberikan pelayanan sepenuh hati untuk mencapai kepuasaan dan kenyamanan pelanggan.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInRight" data-wow-delay="0.4s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseNine">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Apa yang harus saya lakukan apabila penyedia jasa <strong>Servisrumah.com</strong> tidak bisa dihubungi ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseNine" class="collapse" data-parent="#accordion-2">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Tunggu beberapa saat untuk memberikan kesempatan kepada kami untuk menghubungi Anda kembali. Penyedia jasa kami mungkin sedang dalam perjalanan atau masih mengerjakan pekerjaan jasa di tempat lain sehingga tidak bisa langsung membalas Anda.
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="card wow fadeInRight" data-wow-delay="0.5s">
 	                            <div class="card-header">
 	                                <a class="card-link collapsed" data-toggle="collapse" href="#collapseTen">
-	                                    Lorem ipsum dolor sit amet?
+	                                    Berapa lama saya harus menunggu menerima penawaran untuk jasa <strong>Servisrumah.com</strong> ?
 	                                </a>
 	                            </div>
 	                            <div id="collapseTen" class="collapse" data-parent="#accordion-2">
-	                                <div class="card-body">
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non.
+	                                <div class="card-body text-justify">
+	                                    Waktu tunggu bervariasi sesuai dengan lokasi, kategori jasa, dan waktu permintaan jasa Anda. Anda dapat menerima penawaran dalam hitungan  jam atau hari. Sebagai referensi, pada jam kerja dan untuk wilayah jabodetabek, rata-rata customer mendapatkan penawaran pertama dalam waktu ± 24 jam 1(satu) hari.
 	                                </div>
 	                            </div>
 	                        </div>
@@ -962,6 +1035,7 @@
 	    <!-- Footer End -->
 
 	</div>
+    <a href="https://wa.me/6281298922442?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 	@include('layout.footer')
 @endsection
@@ -1027,6 +1101,8 @@
               $("#example").DataTable().destroy();
             });
           }).then(() => {
+          	app.$nextTick(() => {
+            });
             this.form = {};
             this.getData();
           });
@@ -1090,6 +1166,11 @@
           }
         },
         sendReservation: function(){
+        	this.$nextTick(()=>{
+	        	$(".loading-class").removeClass('d-none');
+	            $(".loading-class").addClass('d-flex');
+        	});
+
         	let form 	= document.getElementById('form-engagement');
           	let forms 	= new FormData(form);
             axios.post(
@@ -1107,6 +1188,8 @@
               	app.$nextTick(()=>{
               		$(".select2").val("");
 					$(".select2").trigger("change");
+					$(".loading-class").removeClass('d-flex');
+              		$(".loading-class").addClass('d-none');
               	});
             });
         },
