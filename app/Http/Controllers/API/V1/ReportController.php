@@ -84,11 +84,52 @@ class ReportController extends Controller
         // return $data;
 
         if (auth()->guard('api')->user()->role == 4){
-            if ($data->user_id !== auth()->guard('api')->user()->id)
-                return apiResponseBuilder(403, 'Unautorize');
-        }
+            if ($data->user_id !== auth()->guard('api')->user()->id){
+                return apiResponseBuilder(403, 'Unauthorize');
+            }
+            else{
+                $termin = Termin::where('reservation_id', $data->id)
+                            ->with(['report' => function($query){
+                                $query->whereNull('parent_id')->with(['subreport' => function($query){
+                                    $query->orderBy('id', 'desc');
+                                }]);
+                            }])
+                            ->with(['payment' => function($query){
+                                $query->where('payment_log.status', 'success');
+                            }])->get();
 
-        return apiResponseBuilder(200, ReportFactory::call($data), 'Success');
+                foreach($termin as $item){
+                    foreach($item->report as $key => $report){
+                        if ($key == 0) {
+                            $item['report_all'] = $report->name;
+                        }else{
+                            $item['report_all'] = $report->name.', '.$item['report_all'];
+                        }
+
+                        foreach($report->subreport as $subreport){
+                            $item['customer_price'] += $subreport->price_dirt;
+                        }
+                    }
+                }
+                $data = [
+                    'data' => ReportFactory::call($data),
+                    'termin' => $termin
+                ];
+                return apiResponseBuilder(200, $data);
+            }
+        }else{
+            if (auth()->guard('api')->user()->role == 5) {
+                if ($data->vendor_id !== auth()->guard('api')->user()->id){
+                    return apiResponseBuilder(403, 'Unauthorize');
+                }
+                else{
+                    $termins = Termin::where('reservation_id', $data->id)->get();
+                    return apiResponseBuilder(200, ReportFactory::call($data), $termins);
+                }
+            }else{
+                return apiResponseBuilder(200, ReportFactory::call($data), 'success');
+            }
+        }
     }
 
     public function addPrice(Request $request)

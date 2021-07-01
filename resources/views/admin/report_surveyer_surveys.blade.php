@@ -497,12 +497,12 @@
                           </th>
                         </tr>
                         <tr>
-                          <td align="center"><strong>No</strong></td>
-                          <td align="center" scope="col"><strong>Nama</strong></td>
-                          <td align="center" scope="col"><strong>Volume</strong></td>
-                          <td align="center" scope="col"><strong>Unit</strong></td>
-                          <td align="center" scope="col"><strong>Estimasi</strong></td>
-                          <td align="center" scope="col"><strong>Aksi</strong></td>
+                          <td align="center" width="5%"><strong>No</strong></td>
+                          <td align="center" width="40%"><strong>Nama</strong></td>
+                          <td align="center" width="10%"><strong>Volume</strong></td>
+                          <td align="center" width="10%"><strong>Unit</strong></td>
+                          <td align="center" width="10%"><strong>Estimasi</strong></td>
+                          <td align="center" width="25%"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
                       <tbody>

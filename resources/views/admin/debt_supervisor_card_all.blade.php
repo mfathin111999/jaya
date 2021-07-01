@@ -101,6 +101,11 @@
                     @{{ datas.name }}
                   </button>
                 </div>
+                <div class="list-group text-center" v-if='data.length == 0'>
+                  <button class="list-group-item list-group-item-action" disabled="">
+                    Data tidak ditemukan ( Kosong )
+                  </button>
+                </div>
               </div>
               <div class="col-md-9">
                 <div class="card">
@@ -119,7 +124,7 @@
                           <thead>
                             <tr>
                               <th align="center" class="text-center">
-                                <strong>Business Partner</strong>
+                                <strong>Kode Reservasi</strong>
                             </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Date Invoise</strong>
@@ -324,24 +329,27 @@
             }
           },
           sendPay : function(){
-            Swal.fire({
-              title: 'Perhatian',
-              text: 'Apakah kamu yakin akan membayar '+this.allid.length+' hutang ini ?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                axios.post("{{ url('api/supervisor/addPayMultiple') }}", {id : this.allid}).then(function(response){
-                  Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
-                }.bind(this)).then(()=>{
-                  this.getData(this.id);
-                });
-              }
-            });
-            
+            if (this.allid.length == 0) {
+              Swal.fire('Opss', 'Pilih terlebih dahulu hutang yang ingin anda bayar, Pembayaran tidak bisa kosong');
+            }else{
+              Swal.fire({
+                title: 'Perhatian',
+                text: 'Apakah kamu yakin akan membayar '+this.allid.length+' hutang ini ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.post("{{ url('api/supervisor/addPayMultiple') }}", {id : this.allid}).then(function(response){
+                    Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
+                  }.bind(this)).then(()=>{
+                    this.getData(this.id);
+                  });
+                }
+              });
+            }
           },
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');

@@ -22,7 +22,17 @@ class EngagementController extends Controller
 
     public function index()
     {
-        $data = $this->engagement->allData();
+        $data = Engagement::when(auth()->guard('api')->role == 2, function ($query) {
+                    $query->whereHas('employee', function ($query){
+                        $query->where('id', auth()->guard('api')->id);
+                    });
+                })
+                ->when(auth()->guard('api')->role == 5, function ($query) {
+                    $query->where('mandor_id', auth()->guard('api')->id);
+                })
+                ->with('province', 'regency', 'district', 'village', 'service')
+                ->withCount('report')
+                ->orderBy('date')->get();
 
         return apiResponseBuilder(200, EngagementFactory::allFactory($data));
     }
@@ -44,9 +54,21 @@ class EngagementController extends Controller
 
     public function indexVendor(Request $request)
     {
-        $data = $this->engagement->allDataVendor($request);
+        $data = Engagement::where('vendor_id', $request->id)
+                            ->when($request->has('filter') && $request->filter == 'finish', function ($query) use ($request){
+                                $query->where('status', 'finish');
+                            })
+                            ->when($request->has('filter') && $request->filter != 'finish', function ($query) use ($request){
+                                $query->where('locked', $request->filter);
+                            })
+                            ->with(['regency', 'service', 'report' => function($query){
+                                $query->whereNull('parent_id')->with(['subreport' => function($query){
+                                    $query->orderBy('id', 'desc');
+                                }]);
+                            }])->orderBy('date', 'desc')->get();
+        $count = $data->count();
 
-        return apiResponseBuilder(200, EngagementFactory::vendorFactory($data));
+        return apiResponseBuilder(200, EngagementFactory::vendorFactory($data), $count);
         // return $data;
     }
 
@@ -61,11 +83,11 @@ class EngagementController extends Controller
 
     // GET CALENDAR
 
-    public function getCalendarData()
+    public function getCalendarData(Request $request)
     {
-        $data = $this->engagement->getCalendarData();
+        $data = $this->engagement->getCalendarData($request);
 
-        return apiResponseBuilder(200, EngagementFactory::calendarFactory($data));
+        return EngagementFactory::calendarFactory($data);
     }
 
     public function getCalendarDataSurveyer(Request $request)

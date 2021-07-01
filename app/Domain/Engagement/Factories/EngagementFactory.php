@@ -30,6 +30,7 @@ class EngagementFactory
                 'locked'            => $item->locked,
                 'phone_number'      => $item->phone_number,
                 'customer_is'       => $item->customer_is,
+                'vendor_is'         => $item->vendor_is,
                 'service'           => self::serviceFactory($item->service),
                 'count'             => $item->report_count,
                 'created_at'        => Date('Y-m-d', strtotime($item->created_at))
@@ -76,7 +77,7 @@ class EngagementFactory
  
         foreach ($item as $key) {
             foreach ($key->subreport as $value) {
-                $price += $value->price_dirt;
+                $price += $value->price_clean*$value->volume;
             }
         }
 
@@ -129,25 +130,31 @@ class EngagementFactory
 
     public static function calendarFactory($item){
     	$data = [];
+        $color = '';
     	foreach ($item as $key) {
+            if ($key->status == 'pending') {
+                $color = '#f56954';
+            }elseif($key->status == 'offer'){
+                $color = '#ffc107';
+            }elseif($key->status == 'acc'){
+                if ($key->locked == 'deal') {
+                    $color = '#64bd63';
+                }elseif($key->locked == 'offer'){
+                    $color = '#17a2b8';
+                }
+            }
     		$data[] = [
     			'title' 			=> $key->code,
 				'start' 			=> date('Y-m-d H:m', strtotime($key->date.' '. $key->time,)),
 		      	'allDay' 			=> true,
-                // 'backgroundColor'   => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
-                // 'borderColor'       => $key->status == 'pending' ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 ? '#17a2b8' : '#ffc107'),
-                'backgroundColor'   => $key->status == 'pending' 
-                                            ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 
-                                                ? '#17a2b8' : ($key->locked == 'offer' 
-                                                    ? '#ffc107' : ($key->locked == 'deal' 
-                                                        ? '#64bd63' : ($key->status == 'payed'
-                                                            ? '#26a69a' : '#546e7a')))),
-                'borderColor'       => $key->status == 'pending' 
-                                            ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 
-                                                ? '#17a2b8' : ($key->locked == 'offer' 
-                                                    ? '#ffc107' : ($key->locked == 'deal' 
-                                                        ? '#64bd63' : ($key->status == 'payed'
-                                                            ? '#26a69a' : '#546e7a')))),
+                // 'backgroundColor'   => $key->status == 'pending' 
+                //                             ? '#f56954' : ($key->status == 'acc' && $key->report_count == 0 
+                //                                 ? '#17a2b8' : ($key->locked == 'offer' 
+                //                                     ? '#ffc107' : ($key->locked == 'deal' 
+                //                                         ? '#64bd63' : ($key->status == 'payed'
+                //                                             ? '#26a69a' : '#546e7a')))),
+                'backgroundColor'   => $color,
+                'borderColor'       => $color,
     		]; 	
     	}
 

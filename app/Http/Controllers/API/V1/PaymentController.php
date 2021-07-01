@@ -57,7 +57,7 @@ class PaymentController extends Controller
         $validSignatureKey = hash("sha512", $notification->order_id . $notification->status_code . $notification->gross_amount . env('MIDTRANS_SERVER_KEY'));
 
         if ($notification->signature_key != $validSignatureKey) {
-            return response(['message' => 'Invalid signature'], 403);
+            return apiResponseBuilder(403, '', 'Invalid signature');
         }
 
         $this->initPaymentGateway();
@@ -67,7 +67,7 @@ class PaymentController extends Controller
         $order = Termin::where('id', $paymentNotification->order_id)->with('engagement')->firstOrFail();
 
         if ($order->isPaid()) {
-            return response(['message' => 'The order has been paid before'], 422);
+            return apiResponseBuilder(422, '', 'The order has been paid before');
         }
 
         $transaction    = $paymentNotification->transaction_status;
@@ -113,18 +113,18 @@ class PaymentController extends Controller
         }
 
         $paymentParams = [
-            'order_id' => $order->id,
-            'number' => 'PAY-'.date('ymdhis').'-'.$order->engagement->code.'-'.$paymentStatus,
-            'amount' => $paymentNotification->gross_amount,
-            'method' => 'midtrans',
-            'status' => $paymentStatus,
-            'token' => $paymentNotification->transaction_id,
-            'payloads' => $payload,
-            'payment_type' => $paymentNotification->payment_type,
-            'va_number' => $vaNumber,
-            'vendor_name' => $vendorName,
-            'biller_code' => $paymentNotification->biller_code,
-            'bill_key' => $paymentNotification->bill_key,
+            'order_id'      => $order->id,
+            'number'        => 'PAY-'.date('ymdhis').'-'.$order->engagement->code.'-'.$paymentStatus,
+            'amount'        => $paymentNotification->gross_amount,
+            'method'        => 'midtrans',
+            'status'        => $paymentStatus,
+            'token'         => $paymentNotification->transaction_id,
+            'payloads'      => $payload,
+            'payment_type'  => $paymentNotification->payment_type,
+            'va_number'     => $vaNumber,
+            'vendor_name'   => $vendorName,
+            'biller_code'   => $paymentNotification->biller_code,
+            'bill_key'      => $paymentNotification->bill_key,
         ];
 
         $payment = PaymentLog::create($paymentParams);
@@ -148,7 +148,7 @@ class PaymentController extends Controller
             'message' => $message,
         ];
 
-        return response($response, 200);
+        return apiResponseBuilder(200, $message);
     }
 
     public function completed(Request $request)
@@ -205,7 +205,7 @@ class PaymentController extends Controller
         $all = 0;
         foreach ($termin->report as $key) {
             foreach ($key->subreport as $value) {
-                $all += $value->price_dirt;
+                $all += $value->price_dirt * $value->volume;
             }
 
         }
@@ -256,13 +256,13 @@ class PaymentController extends Controller
         if ($type == 0) {
             foreach ($items as $item) {
                 foreach ($item->subreport as $value) {
-                    $price += $value->price_dirt;
+                    $price += $value->price_dirt*$value->volume;
                 }
             }
         }elseif ($type == 1) {
             foreach ($items as $item) {
                 foreach ($item->subreport as $value) {
-                    $price += $value->price_clean;
+                    $price += $value->price_clean*$value->volume;
                 }
             }
         }

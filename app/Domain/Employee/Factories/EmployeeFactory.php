@@ -64,20 +64,20 @@ class EmployeeFactory
         if ($type == 1) {
             foreach ($items as $key) {
                 foreach ($key->subreport as $value) {
-                    $data += $value->price_dirt;
+                    $data += $value->price_dirt * $value->volume;
                 }
             }
         }elseif ($type == 2) {
             foreach ($items as $key) {
                 foreach ($key->subreport as $value) {
-                    $data += $value->price_clean;
+                    $data += $value->price_clean * $value->volume;
                 }
             }
         }elseif ($type == 3) {
             foreach ($items as $item) {
                 foreach ($item->report as $key) {
                     foreach ($key->subreport as $value) {
-                        $data += $value->price_dirt;
+                        $data += $value->price_dirt * $value->volume;
                     }
                 }
             }
@@ -85,7 +85,7 @@ class EmployeeFactory
             foreach ($items as $item) {
                 foreach ($item->report as $key) {
                     foreach ($key->subreport as $value) {
-                        $data += $value->price_clean;
+                        $data += $value->price_clean * $value->volume;
                     }
                 }
             }
@@ -141,11 +141,11 @@ class EmployeeFactory
 
         if ($type == 1) {
             foreach ($item as $key) {
-                $price += $key->price_dirt;
+                $price += $key->price_dirt * $key->volume;
             }
         }elseif ($type == 2) {
             foreach ($item as $key) {
-                $price += $key->price_clean;
+                $price += $key->price_clean * $key->volume;
             }
         }
         

@@ -134,17 +134,25 @@ class UserController extends Controller
 
     public function updateSurveyer($id, Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'email'     => 'email|unique:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=> $validator->errors()], 401);            
+        }
+
         $user = User::find($id);
 
-        $user->name         = $request['name'] ?? 'NotSet';
-        $user->email        = $request['email'] ?? 'NotSet';
+        $user->name         = $request['name'] ?? $user->name;
+        $user->email        = $request['email'] ?? $user->email;
         $user->province_id  = $request['province_id'] ?? null;
         $user->regency_id   = $request['regency_id'] ?? null;
         $user->district_id  = $request['district_id'] ?? null;
         $user->village_id   = $request['village_id'] ?? null;
         $user->address      = $request['address'] ?? null;
         $user->phone        = $request['phone'] ?? null;
-        $user->status       = $request['status'] ?? null;
         $user->save();
 
         return apiResponseBuilder(200, $user, 'Update Pekerja Berhasil');
@@ -182,17 +190,25 @@ class UserController extends Controller
 
     public function updateMandor($id, Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'email'     => 'required|email|unique:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=> $validator->errors()], 401);            
+        }
+
         $user = User::find($id);
 
-        $user->name         = $request['name'] ?? 'NotSet';
-        $user->email        = $request['email'] ?? 'NotSet';
+        $user->name         = $request['name'] ?? $user->name;
+        $user->email        = $request['email'] ?? $user->email;
         $user->province_id  = $request['province_id'] ?? null;
         $user->regency_id   = $request['regency_id'] ?? null;
         $user->district_id  = $request['district_id'] ?? null;
         $user->village_id   = $request['village_id'] ?? null;
         $user->address      = $request['address'] ?? null;
         $user->phone        = $request['phone'] ?? null;
-        $user->status       = $request['status'] ?? null;
         $user->save();
 
         return apiResponseBuilder(200, $user, 'Update Pekerja Berhasil');
@@ -241,10 +257,19 @@ class UserController extends Controller
 
     public function updateVendor($id, Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'email'     => 'required|email|unique:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=> $validator->errors()], 401);            
+        }
+
         $user = User::find($id);
 
-        $user->name         = $request['name'] ?? 'NotSet';
-        $user->email        = $request['email'] ?? 'NotSet';
+        $user->name         = $request['name'] ?? $user->name;
+        $user->email        = $request['email'] ?? $user->email;
         $user->province_id  = $request['province_id'] ?? null;
         $user->regency_id   = $request['regency_id'] ?? null;
         $user->district_id  = $request['district_id'] ?? null;

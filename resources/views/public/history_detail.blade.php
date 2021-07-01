@@ -92,7 +92,6 @@
                   <div class="col-md-12 mb-4 mt-3 rounded text-center">
                     <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
                       <label class="font-weight-bold m-0 h3">Progres Pekerjaan</label>
-                      <i class="btn btn-success fa fa-plus pull-right" data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer"' @click='addDetail(report.id)'></i>
                     </div>
                   </div>
                   <div class="col-12 table-responsive" v-for='(report, index) in data.report'>
@@ -112,8 +111,8 @@
                           <td align="center" width="20%"><strong>Nama</strong></td>
                           <td align="center" width="20%"><strong>Keterangan</strong></td>
                           <td align="center" width="10%"><strong>Volume</strong></td>
-                          <td align="center" width="10%"><strong>Unit</strong></td>
                           <td align="center" width="10%"><strong>Waktu</strong></td>
+                          <td align="center" width="10%"><strong>Harga Satuan</strong></td>
                           <td align="center" width="10%"><strong>Harga</strong></td>
                           <td align="center" width="15%"><strong>Aksi</strong></td>
                         </tr>
@@ -123,15 +122,50 @@
                           <td align="center" style="vertical-align: middle;">@{{ index3+1 }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.description }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }} @{{ detail.unit }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.price_clean }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ formatPrice(detail.price_dirt) }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ formatPrice(detail.price_dirt*detail.volume) }}</td>
                           <td align="center" style="vertical-align: middle;">
                             <label class="m-0 text-success" v-if='(report.status == "deal" || report.status == "offer") && (detail.status == "deal" || detail.status == "offer")'>Proses Pengerjaan</label>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Pengerjaan Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Selesai</label>
                             <label class="m-0 text-success" v-if='report.status == "donePayed"'>Selesai</label>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-12 mb-4 mt-3 rounded text-center">
+                    <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
+                      <label class="font-weight-bold m-0 h3">Pembayaran</label>
+                    </div>
+                  </div>
+                  <div class="col-md-12 table-responsive">
+                    <table class="table table-striped table-bordered text-center font-12">
+                      <thead>
+                        <tr>
+                          <th>Termin</th>  
+                          <th>Tahapan</th>  
+                          <th>Total Harga</th>
+                          <th>Aksi</th>  
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for = '(termins, indexs) in termin'>
+                          <td style="vertical-align: middle;">@{{ termins.termin }}</td>
+                          <td style="vertical-align: middle;">@{{ termins.report_all }}</td>
+                          <td style="vertical-align: middle;">@{{ formatPrice(termins.customer_price) }}</td>
+                          <td>
+                            <a :href="termins.payment_url+'?_token='+termins.payment_token" class="btn btn-primary text-white font-12" v-if = 'termins.payment_url != null && termins.payment.length == 0'>
+                              Bayar Tagian
+                            </a>
+                            <label class="m-0" v-if='termins.payment_url == null'>
+                              Belum ada tagihan
+                            </label>
+                            <label class="m-0 text-success" v-if='termins.status == "doneCustomer"'>
+                              Lunas
+                            </label>
                           </td>
                         </tr>
                       </tbody>
@@ -212,10 +246,11 @@
         methods: {
           getData : function(id){
             axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
-              this.data = response.data.data;
-              console.log(this.data)
-              this.partner = response.data.data.partner;
-              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
+              this.data = response.data.data.data;
+              this.partner = response.data.data.data.partner;
+              this.allPlace = response.data.data.data.pvillage.name+', '+response.data.data.data.pdistrict.name+', '+response.data.data.data.pregency.name+', '+response.data.data.data.pprovince.name;
+              this.termin = response.data.data.termin;
+              console.log(response.data.data.termin)
             }.bind(this)).catch((error) => {
               console.log(error.response);
 

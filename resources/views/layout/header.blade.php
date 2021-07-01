@@ -84,7 +84,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="logo">
                         <a href="index.html">
-                            <h1 style="font-size: 40px !important;">Servis Rumah</h1>
+                            <h1 style="font-size: 30px !important;">Servis Rumah</h1>
                             <!-- <img src="img/logo.jpg" alt="Logo"> -->
                         </a>
                     </div>
@@ -157,7 +157,9 @@
                                 @csrf
                                 <button class="dropdown-item" style="cursor: pointer;">Logout</button>
                                 </form>
-                        		<a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                @if(auth()->user()->role == 4)
+                            		<a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                @endif
                             </div>
                         </div>
                         @endauth

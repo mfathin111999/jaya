@@ -25,7 +25,7 @@
                         <div class="col-6">
                           <div class="form-group">
                             <label for="ktp">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" v-model ='data.email' required>
+                            <input type="email" class="form-control" id="email" name="email" v-model ='data.email' disabled="">
                           </div>
                         </div>
                         <div class="col-6">
@@ -208,6 +208,9 @@
                 }).then(() => {
                   this.getData();
                   Swal.fire('Success', 'Update Successfully .. !', 'success');
+                }).catch(error => {
+                  var errors = error.response.data.error.email[0];
+                  Swal.fire('Opss', errors, 'warning');
                 });
               }
             });

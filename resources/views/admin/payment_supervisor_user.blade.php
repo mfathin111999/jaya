@@ -61,7 +61,7 @@
                   <button type="button" 
                     :class="partner.id == datas.id ? 'list-group-item list-group-item-action d-flex align-items-center justify-content-between active' : 'list-group-item list-group-item-action d-flex align-items-center justify-content-between'" @click='showDetail(datas.id, index)' style="cursor: pointer; border-radius: 0px;">
                     @{{ datas.name }}
-                    <span class="badge badge-secondary badge-pill pull-right">@{{ datas.vendor_engage_count }}</span>
+                    <span class="badge badge-secondary badge-pill pull-right">@{{ datas.customer_engage_count }}</span>
                   </button>
                   <div class="list-group-item" style="display: none;" :id='datas.id'>
                     <div class="list-group">

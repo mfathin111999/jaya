@@ -169,12 +169,12 @@
                     <table class="table table-bordered" width="100%">
                       <thead>
                         <tr>
-                          <th align="center" class="text-center"><strong>No</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Nama</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Harga Vendor</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Harga Customer</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Status</strong></th>
-                          <th align="center" class="text-center" scope="col"><strong>Aksi</strong></th>
+                          <th align="center" class="text-center" width="5%"><strong>No</strong></th>
+                          <th align="center" class="text-center" width="30%"><strong>Nama</strong></th>
+                          <th align="center" class="text-center" width="15%"><strong>Harga Vendor</strong></th>
+                          <th align="center" class="text-center" width="15%"><strong>Harga Customer</strong></th>
+                          <th align="center" class="text-center" width="25%"><strong>Status</strong></th>
+                          <th align="center" class="text-center" width="10%"><strong>Aksi</strong></th>
                         </tr>
                       </thead>
                       <tbody>

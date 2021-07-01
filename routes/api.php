@@ -52,8 +52,11 @@ Route::post('/notification/create-notification', [NotificationController::class,
 Route::post('/notification/{id}', [NotificationController::class, 'view']);
 Route::post('/notification/update-notification/{id}', [NotificationController::class, 'updateNotification']);
 Route::post('/notification/destroy/{id}', [NotificationController::class, 'destroy']);
+Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
+Route::post('/engagement/getCalendarDataSurveyer', [EngagementController::class, 'getCalendarDataSurveyer']);
+Route::post('/engagement/getCalendarDataMandor', [EngagementController::class, 'getCalendarDataMandor']);
+Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
 
-	Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
 
 Route::middleware('auth:api')->group(function(){
 	Route::get('/engagement', [EngagementController::class, 'index']);
@@ -62,12 +65,9 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/engagementVendor', [EngagementController::class, 'indexVendor']);
 	Route::post('/engagementCustomer', [EngagementController::class, 'indexCustomer']);
 	Route::get('/engagement/availableDate', [EngagementController::class, 'getAvailableDate']);
-	Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
 	Route::get('/engagement/getByCode/{code}', [EngagementController::class, 'getByCode']);
 	Route::get('/engagement/{id}', [EngagementController::class, 'view']);
 	Route::get('/engagement/getBy/{id}', [EngagementController::class, 'getById']);
-	Route::post('/engagement/getCalendarDataSurveyer', [EngagementController::class, 'getCalendarDataSurveyer']);
-	Route::post('/engagement/getCalendarDataMandor', [EngagementController::class, 'getCalendarDataMandor']);
 	Route::post('/engagement/dealed/{id}', [EngagementController::class, 'dealed']);
 	Route::post('/engagement/addVendor', [EngagementController::class, 'addVendor']);
 	Route::post('/engagement/create-engagement', [EngagementController::class, 'createEngagement']);

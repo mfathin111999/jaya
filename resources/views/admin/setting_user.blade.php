@@ -41,8 +41,8 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="email">Email</label>
-                      <input type="email" class="form-control" id="email" v-model="view.email" name="email" required>
+                      <label for="email">Email : @{{ view.email }}</label>
+                      <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                   </div>
                   <div class="col-6">
@@ -216,7 +216,7 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label for="passwords">Password @{{ type_form }}</label>
+                      <label for="passwords">Password</label>
                       <input type="text" class="form-control" id="passwords" name="password" required>
                     </div>
                   </div>
@@ -505,6 +505,17 @@
             }).then(() => {
               this.getData();
               Swal.fire('Success', 'Update Successfully .. !', 'success');
+            }).catch(error => {
+              var email = '';
+              var username = '';
+              if (error.response.data.error.email) {
+                email = error.response.data.error.email[0];
+              }
+              if (error.response.data.error.username) {
+                username = error.response.data.error.username[0];
+              }
+
+              Swal.fire('Opss', (email == '' ? '' : email+'<br>')+(username == '' ? '' : username), 'warning');
             });
           },
           submitEditForm: function(id){
@@ -537,6 +548,9 @@
             }).then(() => {
               this.getData();
               Swal.fire('Success', 'Update Successfully .. !', 'success');
+            }).catch(error => {
+              var errors = error.response.data.error.email[0];
+              Swal.fire('Opss', errors, 'warning');
             });
           },
           deleteItem: function(id, index, type){

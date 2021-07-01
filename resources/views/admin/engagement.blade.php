@@ -8,6 +8,12 @@
 
   @section('sec-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}">
+    <style type="text/css">
+      .shadow-cards{
+        box-shadow: 0 1px 6px 0 rgba(49, 53, 59, 0.12); 
+        border-radius: 8px;
+      }
+    </style>
   @endsection
 
   @section('content')
@@ -132,8 +138,78 @@
                 
               </div>
             </div>
+
+            <div class="card" style="border-radius: 8px;">
+              <div class="card-body">
+                <div class="row px-3">
+                  <div class="col-12 col-md-12 mb-3 d-none d-lg-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <button :class="filter == 'pending' ? active : normal " :disabled="filter == 'pending' ? true : false" @click="getData('ignore')">Ditolak @{{ filter == 'ignore' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'offer' ? active : normal " :disabled="filter == 'offer' ? true : false" @click="getData('offer')">Penawaran @{{ filter == 'offer' ? '('+count+')' : ''  }}</button>
+                    <button :class="filter == 'post_offer' ? active : normal " :disabled="filter == 'post_offer' ? true : false" @click="getData('post_offer')">Penawaran @{{ filter == 'post_offer' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'deal' ? active : normal " :disabled="filter == 'deal' ? true : false" @click="getData('deal')">Proses Pekerjaan @{{ filter == 'deal' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'finish' ? active : normal " :disabled="filter == 'finish' ? true : false" @click="getData('pending')">Pending @{{ filter == 'pending' ? '('+count+')' : '' }}</button>
+                  </div>
+                  <div class="col-12 col-md-12 mb-3 d-lg-none d-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <select class="form-control font-12" v-model='filter' @change="getData(filter)">
+                      <option value="ignore">Ditolak</option>
+                      <option value="pending">Pending</option>
+                      <option value="offer">Survey</option>
+                      <option value="post_offer">Telah Disurvey</option>
+                      <option value="deal">Telah Deal</option>
+                      <option value="finish">Finish</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12 p-3 mb-3 shadow-cards text-center" v-if='data.length == 0'>
+                    <label class="m-0 font-weight-bold">data tidak ditemukan</label>
+                  </div>
+                  <div class="col-md-12 p-3 mb-3 shadow-cards" v-if='data.length != 0' v-for='(engage, index) in data'>
+                    <div class="row">
+                      <div class="col-md-8 col-12 mb-3">
+                        <h5 class="font-weight-bold font-14">@{{engage.code}} ( @{{ engage.service }} )</h5>
+                        <div class="table-responsive">
+                          <table class="table m-0" style="border : 0; line-height: 1.3rem;">
+                            <tr>
+                              <td class="p-0" width="20%" style="border : 0;">Pelanggan</td>
+                              <td class="pt-0 pb-0" width="10%" style="border : 0;">:</td>
+                              <td class="p-0" width="70%" style="border : 0;">@{{ engage.name }}</td>
+                            </tr>
+                            <tr>
+                              <td class="p-0" width="20%" style="border : 0;">Email</td>
+                              <td class="pt-0 pb-0" width="10%" style="border : 0;">:</td>
+                              <td class="p-0" width="70%" style="border : 0;">@{{ engage.email }}</td>
+                            </tr>
+                            <tr>
+                              <td class="p-0" style="border : 0;">Lokasi</td>
+                              <td class="pt-0 pb-0" style="border : 0;">:</td>
+                              <td class="p-0" style="border : 0;">@{{ engage.regency }}</td>
+                            </tr>
+                            <tr>
+                              <td class="p-0" style="border : 0;">Tanggal</td>
+                              <td class="pt-0 pb-0" style="border : 0;">:</td>
+                              <td class="p-0" style="border : 0;">@{{ moment(engage.date).format('LL') }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="col-12 col-md-4 text-right text-lg-left">
+                        <label class="m-0">Status Pekerjaan</label>
+                        <span class="font-14 mb-3 d-block">
+                          <label class="m-0 font-weight-bold p-2 bg-warning mt-2 rounded" v-if='engage.locked == "offer" && engage.vendor_is == 0'>Proses Penawaran</label>
+                          <label class="m-0 font-weight-bold p-2 bg-success text-white mt-2 rounded" v-if= 'engage.locked == "deal"'>Penawaran Telah Disetujui</label>
+                          <label class="m-0 font-weight-bold p-2 bg-danger text-white mt-2 rounded" v-if= 'engage.vendor_is == 99'>Anda telah menolak penawaran</label>
+                        </span>
+                       {{--  <a :href="'{{ url('/report_vendor') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "offer"'>Lihat Detail</a>
+                        <a :href="'{{ url('/report_vendor_action') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "deal"'>Update Pekerjaan</a> --}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
-            <div class="table table-responsive">
+            {{-- <div class="table table-responsive">
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
@@ -156,9 +232,13 @@
                       <td>@{{ item.email }}</td>
                       <td>@{{ item.regency }}</td>
 
-                      <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Diterima</td>
+                      <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Reservasi Diterima</td>
                       <td v-if='item.status == "ignore"'>Ditolak</td>
-                      <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>Telah Disurvei</td>
+                      <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>
+                        <span v-if='item.customer_is != 1 && item.vendor_is != 1'>Telah Disurvei</span>
+                        <span v-if='item.customer_is == 1 && item.vendor_is != 1'>Customer Setuju</span>
+                        <span v-if='item.customer_is == 1 && item.vendor_is == 1'>Customer & Vendor Setuju</span>
+                      </td>
                       <td v-if='item.status == "acc" && item.locked == "deal"'>Telah Disepakati</td>
                       <td v-if='item.status == "pending"'>Belum Dikonfirmasi</td>
 
@@ -179,7 +259,7 @@
                     </tr>
                 </tbody>
               </table>
-            </div>
+            </div> --}}
           </main>
         </div>
       </div> 
@@ -198,6 +278,10 @@
             form: {},
             reason: {},
             action: '',
+            active: 'btn btn-success mx-2',
+            normal: 'btn btn-outline-secondary mx-2',
+            filter : 'pending',
+            count : 0,
             employee: [],
             thisEmployee: [],
             thisReason: '',
@@ -211,7 +295,7 @@
         methods: {
           getData : function(){
             if ('{{ session("role") }}' == 1) {
-              axios.get("{{ url('api/engagement') }}").then(function(response){
+              axios.post("{{ url('api/engagement') }}", {'filter' : this.filter, _method : 'GET'}).then(function(response){
                 this.data = response.data.data;
                 // console.log(this.data);
                 this.$nextTick(() => {

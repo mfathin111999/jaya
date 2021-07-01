@@ -337,7 +337,7 @@
           },
           addPayment : function(termin){
             this.add_termin.id            = termin.id; 
-            this.add_termin.price         = termin.price_dirt; 
+            this.add_termin.price         = termin.price_clean; 
             this.add_termin.name          = termin.name;
             this.add_termin.updated_at    = moment(termin.updated_at).format('YYYY-MM-DD');
             this.add_termin.date_invoice  = termin.date_invoice;

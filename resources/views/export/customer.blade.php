@@ -107,20 +107,20 @@
                             <td>{{ $detail->unit }}</td>
                             <td>{{ $date_before }}</td>
                             <td>{{ $date_after }}</td>
-                            <td>{{ round(($detail->price_dirt / $detail->volume), 0) }}</td>
-                            <td>{{ $detail->price_dirt }}</td>
+                            <td>{{ number_format(round(($detail->price_dirt / $detail->volume), 0),0,",",".") }}</td>
+                            <td>{{ number_format($detail->price_dirt,0,",",".") }}</td>
                         </tr>
                         @endforeach
                         <tr>
                             <td colspan="7">Total</td>
                             <td>
-                                {{ $price }}
+                                {{ number_format($price,0,",",".") }}
                             </td>
                         </tr>
                     @endforeach
                         <tr>
                             <td colspan="7">Total Keseluruhan</td>
-                            <td>{{ $all_price }}</td>
+                            <td>{{ number_format($all_price,0,",",".") }}</td>
                         </tr>
                     </tbody>
 

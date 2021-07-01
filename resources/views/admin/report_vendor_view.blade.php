@@ -121,7 +121,7 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
                           <td align="center" style="vertical-align: middle;">
-                            @{{ formatPrice(detail.price_clean) }}
+                            @{{ formatPrice(detail.price_clean*detail.volume) }}
                           </td>
                         </tr>
                         <tr>

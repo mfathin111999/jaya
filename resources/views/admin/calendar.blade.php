@@ -168,7 +168,7 @@
                             <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #17a2b8;">Diterima</div>
                             <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #ffc107;">Telah Disurvei</div>
                             <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #64bd63;">Telah Deal</div>
-                            <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #26a69a;">Telah Dibayar</div>
+                            {{-- <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #26a69a;">Telah Dibayar</div> --}}
                             <div class="rounded mt-3 p-2 text-center text-white font-weight-bold" style="background-color: #546e7a;">Telah Selesai</div>
                           </div>
                         </div>
@@ -182,6 +182,8 @@
         </div>
       </div> 
     </div>
+
+
     
 
   @endsection
@@ -193,7 +195,7 @@
     <script type="text/javascript" src="{{ asset('plugin/fullcalendar-timegrid/main.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugin/fullcalendar-interaction/main.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugin/fullcalendar-bootstrap/main.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/partial/calendar.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('js/partial/calendar.js') }}"></script> --}}
     <script type="text/javascript">
       var app = new Vue({
         el: '#app',
@@ -206,7 +208,7 @@
             action: '',
             role: "{{ session('role') }}",
         },
-        created: function(){
+        mounted: function(){
          this.getCalendar();
          this.getEmployee();
          this.valid();
@@ -305,35 +307,39 @@
             })
           },
           getCalendar: function(){
-            if ("{{ session('role') }}" == 1) {
-              axios.get("{{ url('api/engagement/getCalendarData') }}").then(function(response){
-                app.$nextTick(() => {
-                  calendarInit(response.data.data);
-                });
-              });
-            }else if ("{{ session('role') }}" == 2) {
-              let id = "{{ session('id') }}";
-              let form = {
-                'id' : id
-              };
-              console.log(id)
-              axios.post("{{ url('api/engagement/getCalendarDataSurveyer') }}", form).then(function(response){
-                app.$nextTick(() => {
-                  calendarInit(response.data.data);
-                });
-              });
-            }else{
-              let id = "{{ session('id') }}";
-              let form = {
-                'id' : id
-              };
-              console.log(id)
-              axios.post("{{ url('api/engagement/getCalendarDataMandor') }}", form).then(function(response){
-                app.$nextTick(() => {
-                  calendarInit(response.data.data);
-                });
-              });
-            }
+            this.$nextTick(() => {
+              calendarInit();
+            });
+
+            // if ("{{ session('role') }}" == 1) {
+            //   axios.get("{{ url('api/engagement/getCalendarData') }}").then(function(response){
+            //     app.$nextTick(() => {
+            //       calendarInit(response.data.data);
+            //     });
+            //   });
+            // }else if ("{{ session('role') }}" == 2) {
+            //   let id = "{{ session('id') }}";
+            //   let form = {
+            //     'id' : id
+            //   };
+            //   console.log(id)
+            //   axios.post("{{ url('api/engagement/getCalendarDataSurveyer') }}", form).then(function(response){
+            //     app.$nextTick(() => {
+            //       calendarInit(response.data.data);
+            //     });
+            //   });
+            // }else{
+            //   let id = "{{ session('id') }}";
+            //   let form = {
+            //     'id' : id
+            //   };
+            //   console.log(id)
+            //   axios.post("{{ url('api/engagement/getCalendarDataMandor') }}", form).then(function(response){
+            //     app.$nextTick(() => {
+            //       calendarInit(response.data.data);
+            //     });
+            //   });
+            // }
           },
         }
       });
@@ -343,6 +349,111 @@
         allowClear: true,
         placeholder: 'Pilih Surveyer',
       });
+
+
+  function calendarInit(data){
+    function ini_events(ele) {
+      ele.each(function () {
+        var eventObject = {
+          title: $.trim($(this).text())
+        }
+        $(this).data('eventObject', eventObject)
+        $(this).draggable({
+          zIndex        : 1070,
+          revert        : true,
+          revertDuration: 0 
+        })
+
+      })
+    }
+
+    ini_events($('#external-events div.external-event'))
+    var date = new Date()
+    var d    = date.getDate(),
+    m    = date.getMonth(),
+    y    = date.getFullYear()
+
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendarInteraction.Draggable;
+
+    var containerEl = document.getElementById('external-events');
+    var checkbox = document.getElementById('drop-remove');
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new Calendar(calendarEl, {
+      plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
+      header    : {
+        left  : 'prev,next today',
+        center: 'title',
+        right : 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      'themeSystem': 'bootstrap',
+
+      events    : "{{ url('api/engagement/getCalendarData') }}",
+
+      eventClick: function(info) {
+        axios.get('api/engagement/getByCode/'+info.event.title).then(function(response){
+            let view = response.data.data;
+            console.log(view);
+            if (view.status == 'acc' && view.report_count == 0 && view.locked == 'offer') {
+              window.location ="report_survey/"+view.id;
+            }
+            else if (view.status == 'acc' && view.report_count != 0 && view.locked == 'offer') {
+              window.location ="report_view/"+view.id;
+            }
+            else if (view.status == 'acc' && view.report_count != 0 && view.locked == 'deal') {
+              window.location ="report_view/"+view.id;
+            }else if (view.status == 'pending'){
+              document.getElementById('action').value = '';
+              $('#employee').val(null).trigger('change');
+              $('#id').val(view.id);
+              $('#name').val(view.name);
+              $('#code').val(view.code);
+              $('#email').val(view.email);
+              $('#phone_number').val(view.phone_number);
+              $('#date').val(view.date);
+              $('#time').val(view.time);
+              $('#service').html(view.service);
+              $('#address').html(view.address+' '+view.village+', '+view.district+', '+view.regency+', '+view.province);
+              $('#description').html(view.description);
+              $('#actionModal').modal('show');
+            }
+        });
+      }
+    });
+
+    calendar.render();
+
+    var currColor = '#3c8dbc' //Red by default
+    var colorChooser = $('#color-chooser-btn')
+    $('#color-chooser > li > a').click(function (e) {
+      e.preventDefault()
+      currColor = $(this).css('color')
+      $('#add-new-event').css({
+        'background-color': currColor,
+        'border-color'    : currColor
+      })
+    })
+    $('#add-new-event').click(function (e) {
+      e.preventDefault()
+      var val = $('#new-event').val()
+      if (val.length == 0) {
+        return
+      }
+
+      var event = $('<div />')
+      event.css({
+        'background-color': currColor,
+        'border-color'    : currColor,
+        'color'           : '#fff'
+      }).addClass('external-event')
+      event.html(val)
+      $('#external-events').prepend(event)
+      ini_events(event)
+      $('#new-event').val('')
+    })
+  };
+
     </script>
   @endsection
 @endif

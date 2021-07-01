@@ -64,8 +64,11 @@ class EngagementManagement
 		return $data;
 	}
 
-	public function getCalendarData(){
-		$data = Engagement::where('status', '!=', 'ignore')->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
+	public function getCalendarData($request){
+		$start 	= date('Y-m-d',strtotime($request->start));
+		$end 	= date('Y-m-d',strtotime($request->end));
+		$data 	= Engagement::where('status', '!=', 'ignore')
+							->whereBetween('date', [$start, $end])->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
 
 		return $data;
 	}
@@ -194,6 +197,11 @@ class EngagementManagement
 	public function accVendor($id){
 		$data = Engagement::find($id);
 
+		if ($data->customer_is == 1) {
+			$data->locked = 'deal';
+			$data->mandor_id = 2;
+		}
+
 		$data->vendor_is = 1;
 
 		$data->save();
@@ -203,6 +211,11 @@ class EngagementManagement
 
 	public function accCustomer($id){
 		$data = Engagement::find($id);
+
+		if ($data->vendor_is == 1) {
+			$data->locked = 'deal';
+			$data->mandor_id = 2;
+		}
 
 		$data->customer_is = 1;
 

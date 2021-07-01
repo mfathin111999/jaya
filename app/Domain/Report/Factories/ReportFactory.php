@@ -17,11 +17,11 @@ class ReportFactory
             'date_work'     => $items->date_work,
             'time'          => $items->time,
             'vendor'        => $items->vendor,
-            'pprovince'     => $items->pprovince,
-            'pregency'      => $items->pregency,
-            'pdistrict'     => $items->pdistrict,
-            'pvillage'      => $items->pvillage,
-            'paddress'      => $items->paddress,
+            'pprovince'     => $items->pprovince ?? '-',
+            'pregency'      => $items->pregency ?? '-',
+            'pdistrict'     => $items->pdistrict ?? '-',
+            'pvillage'      => $items->pvillage ?? '-',
+            'paddress'      => $items->paddress ?? '-',
             'locked'        => $items->locked,
             'vendor_is'     => $items->vendor_is,
             'customer_is'   => $items->customer_is,
@@ -42,6 +42,7 @@ class ReportFactory
                 'reservation_id'    => $item->reservation_id,
                 'name'              => $item->name,
                 'termin'            => auth()->guard('api')->user()->role == 5 ? ($item->termins->payment ?? null ) : $item->termin,
+                'termin_code'       => $item->termins->id ?? null,
                 'status'            => $item->status,
                 'all_price'         => self::price($item->subreport),
                 'detail'            => self::subReport($item->subreport),
@@ -56,8 +57,8 @@ class ReportFactory
         $data_dirt  = 0;
 
         foreach ($items as $item) {
-        $data_clean += $item->price_clean; 
-        $data_dirt  += $item->price_dirt; 
+        $data_clean += $item->price_clean * $item->volume; 
+        $data_dirt  += $item->price_dirt * $item->volume; 
         }
 
         return [$data_clean, $data_dirt];

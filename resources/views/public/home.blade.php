@@ -1035,7 +1035,7 @@
 	    <!-- Footer End -->
 
 	</div>
-    <a href="https://wa.me/6281298922442?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
+    <a href="https://wa.me/6281219961904?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 	@include('layout.footer')
 @endsection
@@ -1094,19 +1094,6 @@
 	        });
           }.bind(this));
         },
-        submitform : function(){
-          axios.post("{{ url('api/employee/create-employee') }}", this.form).then(function(response){
-            app.$nextTick(() => {
-              $("#editModal").modal('hide');
-              $("#example").DataTable().destroy();
-            });
-          }).then(() => {
-          	app.$nextTick(() => {
-            });
-            this.form = {};
-            this.getData();
-          });
-        }, 
         addForm: function(){
             this.thisProvince = '';
             this.regency = {};
@@ -1166,32 +1153,38 @@
           }
         },
         sendReservation: function(){
-        	this.$nextTick(()=>{
-	        	$(".loading-class").removeClass('d-none');
-	            $(".loading-class").addClass('d-flex');
-        	});
+        	@auth
+        	if ({{ auth()->user()->role }} != 4) {
+        		Swal.fire('Opss !', 'Anda tidak dapat melakukan transaksi ini', 'warning');
+        	}else{
+	        	this.$nextTick(()=>{
+		        	$(".loading-class").removeClass('d-none');
+		            $(".loading-class").addClass('d-flex');
+	        	});
 
-        	let form 	= document.getElementById('form-engagement');
-          	let forms 	= new FormData(form);
-            axios.post(
-              "{{ url('api/engagement/create-engagement') }}",
-              forms,
-              {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                }
-              }
-            ).then((response) => {
-        		form.reset();
-        		console.log(response);
-              	Swal.fire('Success', 'Terima Kasih! Reservasi anda akan kami tinjau', 'success');
-              	app.$nextTick(()=>{
-              		$(".select2").val("");
-					$(".select2").trigger("change");
-					$(".loading-class").removeClass('d-flex');
-              		$(".loading-class").addClass('d-none');
-              	});
-            });
+	        	let form 	= document.getElementById('form-engagement');
+	          	let forms 	= new FormData(form);
+	            axios.post(
+	              "{{ url('api/engagement/create-engagement') }}",
+	              forms,
+	              {
+	                headers: {
+	                  'Content-Type': 'multipart/form-data',
+	                }
+	              }
+	            ).then((response) => {
+	        		form.reset();
+	        		console.log(response);
+	              	Swal.fire('Success', 'Terima Kasih! Reservasi anda akan kami tinjau', 'success');
+	              	app.$nextTick(()=>{
+	              		$(".select2").val("");
+						$(".select2").trigger("change");
+						$(".loading-class").removeClass('d-flex');
+	              		$(".loading-class").addClass('d-none');
+	              	});
+	            });
+	        }
+	        @endauth
         },
         toSelection(){
         	$("html, body").animate({ scrollTop: $('#reservation-selection').offset().top }, 1000);

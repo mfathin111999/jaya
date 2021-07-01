@@ -176,13 +176,13 @@
                           </th>
                         </tr>
                         <tr>
-                          <td align="center"><strong>No</strong></td>
-                          <td align="center" scope="col"><strong>Nama</strong></td>
-                          <td align="center" scope="col"><strong>keterangan</strong></td>
-                          <td align="center" scope="col"><strong>Volume</strong></td>
-                          <td align="center" scope="col"><strong>Unit</strong></td>
-                          <td align="center" scope="col"><strong>Waktu</strong></td>
-                          <td align="center" scope="col"><strong>Aksi</strong></td>
+                          <td align="center" width="5%"><strong>No</strong></td>
+                          <td align="center" width="30%"><strong>Nama</strong></td>
+                          <td align="center" width="30%"><strong>Keterangan</strong></td>
+                          <td align="center" width="5%"><strong>Volume</strong></td>
+                          <td align="center" width="5%"><strong>Unit</strong></td>
+                          <td align="center" width="5%"><strong>Waktu</strong></td>
+                          <td align="center" width="20%"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
                       <tbody>

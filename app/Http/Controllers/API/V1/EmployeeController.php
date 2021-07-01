@@ -73,6 +73,9 @@ class EmployeeController extends Controller
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer');             
+                  })
                   ->when($request->has('year') && $request->year != 'all', function($query) use ($request) {
                     $query->whereYear('date', $request->year);
                   })
@@ -86,9 +89,18 @@ class EmployeeController extends Controller
                           }]);
                   }]);
         }])
-        ->withCount(['vendorEngage' => function($query){
+        ->withCount(['vendorEngage' => function($query) use ($request){
             $query->where('status', 'acc')
-                  ->where('locked', 'deal');
+                  ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer');             
+                  })
+                  ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
+                    $query->whereMonth('date', $request->month);
+                  })
+                  ->when($request->has('year') && $request->year != 'all', function($query) use ($request) {
+                    $query->whereYear('date', $request->year);
+                  });
         }])
         ->get();
 
@@ -106,6 +118,9 @@ class EmployeeController extends Controller
         ->whereHas('vendorEngage', function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -116,6 +131,9 @@ class EmployeeController extends Controller
         ->with(['vendorEngage' => function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -123,8 +141,7 @@ class EmployeeController extends Controller
                     $query->whereYear('date', $request->year);
                   })
                   ->with(['service', 'vendor', 'termin' => function($query){
-                    $query->where('status', 'doneCustomer')
-                          ->orWhere('status', 'donePayed')
+                    $query->where('status', 'donePayed')
                           ->with(['report' => function($query){
                               $query->whereNull('parent_id')
                                 ->with(['subreport' => function($query){
@@ -135,9 +152,18 @@ class EmployeeController extends Controller
                           }]);
                   }]);
         }])
-        ->withCount(['vendorEngage' => function($query){
+        ->withCount(['vendorEngage' => function($query) use ($request){
             $query->where('status', 'acc')
-                  ->where('locked', 'deal');
+                  ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'donePayed');             
+                  })
+                  ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
+                    $query->whereMonth('date', $request->month);
+                  })
+                  ->when($request->has('year') && $request->year != 'all', function($query) use ($request) {
+                    $query->whereYear('date', $request->year);
+                  });
         }])
         ->get();
 
@@ -152,6 +178,10 @@ class EmployeeController extends Controller
         ->whereHas('engageCustomer', function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereDoesntHave('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -162,6 +192,10 @@ class EmployeeController extends Controller
         ->with(['engageCustomer' => function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereDoesntHave('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -181,9 +215,19 @@ class EmployeeController extends Controller
                           }]);
                   }]);
         }])
-        ->withCount(['engageCustomer' => function($query){
+        ->withCount(['engageCustomer' => function($query) use ($request){
             $query->where('status', 'acc')
-                  ->where('locked', 'deal');
+                  ->where('locked', 'deal')
+                  ->whereDoesntHave('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
+                  ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
+                    $query->whereMonth('date', $request->month);
+                  })
+                  ->when($request->has('year') && $request->year != 'all', function($query) use ($request) {
+                    $query->whereYear('date', $request->year);
+                  });
         }])
         ->get();
 
@@ -201,6 +245,10 @@ class EmployeeController extends Controller
         ->whereHas('engageCustomer', function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -211,6 +259,10 @@ class EmployeeController extends Controller
         ->with(['engageCustomer' => function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
                   })
@@ -231,9 +283,19 @@ class EmployeeController extends Controller
                           }]);
                   }]);
         }])
-        ->withCount(['engageCustomer' => function($query){
+        ->withCount(['engageCustomer' => function($query) use ($request){
             $query->where('status', 'acc')
-                  ->where('locked', 'deal');
+                  ->where('locked', 'deal')
+                  ->whereHas('termin', function($query){
+                    $query->where('status', 'doneCustomer')
+                          ->orWhere('status', 'donePayed');             
+                  })
+                  ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
+                    $query->whereMonth('date', $request->month);
+                  })
+                  ->when($request->has('year') && $request->year != 'all', function($query) use ($request) {
+                    $query->whereYear('date', $request->year);
+                  });
         }])
         ->get();
 

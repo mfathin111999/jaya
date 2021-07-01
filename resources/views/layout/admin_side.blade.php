@@ -122,12 +122,12 @@
           PENGELOLAAN USER
         </a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('setting_application') }}">
           <i class="fa fa-wrench pr-2"></i> 
           PENGATURAN APLIKASI
         </a>
-      </li>
+      </li> --}}
       @endif
     </ul>
   </div>

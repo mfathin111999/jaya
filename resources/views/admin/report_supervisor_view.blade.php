@@ -52,13 +52,13 @@
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume">Volume</label>
-                      <input type="text" class="form-control" id="volume" v-model="view_report.volume" name="volume" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="volume" v-model="view_report.volume" name="volume" oninput="addVolume(event, 'price_clean', 'price_dirt', 'price_dirt_read', 'price_clean_read')" @keyup = 'decimal' @keypress = 'isNumber' required :readonly="data.customer_is != 1 ? false : true">
                     </div>
                   </div>
                   <div class="col-4">
                     <div class="form-group">
                       <label for="unit">Unit</label>
-                      <select class="form-control" required="" name= 'unit' id="unit" v-model='view_report.unit'>
+                      <select class="form-control" required="" name= 'unit' id="unit" v-model='view_report.unit':readonly="data.customer_is != 1 ? false : true">
                           <option value=''>Pilih Unit</option>
                           <option v-for='(units, index) in allunit' :value="units.data2">@{{ units.data1 }}</option>
                         </select>
@@ -67,19 +67,31 @@
                   <div class="col-4">
                     <div class="form-group">
                       <label for="time">Waktu Pengerjaan</label>
-                      <input type="text" class="form-control" id="time" v-model="view_report.time" name="time" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="time" v-model="view_report.time" name="time" @keyup = 'filter' @keypress = 'isNumber' required :readonly="data.customer_is != 1 ? false : true">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="price_clean">Satuan Vendor</label>
+                      <input type="text" class="form-control" id="price_clean" v-model="view_report.price_clean" name="price_clean" oninput="addValue(event, 'volume', 'price_clean_read')" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.vendor_is != 1 ? false : true" required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="price_dirt">Satuan Customer</label>
+                      <input type="text" class="form-control" id="price_dirt" v-model="view_report.price_dirt" name="price_dirt" oninput="addValue(event, 'volume', 'price_dirt_read')" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.customer_is != 1 ? false : true" required>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="price_clean">Harga Vendor</label>
-                      <input type="text" class="form-control" id="price_clean" v-model="view_report.price_clean" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.vendor_is != 1 ? false : true" required>
+                      <input type="text" class="form-control" id="price_clean_read" :value='view_report.price_clean*view_report.volume' name="price_clean" @keyup = 'filter' @keypress = 'isNumber' disabled="">
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="price_dirt">Harga Customer</label>
-                      <input type="text" class="form-control" id="price_dirt" v-model="view_report.price_dirt" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' :readonly="data.customer_is != 1 ? false : true" required>
+                      <input type="text" class="form-control" id="price_dirt_read" :value='view_report.price_dirt*view_report.volume' name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' disabled="">
                     </div>
                   </div>
                 </div>
@@ -124,7 +136,7 @@
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume1">Volume</label>
-                      <input type="text" class="form-control" id="volume1" name="volume" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="volume1" name="volume" oninput="addVolume(event, 'price_clean1', 'price_dirt1', 'price_dirt_read1', 'price_clean_read1')" @keyup = 'decimal' @keypress = 'isNumber' required>
                     </div>
                   </div>
                   <div class="col-4">
@@ -144,14 +156,26 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
+                      <label for="price_clean1">Satuan Vendor</label>
+                      <input type="text" class="form-control" id="price_clean1" name="price_clean" oninput="addValue(event, 'volume1', 'price_clean_read1')" @keyup = 'filter' @keypress = 'isNumber' required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="price_dirt1">Satuan Customer</label>
+                      <input type="text" class="form-control" id="price_dirt1" name="price_dirt" oninput="addValue(event, 'volume1', 'price_dirt_read1')" @keyup = 'filter' @keypress = 'isNumber' required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
                       <label for="price_clean1">Harga Vendor</label>
-                      <input type="text" class="form-control" id="price_clean1" name="price_clean" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="price_clean_read1" name="price_clean_read1" @keyup = 'filter' @keypress = 'isNumber' disabled>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="form-group">
                       <label for="price_dirt1">Harga Customer</label>
-                      <input type="text" class="form-control" id="price_dirt1" name="price_dirt" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="price_dirt_read1" name="price_dirt_read1" @keyup = 'filter' @keypress = 'isNumber' disabled>
                     </div>
                   </div>
                 </div>
@@ -374,7 +398,7 @@
     						<div class="row">
                   <div class="col-md-12 mb-4 mt-3 rounded text-center">
                     <div class="pt-3 pb-3 pl-2 pr-2" style="background-color: #00000008; border: 1px solid #00000020;">
-                      <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan</label>
+                      <label class="font-weight-bold m-0 h3">Tahapan Pekerjaan {{ 12,7*11 }}</label>
                       <i class="btn btn-success fa fa-plus mt-1 float-md-right " data-toggle="modal" data-target="#addStep" v-if='data.locked == "offer" && data.customer_is != 1' @click='addDetail(report.id)'></i>
                     </div>
                   </div>
@@ -390,15 +414,15 @@
                           </th>
                         </tr>
                         <tr>
-                          <td align="center"><strong>No</strong></td>
-                          <td align="center" scope="col"><strong>Nama</strong></td>
-                          <td align="center" scope="col"><strong>keterangan</strong></td>
-                          <td align="center" scope="col"><strong>Volume</strong></td>
-                          <td align="center" scope="col"><strong>Unit</strong></td>
-                          <td align="center" scope="col"><strong>Waktu</strong></td>
-                          <td align="center" scope="col"><strong>Harga Vendor</strong></td>
-                          <td align="center" scope="col"><strong>Harga Customer</strong></td>
-                          <td align="center" scope="col"><strong>Aksi</strong></td>
+                          <td align="center" width="5%"><strong>No</strong></td>
+                          <td align="center" width="25%"><strong>Nama</strong></td>
+                          <td align="center" width="25%"><strong>keterangan</strong></td>
+                          <td align="center" width="5%"><strong>Volume</strong></td>
+                          <td align="center" width="5%"><strong>Unit</strong></td>
+                          <td align="center" width="5%"><strong>Waktu</strong></td>
+                          <td align="center" width="10%"><strong>Harga Vendor</strong></td>
+                          <td align="center" width="10%"><strong>Harga Customer</strong></td>
+                          <td align="center" width="10%"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
                       <tbody>
@@ -410,15 +434,15 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
                           <td align="center" style="vertical-align: middle;">
-                            @{{ formatPrice(detail.price_clean) }}
+                            @{{ formatPrice(detail.price_clean*detail.volume) }}
                           </td>
                           <td align="center" style="vertical-align: middle;">
-                            @{{ formatPrice(detail.price_dirt) }}
+                            @{{ formatPrice(detail.price_dirt*detail.volume) }}
                           </td>
                           <td align="center" style="vertical-align: middle;">
                             <!-- <i class="btn btn-info fa fa-save" v-if='data.locked == "offer"' @click="addPrice(detail.id, index, index3)"></i> -->
                             <i class="btn btn-info fa fa-pencil" data-toggle="modal" data-target="#editModal" v-if='data.locked == "offer"' @click="getReport(detail.id)"></i>
-                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer"' @click="delReport(detail.id)"></i>
+                            <i class="btn btn-danger fa fa-trash" v-if='data.locked == "offer" && data.customer_is != 1' @click="delReport(detail.id)"></i>
                             <i class="btn btn-warning fa fa-check" v-if='data.locked == "deal"'></i>
                           </td>
                         </tr>
@@ -517,7 +541,7 @@
                           <tbody>
                             <tr v-for='(termins, index) in termin'>
                               <td align="center" style="vertical-align: middle;">@{{ index+1 }}</td>
-                              <td align="center" style="vertical-align: middle;">@{{ formatPrice(termins.total_vendor == null ? 0 :  termins.total_customer) }}</td>
+                              <td align="center" style="vertical-align: middle;">@{{ formatPrice(termins.total_vendor == null ? 0 :  termins.total_vendor) }}</td>
                               <td align="center" style="vertical-align: middle;">@{{ formatPrice(termins.total_customer == null ? 0 :  termins.total_customer) }}</td>
                               <td align="center" style="vertical-align: middle;">
                                 <i class="btn btn-warning fa fa-check" v-if='termins.report_count == 0 && termins.termin != termin.length'></i>
@@ -544,7 +568,7 @@
                           <option value="">Pilih Vendor</option>
                           <option v-for="(vendors, indexv) in vendor" :value="vendors.id">@{{ vendors.name }}</option>
                         </select>
-                        <label class="font-weight-bold" v-if = "data.vendor != null">Vendor telah anda tentukan, apakah anda ingin mengubahnya ?</label><br v-if = "data.vendor != null">
+                        <label class="font-weight-bold" v-if = "data.vendor != null">Vendor ( @{{ data.vendor.name }} ) telah anda pilih, apakah anda ingin mengubahnya ?</label><br v-if = "data.vendor != null">
                         <button class="btn btn-danger" v-if = "data.vendor != null" @click='removeVendor'>Kosongkan Vendor</button>
                       </div>
                       <div v-if='data.vendor_is == 99'>
@@ -1259,16 +1283,45 @@
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
             if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-              evt.preventDefault();;
+              if (charCode == 190) {
+                return true;
+              }else{
+                evt.preventDefault();
+              }
             } else {
               return true;
             }
+          },
+          decimal:function(e){
+            e.target.value = e.target.value.replace(/[^0-9]+\.+/g, '');
           },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
           },
         }
       });
+
+      function addValue (e, volume, target){
+       if($('#'+volume).val() == '' || $('#'+volume).val() == null){
+        $('#'+target).val(0 * e.target.value);
+       }else{
+        $('#'+target).val($('#'+volume).val() * e.target.value);
+       }
+      }
+
+      function addVolume (e, unit1, unit2, target1, target2){
+        if($('#'+unit1).val() == '' || $('#'+unit1).val() == null){
+          $('#'+target1).val(0 * e.target.value);
+        }else{
+          $('#'+target1).val($('#'+unit1).val() * e.target.value);
+        }
+
+        if($('#'+unit2).val() == '' || $('#'+unit2).val() == null){
+          $('#'+target2).val(0 * e.target.value);
+        }else{
+          $('#'+target2).val($('#'+unit2).val() * e.target.value);
+        }
+      }
       
     </script>
   @endsection
