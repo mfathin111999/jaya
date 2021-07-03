@@ -69,7 +69,7 @@
     		<td style="padding-top: 15px;" align="center" colspan="3">Yang Mengetahui</td>
     	</tr>
     	<tr>
-    		<td colspan="3" height="30px"></td>
+    		<td colspan="3" height="20px"></td>
     	</tr>
     	<tr>
     		<td style="padding-top: 15px;" align="center" colspan="3">Nurani Rejeki Unggul</td>

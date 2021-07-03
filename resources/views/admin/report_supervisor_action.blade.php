@@ -119,7 +119,7 @@
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
           @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
+          <main role="main" class="col-lg-10 px-4 mt-4">
             <div class="card">
               <div class="card-header">
                 <h3 class="text-center mb-4"><strong>KONFIRMASI LAPORAN PEKERJAAN</strong></h3>

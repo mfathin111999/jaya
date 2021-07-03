@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Domain\Engagement\Entities\Engagement;
 use App\Domain\Engagement\Application\EngagementManagement;
 use App\Domain\Engagement\Factories\EngagementFactory;
+use Illuminate\Support\Facades\Auth;
 
 class EngagementController extends Controller
 {
@@ -20,21 +21,47 @@ class EngagementController extends Controller
     
     // GET DATA ENGAGEMENT BY ROLE
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = Engagement::when(auth()->guard('api')->role == 2, function ($query) {
+        $data = Engagement::when(auth()->guard('api')->user()->role == 2, function ($query) {
                     $query->whereHas('employee', function ($query){
-                        $query->where('id', auth()->guard('api')->id);
+                        $query->where('users.id', auth()->guard('api')->user()->id);
                     });
                 })
-                ->when(auth()->guard('api')->role == 5, function ($query) {
-                    $query->where('mandor_id', auth()->guard('api')->id);
+                ->when(auth()->guard('api')->user()->role == 5, function ($query) {
+                    $query->where('mandor_id', auth()->guard('api')->user()->id);
+                })
+                ->when($request->has('filter') && $request->filter == 'finish', function ($query) use ($request){
+                    $query->where('status', $request->filter);
+                })
+                ->when($request->has('filter') && $request->filter == 'pending', function ($query) use ($request){
+                    $query->where('status', $request->filter);
+                })
+                ->when($request->has('filter') && $request->filter == 'ignore', function ($query) use ($request){
+                    $query->where('status', $request->filter);
+                })
+                ->when($request->has('filter') && $request->filter == 'post_offer', function ($query) use ($request){
+                    $query->where('locked', 'offer')->where('status', 'acc')->whereHas('report');
+                })
+                ->when($request->has('filter') && $request->filter == 'offer', function ($query) use ($request){
+                    $query->where('locked', 'offer')->where('status', 'acc')->whereDoesntHave('report');
+                })
+                ->when($request->has('filter') && $request->filter == 'deal', function ($query) use ($request){
+                    $query->where('locked', 'deal')->where('status', 'acc');
                 })
                 ->with('province', 'regency', 'district', 'village', 'service')
                 ->withCount('report')
-                ->orderBy('date')->get();
+                ->when($request->has('order'), function ($query) use ($request){
+                    $query->orderBy('date', $request->order);
+                })
+                ->get();
 
-        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+        $response = [
+            'data' => EngagementFactory::allFactory($data),
+            'count' => $data->count()
+        ];
+
+        return apiResponseBuilder(200, $response);
     }
 
     public function indexSurveyer(Request $request)
@@ -61,11 +88,15 @@ class EngagementController extends Controller
                             ->when($request->has('filter') && $request->filter != 'finish', function ($query) use ($request){
                                 $query->where('locked', $request->filter);
                             })
+                            ->when($request->has('order'), function ($query) use ($request){
+                                $query->orderBy('date', $request->order);
+                            })
                             ->with(['regency', 'service', 'report' => function($query){
                                 $query->whereNull('parent_id')->with(['subreport' => function($query){
                                     $query->orderBy('id', 'desc');
                                 }]);
-                            }])->orderBy('date', 'desc')->get();
+                            }])
+                            ->get();
         $count = $data->count();
 
         return apiResponseBuilder(200, EngagementFactory::vendorFactory($data), $count);
@@ -167,9 +198,28 @@ class EngagementController extends Controller
 
     public function accCustomer($id, Request $request)
     {
-        $data = $this->engagement->accCustomer($id);
 
-        return redirect()->route('action');
+        if (Auth::check()) {
+
+            $data = Engagement::find($id);
+
+            if (auth()->user()->id === $data->user_id ) {
+                if ($data->vendor_is == 1) {
+                    $data->locked = 'deal';
+                    $data->mandor_id = 2;
+                }
+
+                $data->customer_is = 1;
+
+                $data->save();
+
+                return redirect()->route('action');
+            }else{
+                return abort(404);
+            }
+        }else{
+            return redirect()->route('login');
+        }
 
     }
 

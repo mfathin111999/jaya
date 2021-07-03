@@ -27,7 +27,7 @@
 					</tr>
 					<tr style="text-align: center;">
 						<td>
-							<a href="{{ url('/api/engagement/accCustomer') }}/{{ $engagement->id }}" style="background-color: #555555; border-radius: 10px; color: #FFFFFF; padding: 1rem;"> 
+							<a href="{{ url('/engagement/accCustomer') }}/{{ $engagement->id }}" style="background-color: #555555; border-radius: 10px; color: #FFFFFF; padding: 1rem;"> 
 								Setuju
 							</a>
 						</td>

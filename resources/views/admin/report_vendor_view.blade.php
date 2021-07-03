@@ -14,7 +14,7 @@
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
           @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
+          <main role="main" class="col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
       					<h3 class="text-center mb-4"><strong>PENAWARAN PEKERJAAN</strong></h3>
@@ -107,7 +107,7 @@
                           <td align="center" scope="col"><strong>Nama</strong></td>
                           <td align="center" scope="col"><strong>keterangan</strong></td>
                           <td align="center" scope="col"><strong>Volume</strong></td>
-                          <td align="center" scope="col"><strong>Unit</strong></td>
+                          <td align="center" scope="col"><strong>Satuan</strong></td>
                           <td align="center" scope="col"><strong>Waktu</strong></td>
                           <td align="center" scope="col"><strong>Harga</strong></td>
                         </tr>
@@ -117,8 +117,8 @@
                           <td align="center" style="vertical-align: middle;">@{{ index3+1 }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.description }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }} @{{ detail.unit }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ formatPrice(detail.price_clean) }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
                           <td align="center" style="vertical-align: middle;">
                             @{{ formatPrice(detail.price_clean*detail.volume) }}

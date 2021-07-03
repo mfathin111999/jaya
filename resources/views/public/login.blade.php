@@ -68,7 +68,8 @@
 		        }.bind(this))
 		        .catch(function (response) {
 					//handle error
-					Swal.fire('Opss', response.response.data.message, 'warning');
+                    Swal.fire('Opss', 'Kombinasi Email dan Password Salah !', 'warning');
+					// Swal.fire('Opss', response.response.data.message, 'warning');
 				});
 			},
 			setSession: function(){
@@ -83,7 +84,7 @@
 				)
 				.then(function(response){
 					if (response.data.data.role == 4) {
-	                    window.location = "{{ route('home') }}";
+	                    window.location = "{{ url()->previous() }}";
 	                }else{
 	                    window.location = "{{ route('dashboard') }}";
 	                }

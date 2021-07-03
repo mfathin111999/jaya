@@ -55,8 +55,6 @@ Route::post('/notification/destroy/{id}', [NotificationController::class, 'destr
 Route::get('/engagement/getCalendarData', [EngagementController::class, 'getCalendarData']);
 Route::post('/engagement/getCalendarDataSurveyer', [EngagementController::class, 'getCalendarDataSurveyer']);
 Route::post('/engagement/getCalendarDataMandor', [EngagementController::class, 'getCalendarDataMandor']);
-Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
-
 
 Route::middleware('auth:api')->group(function(){
 	Route::get('/engagement', [EngagementController::class, 'index']);

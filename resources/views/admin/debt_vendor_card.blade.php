@@ -92,7 +92,7 @@
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
           @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4">
+          <main role="main" class="col-lg-10 px-4 mt-4">
             <div class="row">
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="list-group" v-for='(datas, index) in data'>

@@ -19,7 +19,7 @@
   @section('content')
     @include('layout.admin_header')
     <div id="app" v-cloak>
-
+      @if(auth()->user()->role == 1)
       <div class="modal fade" id="actionModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -127,11 +127,11 @@
           </div>
         </div>
       </div>
-
+      @endif
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
           @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <main role="main" class="col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 class="h3 font-weight-bold">RESERVASI</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
@@ -142,23 +142,77 @@
             <div class="card" style="border-radius: 8px;">
               <div class="card-body">
                 <div class="row px-3">
+                  @if(auth()->user()->role == 1)
                   <div class="col-12 col-md-12 mb-3 d-none d-lg-block">
                     <label class="mb-0 mr-2">filter :</label>
-                    <button :class="filter == 'pending' ? active : normal " :disabled="filter == 'pending' ? true : false" @click="getData('ignore')">Ditolak @{{ filter == 'ignore' ? '('+count+')' : '' }}</button>
-                    <button :class="filter == 'offer' ? active : normal " :disabled="filter == 'offer' ? true : false" @click="getData('offer')">Penawaran @{{ filter == 'offer' ? '('+count+')' : ''  }}</button>
-                    <button :class="filter == 'post_offer' ? active : normal " :disabled="filter == 'post_offer' ? true : false" @click="getData('post_offer')">Penawaran @{{ filter == 'post_offer' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'pending' ? active : normal " :disabled="filter == 'pending' ? true : false" @click="getData('pending')">Pending @{{ filter == 'pending' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'offer' ? active : normal " :disabled="filter == 'offer' ? true : false" @click="getData('offer')">Diterima @{{ filter == 'offer' ? '('+count+')' : ''  }}</button>
+                    <button :class="filter == 'post_offer' ? active : normal " :disabled="filter == 'post_offer' ? true : false" @click="getData('post_offer')">Telah Disurvei @{{ filter == 'post_offer' ? '('+count+')' : '' }}</button>
                     <button :class="filter == 'deal' ? active : normal " :disabled="filter == 'deal' ? true : false" @click="getData('deal')">Proses Pekerjaan @{{ filter == 'deal' ? '('+count+')' : '' }}</button>
-                    <button :class="filter == 'finish' ? active : normal " :disabled="filter == 'finish' ? true : false" @click="getData('pending')">Pending @{{ filter == 'pending' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'ignore' ? active : normal " :disabled="filter == 'ignore' ? true : false" @click="getData('ignore')">Ditolak @{{ filter == 'ignore' ? '('+count+')' : '' }}</button>
+                    <button :class="filter == 'finish' ? active : normal " :disabled="filter == 'finish' ? true : false" @click="getData('finish')">Selesai @{{ filter == 'finish' ? '('+count+')' : '' }}</button>
                   </div>
+                  @endif
+
+                  @if(auth()->user()->role == 2)
+                  <div class="col-12 col-md-12 mb-3 d-none d-md-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <button :class="filter == 'offer' ? active : normal " :disabled="filter == 'offer' ? true : false" @click="getData('offer')">Proses Survei @{{ filter == 'offer' ? '('+count+')' : ''  }}</button>
+                    <button :class="filter == 'post_offer' ? active : normal " :disabled="filter == 'post_offer' ? true : false" @click="getData('post_offer')">Telah Disurvei @{{ filter == 'post_offer' ? '('+count+')' : '' }}</button>
+                  </div>
+                  @endif
+
+                  @if(auth()->user()->role == 3)
+                  <div class="col-12 col-md-12 mb-3 d-none d-md-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <button :class="filter == 'deal' ? active : normal " :disabled="filter == 'deal' ? true : false" @click="getData('deal')">Proses Pekerjaan @{{ filter == 'deal' ? '('+count+')' : '' }}</button>
+                  </div>
+                  @endif
+
+                  <div class="col-12 col-md-12 mb-3 d-none d-md-block">
+                    <label class="mb-0 mr-2">Urutan :</label>
+                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terbaru</button>
+                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terlama</button>
+                  </div>
+
+                  @if(auth()->user()->role == 1)
                   <div class="col-12 col-md-12 mb-3 d-lg-none d-block">
                     <label class="mb-0 mr-2">filter :</label>
                     <select class="form-control font-12" v-model='filter' @change="getData(filter)">
-                      <option value="ignore">Ditolak</option>
                       <option value="pending">Pending</option>
-                      <option value="offer">Survey</option>
-                      <option value="post_offer">Telah Disurvey</option>
+                      <option value="offer">Diterima</option>
+                      <option value="post_offer">Telah Disurvei</option>
                       <option value="deal">Telah Deal</option>
                       <option value="finish">Finish</option>
+                      <option value="ignore">Ditolak</option>
+                    </select>
+                  </div>
+                  @endif
+
+                  @if(auth()->user()->role == 2)
+                  <div class="col-12 col-md-12 mb-3 d-md-none d-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <select class="form-control font-12" v-model='filter' @change="getData(filter)">
+                      <option value="offer">Diterima</option>
+                      <option value="post_offer">Telah Disurvei</option>
+                    </select>
+                  </div>
+                  @endif
+
+                  @if(auth()->user()->role == 3)
+                  <div class="col-12 col-md-12 mb-3 d-md-none d-block">
+                    <label class="mb-0 mr-2">filter :</label>
+                    <select class="form-control font-12" v-model='filter' @change="getData(filter)">
+                      <option value="deal">Telah Deal</option>
+                    </select>
+                  </div>
+                  @endif
+
+                  <div class="col-12 col-md-12 mb-3 d-md-none d-block">
+                    <label class="mb-0 mr-2">Urutan :</label>
+                    <select class="form-control font-12" v-model='order' @change="getData(filter)">
+                      <option value="desc">Terbaru</option>
+                      <option value="asc">Terlama</option>
                     </select>
                   </div>
                   <div class="col-md-12 p-3 mb-3 shadow-cards text-center" v-if='data.length == 0'>
@@ -183,7 +237,7 @@
                             <tr>
                               <td class="p-0" style="border : 0;">Lokasi</td>
                               <td class="pt-0 pb-0" style="border : 0;">:</td>
-                              <td class="p-0" style="border : 0;">@{{ engage.regency }}</td>
+                              <td class="p-0" style="border : 0;">@{{ engage.regency }}, @{{ engage.district }}</td>
                             </tr>
                             <tr>
                               <td class="p-0" style="border : 0;">Tanggal</td>
@@ -193,12 +247,41 @@
                           </table>
                         </div>
                       </div>
-                      <div class="col-12 col-md-4 text-right text-lg-left">
-                        <label class="m-0">Status Pekerjaan</label>
-                        <span class="font-14 mb-3 d-block">
-                          <label class="m-0 font-weight-bold p-2 bg-warning mt-2 rounded" v-if='engage.locked == "offer" && engage.vendor_is == 0'>Proses Penawaran</label>
-                          <label class="m-0 font-weight-bold p-2 bg-success text-white mt-2 rounded" v-if= 'engage.locked == "deal"'>Penawaran Telah Disetujui</label>
-                          <label class="m-0 font-weight-bold p-2 bg-danger text-white mt-2 rounded" v-if= 'engage.vendor_is == 99'>Anda telah menolak penawaran</label>
+                      <div class="col-12 col-md-4 text-center text-lg-left">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <label class="m-0">Status Pekerjaan </label>
+                          <span class="font-14 mb-2">
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-warning mt-2 rounded" v-if='filter == "pending"'>Pending</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-danger text-white mt-2 rounded" v-if= 'filter == "ignore"'>Ditolak</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-success text-white mt-2 rounded" v-if= 'filter == "offer"'>Diterima</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-primary text-white mt-2 rounded" v-if= 'filter == "post_offer"'>Telah Disurvey</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-dark text-white mt-2 rounded" v-if= 'filter == "deal"'>Telah Deal</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-info text-white mt-2 rounded" v-if= 'filter == "finish"'>Finish</label>
+                          </span>
+                        </div>
+                        <span class="d-block">
+                          @if(auth()->user()->role == 1)
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" data-toggle="modal" data-target="#actionModal" v-on:click='viewData(engage.id)' v-if = 'engage.status == "pending" && filter == "pending"'>
+                              Detail
+                            </button>
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" v-on:click='addReport(engage.id)' v-if='engage.status == "acc" && engage.locked != "deal" && filter == "offer"'>
+                              Detail
+                            </button>
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" v-on:click='seeReport(engage.id)' v-if='engage.status == "acc" && engage.locked == "offer" && filter == "post_offer"'>
+                              Detail
+                            </button>
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" v-on:click='seeWork(engage.id)' v-if='engage.status == "acc" && engage.locked == "deal" && filter == "deal"'>
+                              Detail
+                            </button>
+                          @elseif(auth()->user()->role == 2)
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" v-on:click='addReport(engage.id)' v-if='engage.customer_is != 1  && filter == "offer" || filter == "post_offer"'>
+                              Detail
+                            </button>
+                          @elseif(auth()->user()->role == 3)
+                            <button class="btn-block btn btn-info font-14" href="#" type="button" v-on:click='seeReportMandor(engage.id)' v-if='engage.status == "acc" && filter == "deal"'>
+                              Detail
+                            </button>
+                          @endif
                         </span>
                        {{--  <a :href="'{{ url('/report_vendor') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "offer"'>Lihat Detail</a>
                         <a :href="'{{ url('/report_vendor_action') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "deal"'>Update Pekerjaan</a> --}}
@@ -278,55 +361,38 @@
             form: {},
             reason: {},
             action: '',
-            active: 'btn btn-success mx-2',
-            normal: 'btn btn-outline-secondary mx-2',
+            active: 'btn btn-success m-2',
+            normal: 'btn btn-outline-secondary m-2',
+            @if(auth()->user()->role == 1)
             filter : 'pending',
+            @elseif(auth()->user()->role == 2)
+            filter : 'offer',
+            @else
+            filter : 'deal',
+            @endif
+            order : 'asc',
             count : 0,
             employee: [],
             thisEmployee: [],
             thisReason: '',
         },
         created: function(){
-          this.getData();
+          this.getData(this.filter);
           this.getEmployee();
           this.getReason();
           this.valid();
         },
         methods: {
-          getData : function(){
-            if ('{{ session("role") }}' == 1) {
-              axios.post("{{ url('api/engagement') }}", {'filter' : this.filter, _method : 'GET'}).then(function(response){
-                this.data = response.data.data;
-                // console.log(this.data);
-                this.$nextTick(() => {
-                   $("#example").DataTable();
-                });
-              }.bind(this));
-            }else if ('{{ session("role") }}' == 2) {
-              let id = "{{ session('id') }}";
-              let form = {
-                'id' : id
-              };
-              axios.post("{{ url('api/engagementSurveyer') }}", form).then(function(response){
-                this.data = response.data.data;
-                // console.log(this.data);
-                this.$nextTick(() => {
-                   $("#example").DataTable();
-                });
-              }.bind(this));
-            }else{
-              let id = "{{ session('id') }}";
-              let form = {
-                'id' : id
-              };
-              axios.post("{{ url('api/engagementMandor') }}", form).then(function(response){
-                this.data = response.data.data;
-                // console.log(this.data);
-                this.$nextTick(() => {
-                   $("#example").DataTable();
-                });
-              }.bind(this));
-            }
+          getData : function(filter = this.filter, order = 'asc'){
+            this.filter = filter;
+            this.order = order;
+            axios.post("{{ url('api/engagement') }}", {'filter' : this.filter, 'order' : this.order, _method : 'GET'}).then(function(response){
+              this.data = response.data.data.data;
+              this.count = response.data.data.count;
+            }.bind(this))
+            .catch(error => {
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           getReason : function(){
             axios.get("{{ url('api/getReason') }}").then(function(response){
@@ -336,12 +402,18 @@
           viewData : function(id){
             axios.get("{{ url('api/engagement') }}/"+id).then(function(response){
               this.view = response.data.data;
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           getEmployee : function(){
             axios.get("{{ url('api/user/getSurveyer') }}").then(function(response){
               this.employee = response.data.data;
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           valid: function() {
             if (this.action == 'acc') {
@@ -416,8 +488,12 @@
                         'success'
                     );
                   }
-                }).then(()=>{
+                })
+                .then(()=>{
                   this.getData();
+                })
+                .catch(error => {
+                  Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
                 });
               }
             }
@@ -443,6 +519,9 @@
                       'Your file has been deleted.',
                       'success'
                   )
+                })
+                .catch(error => {
+                  Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
                 });
                 this.getData();
               }

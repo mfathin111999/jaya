@@ -35,7 +35,7 @@
         <div class="ml-4 mb-4 mt-4">
             Kepada Yth:<br>
             <strong>{{ $datas->name }}</strong><br>
-            <strong>{{ ucwords(strtolower($datas->address)) }}</strong><br>
+            <strong>Di {{ ucwords(strtolower($datas->district.', '.$datas->regency)) }}</strong><br>
         </div>
 
         <div class="ml-4 mb-3">
@@ -95,8 +95,8 @@
                         </tr>
                         @foreach($data->subreport as $detail)
                         @php
-                            $price += $detail->price_dirt;
-                            $all_price += $detail->price_dirt;
+                            $price += $detail->price_dirt*$detail->volume;
+                            $all_price += $detail->price_dirt*$detail->volume;
                             $date_before = date('Y/m/d', strtotime($date_after));
                             $date_after = date('Y/m/d', strtotime($date_before.' +1 day'));
                         @endphp
@@ -107,8 +107,8 @@
                             <td>{{ $detail->unit }}</td>
                             <td>{{ $date_before }}</td>
                             <td>{{ $date_after }}</td>
-                            <td>{{ number_format(round(($detail->price_dirt / $detail->volume), 0),0,",",".") }}</td>
                             <td>{{ number_format($detail->price_dirt,0,",",".") }}</td>
+                            <td>{{ number_format(($detail->price_dirt * $detail->volume),0,",",".") }}</td>
                         </tr>
                         @endforeach
                         <tr>
@@ -129,7 +129,7 @@
         </div> 
         <div>
             <label class="">
-                Demikian rincian harga ini kami ajukan, atas perhatian dan kerjasamanya kami ucapkan terima kasih
+                Demikian rincian harga ini kami ajukan, atas perhatian dan kerjasamanya kami ucapkan terima kasih.
             </label>
             <br>
             <br>

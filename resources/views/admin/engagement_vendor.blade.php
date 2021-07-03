@@ -23,7 +23,7 @@
       <div class="container-fluid" style="margin-top: 60px;">
         <div class="row">
           @include('layout.admin_side')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <main role="main" class="col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
               <h1 class="h3 font-weight-bold">RESERVASI</h1>
             </div>
@@ -36,6 +36,11 @@
                     <button :class="filter == 'offer' ? active : normal " :disabled="filter == 'offer' ? true : false" @click="getData('offer')">Penawaran @{{ filter == 'offer' ? '('+count+')' : ''  }}</button>
                     <button :class="filter == 'deal' ? active : normal " :disabled="filter == 'deal' ? true : false" @click="getData('deal')">Proses Pekerjaan @{{ filter == 'deal' ? '('+count+')' : '' }}</button>
                     <button :class="filter == 'finish' ? active : normal " :disabled="filter == 'finish' ? true : false" @click="getData('finish')">Selesai @{{ filter == 'finish' ? '('+count+')' : '' }}</button>
+                  </div>
+                  <div class="col-12 col-md-12 mb-3 d-none d-lg-block">
+                    <label class="mb-0 mr-2">Urutan :</label>
+                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terbaru</button>
+                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terlama</button>
                   </div>
                   <div class="col-12 col-md-12 mb-3 d-lg-none d-block">
                     <label class="mb-0 mr-2">filter :</label>
@@ -110,6 +115,7 @@
             active: 'btn btn-success mx-2',
             normal: 'btn btn-outline-secondary mx-2',
             filter : 'offer',
+            order : 'asc',
             count : 0,
             action: '',
             employee: [],
@@ -119,8 +125,9 @@
           this.getData(this.filter);
         },
         methods: {
-          getData : function(filter){
+          getData : function(filter, order = 'asc'){
             this.filter = filter;
+            this.order = order;
             axios.post("{{ url('api/engagementVendor') }}",{ 'id' : "{{ session('id') }}", 'filter': filter}).then(function(response){
               this.data = response.data.data;
               this.count = response.data.message;

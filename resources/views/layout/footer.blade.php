@@ -4,8 +4,8 @@
             <div class="col-md-6 col-lg-3">
                 <div class="footer-contact">
                     <h2>Kantor</h2>
-                    <p><i class="fa fa-map-marker-alt"></i>123 Street, Jakarta, Indonesia</p>
-                    <p><i class="fa fa-phone-alt"></i>+62 8810 2355 4758</p>
+                    <p><i class="fa fa-map-marker-alt"></i>Jl. Bintara XI No. 104 RT.001/013 Kel. Bintara Kecamatan Bekasi Barat - Kota Bekasi -Jawa Barat</p>
+                    <p><i class="fa fa-phone-alt"></i>021-89453624</p>
                     <p><i class="fa fa-envelope"></i>nru@servisrumah.com</p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-twitter"></i></a>

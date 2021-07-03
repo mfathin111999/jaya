@@ -246,7 +246,8 @@
 		        }.bind(this))
 		        .catch(function (response) {
 					//handle error
-					Swal.fire('Opss', response.response.data.message, 'warning');
+					// Swal.fire('Opss', response.response.data.message, 'warning');
+                    Swal.fire('Opss', 'Kombinasi Email dan Password Salah !', 'warning');
 				});
 			},
 			logout: function(){

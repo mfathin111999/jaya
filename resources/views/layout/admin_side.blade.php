@@ -1,4 +1,4 @@
-<nav class="col-md-2 d-none d-md-block sidebar" style="height: auto; background-color: #ffc107; min-height: 100vh;">
+<nav class="col-md-2 d-none d-lg-block sidebar" style="height: auto; background-color: #ffc107; min-height: 100vh;">
   <div class="sidebar-sticky font-weight-bold">
 
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

@@ -33,7 +33,7 @@
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume">Volume</label>
-                      <input type="text" class="form-control" id="volume" v-model="view_report.volume" name="volume" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="volume" v-model="view_report.volume" name="volume" @keyup = 'decimal' @keypress = 'isNumber' required>
                     </div>
                   </div>
                   <div class="col-4">
@@ -87,7 +87,7 @@
                   <div class="col-4">
                     <div class="form-group">
                       <label for="volume1">Volume</label>
-                      <input type="text" class="form-control" id="volume1" name="volume" @keyup = 'filter' @keypress = 'isNumber' required>
+                      <input type="text" class="form-control" id="volume1" name="volume" @keyup = 'decimal' @keypress = 'isNumber' required>
                     </div>
                   </div>
                   <div class="col-4">
@@ -626,16 +626,17 @@
             }.bind(this));
           },
           async showPartner(){
-            this.thisProvince = this.data.pprovince.id;
+            var q;
+            this.thisProvince = this.data.pprovince.id === q ? 0 : this.data.pprovince.id;
             await this.getRegency(1);
 
-            this.thisRegency  = this.data.pregency.id;
+            this.thisRegency  = this.data.pregency.id === q ? 0 : this.data.pregency.id;
             await this.getDistrict(1);
 
-            this.thisDistrict = this.data.pdistrict.id;
+            this.thisDistrict = this.data.pdistrict.id === q ? 0 : this.data.pdistrict.id;
             await this.getVillage();
 
-            this.thisVillage  = this.data.pvillage.id;
+            this.thisVillage  = this.data.pvillage.id === q ? 0 : this.data.pvillage.id;
 
 
           },
@@ -1029,9 +1030,12 @@
               return true;
             }
           },
+          decimal:function(e){
+            e.target.value = e.target.value.replace(/[^0-9]+\.+/g, '');
+          },
           filter:function(e){
             e.target.value = e.target.value.replace(/[^0-9]+/g, '');
-          },
+          }
         }
       });
       

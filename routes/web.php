@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ReportController;
+use App\Http\Controllers\API\V1\EngagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,6 +206,8 @@ Route::prefix('auth')->group(function () {
 	Route::post('/update', [AuthController::class, 'updateSession']);
 	Route::get('/delete', [AuthController::class, 'deleteSession']);
 });
+
+Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
 
 Route::get('generate', function (){
     \Illuminate\Support\Facades\Artisan::call('storage:link');
