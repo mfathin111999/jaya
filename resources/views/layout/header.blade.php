@@ -159,6 +159,8 @@
                                 </form>
                                 @if(auth()->user()->role == 4)
                             		<a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                @else
+                                    <a href="{{ url('dashboard') }}" class="dropdown-item">Dashboard</a>
                                 @endif
                             </div>
                         </div>
@@ -185,7 +187,9 @@
                                 <button class="dropdown-item" style="cursor: pointer;">Logout</button>
                                 </form>
                                 @if(auth()->user()->role == 4)
-                                <a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                    <a href="{{ url('history/all') }}" class="dropdown-item">History</a>
+                                @else
+                                    <a href="{{ url('dashboard') }}" class="dropdown-item">Dashboard</a>
                                 @endif
                             </div>
                         </div>

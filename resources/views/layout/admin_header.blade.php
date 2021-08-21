@@ -55,18 +55,6 @@
 			</ul>
 			<ul class="navbar-nav d-mob" style="border-top: 1px #FFFFFF solid; margin-top : 0.5rem; ">
 				@auth
-				{{-- <li class="nav-item">
-					<div class="btn-group">
-						<a class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-bell text-white"></i>
-							<span class="badge bg-warning dropbtn" id="notif" style="color: black;">12</span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" style="max-width: 500px;">
-						    <a class="dropdown-item" href="#">Reservasi 1</a>
-						    <a class="dropdown-item" href="#">Reservasi 1</a>
-						</div>
-					</div>
-				</li> --}}
 				<li class="nav-item">
 			        <a class="nav-link ploton active text-white" href="{{ route('dashboard') }}">
 			          	<i class="fa fa-home pr-2"></i>
@@ -96,16 +84,10 @@
 		          		Kartu Piutang
 		        	</a>
 		      	</li>
-		      	{{-- <li class="nav-item">
+		      	<li class="nav-item">
 		        	<a class="nav-link ploton text-white" href="{{ route('vendor.payment.card') }}">
 		          		<i class="fa fa-calendar pr-2"></i>
 		          		Pembayaran
-		        	</a>
-		      	</li> --}}
-		      	<li class="nav-item">
-		        	<a class="nav-link ploton text-white" href="{{ route('engagement_history') }}">
-		          		<i class="fa fa-calendar pr-2"></i>
-		          		History
 		        	</a>
 		      	</li>
 		      	@endif

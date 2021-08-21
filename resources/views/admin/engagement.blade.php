@@ -283,66 +283,13 @@
                             </button>
                           @endif
                         </span>
-                       {{--  <a :href="'{{ url('/report_vendor') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "offer"'>Lihat Detail</a>
-                        <a :href="'{{ url('/report_vendor_action') }}'+'/'+engage.id" class="btn btn-info" style="font-size: 12px;" v-if= 'engage.locked == "deal"'>Update Pekerjaan</a> --}}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            
-            {{-- <div class="table table-responsive">
-              <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Code</th>
-                        <th>Nama</th>
-                        <th>Servis</th>
-                        <th>Email</th>
-                        <th>Kota</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for = "(item, index) in data" v-bind:class = 'item.status == "acc" ? "table-success" : (item.status == "pending" ? "table-warning" : "table-danger")'>
-                      <td>@{{ item.date }} @{{ item.time }}</td>
-                      <td>@{{ item.code }} </td>
-                      <td>@{{ item.name }} </td>
-                      <td>@{{ item.service }}</td>
-                      <td>@{{ item.email }}</td>
-                      <td>@{{ item.regency }}</td>
-
-                      <td v-if='item.status == "acc" && item.count == 0 && item.locked == "offer"'>Reservasi Diterima</td>
-                      <td v-if='item.status == "ignore"'>Ditolak</td>
-                      <td v-if='item.status == "acc" && item.count > 0 && item.locked == "offer"'>
-                        <span v-if='item.customer_is != 1 && item.vendor_is != 1'>Telah Disurvei</span>
-                        <span v-if='item.customer_is == 1 && item.vendor_is != 1'>Customer Setuju</span>
-                        <span v-if='item.customer_is == 1 && item.vendor_is == 1'>Customer & Vendor Setuju</span>
-                      </td>
-                      <td v-if='item.status == "acc" && item.locked == "deal"'>Telah Disepakati</td>
-                      <td v-if='item.status == "pending"'>Belum Dikonfirmasi</td>
-
-                      <td>
-                        @if(auth()->user()->role == 1)
-                        <a class="btn btn-info" href="#" type="button" data-toggle="modal" data-target="#actionModal" v-on:click='viewData(item.id)' v-if = 'item.status == "pending"'><i class="fa fa-eye"></i></a>
-                        <!-- <a class="btn btn-danger" href="#" type="button" v-on:click='deleteItem(item.id)' v-if='item-status'><i class="fa fa-trash"></i></a> -->
-                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" && item.count == 0'><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReport(item.id)' v-if='item.status == "acc" && item.locked != "deal" &&  item.count > 0'><i class="fa fa-list-alt"></i></a>
-                        <a class="btn btn-info" href="#" type="button" v-on:click='seeWork(item.id)' v-if='item.status == "acc" && item.locked == "deal"'><i class="fa fa-cog"></i></a>
-                        <!-- <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.status != "acc"'><i class="fa fa-pencil"></i></a> -->
-                        @elseif(auth()->user()->role == 2)
-                        <a class="btn btn-success" href="#" type="button" v-on:click='addReport(item.id)' v-if='item.customer_is != 1'><i class="fa fa-pencil"></i></a>
-                        @elseif(auth()->user()->role == 3)
-                        <a class="btn btn-primary" href="#" type="button" v-on:click='seeReportMandor(item.id)' v-if='item.status == "acc" && item.count > 0'><i class="fa fa-list-alt"></i></a>
-                        @endif
-                      </td>
-                    </tr>
-                </tbody>
-              </table>
-            </div> --}}
+        
           </main>
         </div>
       </div> 
@@ -380,7 +327,9 @@
           this.getData(this.filter);
           this.getEmployee();
           this.getReason();
+          @if(auth()->user()->role == 1)
           this.valid();
+          @endif
         },
         methods: {
           getData : function(filter = this.filter, order = 'desc'){
@@ -415,6 +364,7 @@
               Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
             });
           },
+          @if(auth()->user()->role == 1)
           valid: function() {
             if (this.action == 'acc') {
               document.getElementById('employee').disabled = false;
@@ -422,6 +372,7 @@
               document.getElementById('employee').disabled = true;
             }
           },
+          @endif
           ucwords(str) {
               str = str.toLowerCase();
               str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {

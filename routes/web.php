@@ -89,10 +89,6 @@ Route::get('/engagement_vendor', function(){
 	return view('admin.engagement_vendor');
 })->name('engagement_vendor');
 
-Route::get('/engagement_history', function(){
-	return view('admin.engagement_history');
-})->name('engagement_history');
-
 Route::get('/work', function(){
 	return view('admin.work');
 })->name('work');
@@ -181,25 +177,13 @@ Route::get('/payment_supervisor_user', function(){
 	return view('admin.payment_supervisor_user');
 })->name('supervisor.payment.user');
 
-// Route::get('/payment_vendor_card', function(){
-// 	return view('admin.payment_vendor_card');
-// })->name('vendor.payment.card');
+Route::get('/payment_vendor_card', function(){
+	return view('admin.payment_vendor_card');
+})->name('vendor.payment.card');
 
 Route::get('/payment_customer_card', function(){
 	return view('admin.payment_customer_card');
 })->name('customer.payment.card');
-
-Route::get('/history-supervisor', function(){
-	return view('admin.supervisor.history');
-})->name('supervisor.history');
-
-Route::get('/history-vendor', function(){
-	return view('admin.vendor.history');
-})->name('vendor.history');
-
-Route::get('/history-customer', function(){
-	return view('admin.customer.history');
-})->name('customer.history');
 
 Route::get('/test/{id}', [ReportController::class, 'test']);
 

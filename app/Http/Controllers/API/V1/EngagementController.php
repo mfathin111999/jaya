@@ -23,7 +23,7 @@ class EngagementController extends Controller
 
     public function index(Request $request)
     {
-        if (auth()->user()->role == 4 || auth()->user()->role == 3) {
+        if (auth()->user()->role == 4 || auth()->user()->role == 5) {
             return apiResponseBuilder(403, [], 'unauthorize');
         }
         
@@ -32,7 +32,7 @@ class EngagementController extends Controller
                         $query->where('users.id', auth()->guard('api')->user()->id);
                     });
                 })
-                ->when(auth()->guard('api')->user()->role == 5, function ($query) {
+                ->when(auth()->guard('api')->user()->role == 4, function ($query) {
                     $query->where('mandor_id', auth()->guard('api')->user()->id);
                 })
                 ->when($request->has('filter') && $request->filter == 'finish', function ($query) use ($request){

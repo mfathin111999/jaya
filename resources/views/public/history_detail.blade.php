@@ -196,7 +196,7 @@
       var report = new Vue({
         el: '#app',
         data: {
-            check : 0,
+            check : 10,
             today : moment().format('YYYY-MM-DD'),
             id : '{{ $id }}',
             id_step : '',
