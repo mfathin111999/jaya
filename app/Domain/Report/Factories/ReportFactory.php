@@ -22,6 +22,7 @@ class ReportFactory
             'pdistrict'     => $items->pdistrict ?? '-',
             'pvillage'      => $items->pvillage ?? '-',
             'paddress'      => $items->paddress ?? '-',
+            'status'        => $items->status,
             'locked'        => $items->locked,
             'vendor_is'     => $items->vendor_is,
             'customer_is'   => $items->customer_is,

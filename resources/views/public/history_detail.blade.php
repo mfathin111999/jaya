@@ -78,8 +78,15 @@
                     <div>
                       <label class="font-12">Status</label>
                       <br>
-                      <label class="font-weight-bold text-warning h-3" v-if='data.status != "finish"'>Dalam Progres</label>
+                      <label class="font-weight-bold text-warning h-3" v-if='data.status != "finish" && check != 0'>Dalam Progres</label>
+                      <label class="font-weight-bold text-warning h-3" v-if='data.status != "finish" && check == 0'>Semua Tahapan telah Selesai</label>
                       <label class="font-weight-bold text-info h-3" v-if='data.status == "finish"'>Selesai</label>
+
+                      <br>
+                      <label class="font-12">Aksi</label>
+                      <br>
+                      <button class="font-weight-bold btn btn-info" v-if='check == 0' v-on:click="completing">Selesaikan Pekerjaan</button>
+                      <label class="font-weight-bold" v-if='data.status != "finish" && check != 0'> - </label>
                     </div>
                   </div>
                 </div>
@@ -185,11 +192,7 @@
 
   @endsection
   @section('sec-js')
-    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/v-mask.min.js') }}"></script>
-    </script>
     <script type="text/javascript">
-      Vue.use(VueMask.VueMaskPlugin);
       var report = new Vue({
         el: '#app',
         data: {
@@ -199,10 +202,6 @@
             id_step : '',
             partner: {},
             view_report : {},
-            add_report : {},
-            add_form : {},
-            add_date : {},
-            add_step : {},
             data: {},
             vone: '',
             report: {},
@@ -213,35 +212,12 @@
             termin: [],
             vendor: [],
             allunit : [],
-            province: {},
-            thisProvince: '',
-            regency: {},
-            thisRegency: '',
-            district: {},
-            thisDistrict: '',
-            village: {},
-            thisVillage: '',
-            priceCleanVendor: '',
             allPlace: '',
         },
         mounted: function(){
+          this.checks();
           this.getData(this.id);
           this.allUnit();
-          this.loadProvince();
-          this.$nextTick(()=>{
-            let data = moment().format('YYYY-MM-DD');
-            let data7 = moment().add(-7, 'days').format('YYYY-MM-DD');
-            $('#date_start').daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                minDate: data7,
-                disableTouchKeyboard: true,
-                startDate: data,
-                locale: {
-                  format: 'YYYY-MM-DD'
-                },
-            });
-          });
         },
         methods: {
           getData : function(id){
@@ -250,10 +226,7 @@
               this.partner = response.data.data.data.partner;
               this.allPlace = response.data.data.data.pvillage.name+', '+response.data.data.data.pdistrict.name+', '+response.data.data.data.pregency.name+', '+response.data.data.data.pprovince.name;
               this.termin = response.data.data.termin;
-              console.log(response.data.data.termin)
             }.bind(this)).catch((error) => {
-              console.log(error.response);
-
               Swal.fire({
                 title: 'Ops !',
                 text: 'Anda tidak punya akses untuk data ini',
@@ -272,72 +245,33 @@
               this.allunit = response.data.data;
             }.bind(this));
           },
-          getReport : function(id){
-            axios.get("{{ url('api/report/getByIdReportStep') }}/"+id).then(function(response){
-              this.view_report = response.data.data;
-            }.bind(this));
-          },
-          addPayment : function(id, price){
-            this.getReport(id);
-            this.priceCleanVendor = price;
-          },
-          sendPayment : function(id){
-            let form = document.getElementById('form-add-pay');
-            let forms = new FormData(form);
-
-            axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
-              Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
-              report.$nextTick(()=>{
-                $('#addPayment').modal('hide');
-              });
-            }.bind(this)).then(()=>{
-              this.getData(this.id);
+          async checks () {
+            await axios.post("{{ url('api/customer/checkOrder') }}", {'id' : this.id}).then(response => {
+              this.check = response.data.data;
             });
+          },
+          async completing () {
+            Swal.fire({
+                title: 'Apakah kamu yakin ?',
+                text: "Kamu akan mengubah status reservasi ini menjadi 'Selesai'",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.post("{{ url('api/customer/completingOrder') }}", {'id' : this.id}).then(response => {})
+                  .then(() => {
+                    Swal.fire('Berhasil !', 'Data berhasil dihapus .. !', 'success');
+                    this.getData(this.id);
+                  });
+                }
+              });
           },
           formatPrice(value) {
             let val = (value/1).toFixed(0).replace(',', ',')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-          },
-          addDetail : function(id){
-            this.id_step = id;
-          },
-          loadProvince(){
-            axios.get("{{ url('api/province') }}").then(function(response){
-              this.province = response.data.data;
-              this.regency = {};
-              this.thisRegency = '';
-              this.district = {};
-              this.thisDistrict = '';
-              this.village = {};
-              this.thisVillage = '';
-            }.bind(this));
-          },
-          getRegency: function(){
-            if (this.thisProvince != '') {
-                axios.post("{{ url('api/regency') }}", {id: this.thisProvince}).then(function(response){
-                this.regency = response.data.data;
-                this.district = {};
-                this.thisDistrict = '';
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getDistrict: function(){
-            if (this.thisRegency != '') {
-              axios.post("{{ url('api/district') }}", {id: this.thisRegency}).then(function(response){
-                this.district = response.data.data;
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getVillage: function(){
-            if (this.thisDistrict != '') {
-              axios.post("{{ url('api/village') }}", {id: this.thisDistrict}).then(function(response){
-                this.village = response.data.data;
-              }.bind(this));
-            }
           },
           formatRupiah: function(e){
             var number_string = e.target.value.replace(/[^,\d]/g, '').toString(),

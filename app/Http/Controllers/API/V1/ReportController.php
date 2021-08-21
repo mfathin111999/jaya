@@ -146,10 +146,6 @@ class ReportController extends Controller
                         }])
                     ->first();
 
-        if (auth()->guard('api')->user()->role == 4) {
-            if
-        }
-
         return apiResponseBuilder(200, $engagement);
     }
 

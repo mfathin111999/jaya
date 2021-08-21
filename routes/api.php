@@ -115,6 +115,9 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/supervisor/history', [EngagementController::class, 'historySupervisor']);
 
 	Route::post('/customer/history', [EngagementController::class, 'historyCustomer']);
+	Route::post('/customer/checkOrder', [EngagementController::class, 'checkOrder']);
+	Route::post('/customer/completingOrder', [EngagementController::class, 'completingOrder']);
+	Route::post('/customer/recompletingOrder', [EngagementController::class, 'recompletingOrder']);
 
 
 	Route::post('/partner', [EmployeeController::class, 'createPartner']);

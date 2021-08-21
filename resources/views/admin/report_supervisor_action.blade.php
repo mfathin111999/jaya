@@ -126,33 +126,53 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
-                      <div class="col-md-3">Kode Booking</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3">Nama Pelanggan</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3">Tanggal Survey</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3">Vendor</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3">Tanggal Mulai</div>
-                      <div class="col-md-1 text-center">:</div>
-                      <div class="col-md-8" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Kode Booking</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.code }}</strong></label>
                       </div>
-                      <div class="col-md-8" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Nama Pelanggan</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.name }}</strong></label>
                       </div>
-                      <div class="col-12 mt-2">
-                        <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Tanggal Survey</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.date }} @{{ data.time }}</strong></label>
+                      </div>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Vendor</label>
+                        <br>
+                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                      </div>
+                      <div class="col-md-12">
+                        <label class="font-12 m-0">Tanggal Mulai</label>
+                        <br>
+                        <label class="font-14" v-if= 'data.date_work != null'><strong>@{{ data.date_work }}</strong></label>
+                        <label class="font-14" v-if= 'data.date_work == null'><strong>Belum Ditentukan</strong></label>
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div class="col-md-6 d-block d-md-flex align-items-center justify-content-center">
+                    <div>
+                      <label class="font-12">Status</label>
+                      <br>
+                      <label class="font-weight-bold text-warning h4" v-if='data.status != "finish" && check != 0'>Dalam Progres</label>
+                      <label class="font-weight-bold text-warning h4" v-if='data.status != "finish" && check == 0'>Semua Tahapan telah Selesai</label>
+                      <label class="font-weight-bold text-info h4" v-if='data.status == "finish"'>Selesai</label>
 
+                      <br>
+                      <label class="font-12">Aksi</label>
+                      <br>
+                      <button class="font-weight-bold btn btn-info" v-if='data.status != "finish"' v-on:click="completing">Selesaikan Pekerjaan</button>
+                      <button class="font-weight-bold btn btn-danger" v-if='data.status == "finish"' v-on:click="recompleting">Batalkan Perubahan</button>
+                    </div>
+                  </div>
+                  <div class="col-12 mt-2">
+                    <button class="btn btn-success font-12" data-toggle="modal" data-target="#info_engage">Detail Selengkapnya</button>
+                  </div>
+                </div>
               </div>
               <div class="card-body">
 
@@ -228,55 +248,26 @@
       var report = new Vue({
         el: '#app',
         data: {
-            check : 0,
+            check : 10,
             today : moment().format('YYYY-MM-DD'),
             id : '{{ $id }}',
             id_step : '',
             partner: {},
             view_report : {},
-            add_report : {},
-            add_form : {},
-            add_date : {},
-            add_step : {},
             data: {},
-            vone: '',
             report: {},
             step: [],
             image: [],
-            view: [],
-            view_image: [],
             termin: [],
             vendor: [],
             allunit : [],
-            province: {},
-            thisProvince: '',
-            regency: {},
-            thisRegency: '',
-            district: {},
-            thisDistrict: '',
-            village: {},
-            thisVillage: '',
             priceCleanVendor: '',
             allPlace: '',
         },
         mounted: function(){
           this.getData(this.id);
           this.allUnit();
-          this.loadProvince();
-          this.$nextTick(()=>{
-            let data = moment().format('YYYY-MM-DD');
-            let data7 = moment().add(-7, 'days').format('YYYY-MM-DD');
-            $('#date_start').daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                minDate: data7,
-                disableTouchKeyboard: true,
-                startDate: data,
-                locale: {
-                  format: 'YYYY-MM-DD'
-                },
-            });
-          });
+          this.checks();
         },
         methods: {
           getData : function(id){
@@ -326,6 +317,49 @@
               }
             }.bind(this));
           },
+          async checks () {
+            await axios.post("{{ url('api/customer/checkOrder') }}", {'id' : this.id}).then(response => {
+              this.check = response.data.data;
+            });
+          },
+          async completing () {
+            Swal.fire({
+                title: 'Apakah kamu yakin ?',
+                text: "Kamu akan mengubah status reservasi ini menjadi 'Selesai'",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.post("{{ url('api/customer/completingOrder') }}", {'id' : this.id}).then(response => {})
+                  .then(() => {
+                    this.getData(this.id);
+                    Swal.fire('Berhasil !', 'Data berhasil diubah .. !', 'success');
+                  });
+                }
+              });
+          },
+          async recompleting () {
+            Swal.fire({
+                title: 'Apakah kamu yakin ?',
+                text: "Kamu akan mengubah status reservasi ini menjadi 'Belum Selesai'",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.post("{{ url('api/customer/recompletingOrder') }}", {'id' : this.id}).then(response => {})
+                  .then(() => {
+                    this.getData(this.id);
+                    Swal.fire('Berhasil !', 'Data berhasil diubah .. !', 'success');
+                  });
+                }
+              });
+          },
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
               this.allunit = response.data.data;
@@ -359,44 +393,6 @@
           },
           addDetail : function(id){
             this.id_step = id;
-          },
-          loadProvince(){
-            axios.get("{{ url('api/province') }}").then(function(response){
-              this.province = response.data.data;
-              this.regency = {};
-              this.thisRegency = '';
-              this.district = {};
-              this.thisDistrict = '';
-              this.village = {};
-              this.thisVillage = '';
-            }.bind(this));
-          },
-          getRegency: function(){
-            if (this.thisProvince != '') {
-                axios.post("{{ url('api/regency') }}", {id: this.thisProvince}).then(function(response){
-                this.regency = response.data.data;
-                this.district = {};
-                this.thisDistrict = '';
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getDistrict: function(){
-            if (this.thisRegency != '') {
-              axios.post("{{ url('api/district') }}", {id: this.thisRegency}).then(function(response){
-                this.district = response.data.data;
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getVillage: function(){
-            if (this.thisDistrict != '') {
-              axios.post("{{ url('api/village') }}", {id: this.thisDistrict}).then(function(response){
-                this.village = response.data.data;
-              }.bind(this));
-            }
           },
           formatRupiah: function(e){
             var number_string = e.target.value.replace(/[^,\d]/g, '').toString(),

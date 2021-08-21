@@ -260,6 +260,72 @@ class EngagementController extends Controller
 
     }
 
+    public function checkOrder(Request $request){
+        if (auth()->guard('api')->user()->role != 1 && auth()->guard('api')->user()->role != 4) {
+            return abort(401);
+        }
+
+        if (auth()->guard('api')->user()->role == 1) {
+            $data = Engagement::where('id', $request->id)
+                    ->withCount(['report' => function($query){
+                        $query->whereNull('parent_id')
+                            ->whereHas('termin', function($query){
+                                $query->whereNull('status');
+                            });
+                    }])
+                    ->first();
+        }else{
+            $data = Engagement::where('user_id', auth()->guard('api')->user()->id)
+                    ->where('id', $request->id)
+                    ->withCount(['report' => function($query){
+                        $query->whereNull('parent_id')
+                            ->whereHas('termin', function($query){
+                                $query->whereNull('status');
+                            });
+                    }])
+                    ->first();
+        }
+
+        return apiResponseBuilder(200, $data->report_count);
+    }
+
+
+    public function completingOrder(Request $request){
+
+        if (auth()->guard('api')->user()->role != 1 && auth()->guard('api')->user()->role != 4) {
+            return abort(401);
+        }
+
+        if (auth()->guard('api')->user()->role == 1) {
+            $data = Engagement::findOrFail($request->id);
+        }else{
+            $data = Engagement::where('user_id', auth()->guard('api')->user()->id)
+                                ->where('id', $request->id)
+                                ->firstOrFail();
+
+
+        }
+
+        $data->status = 'finish';
+        $data->save();
+
+        return apiResponseBuilder(200, "oke", "Berhasil");
+    }
+
+    public function recompletingOrder(Request $request){
+
+        if (auth()->guard('api')->user()->role != 1) {
+            return abort(401);
+        }
+
+        $data = Engagement::findOrFail($request->id);
+
+        $data->status = 'acc';
+        $data->save();
+
+        return apiResponseBuilder(200, "oke", "Berhasil");
+    }
+
     // ACTION METHOD
 
     public function action(Request $request)

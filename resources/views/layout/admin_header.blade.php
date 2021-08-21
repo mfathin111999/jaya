@@ -96,12 +96,12 @@
 		          		Kartu Piutang
 		        	</a>
 		      	</li>
-		      	<li class="nav-item">
+		      	{{-- <li class="nav-item">
 		        	<a class="nav-link ploton text-white" href="{{ route('vendor.payment.card') }}">
 		          		<i class="fa fa-calendar pr-2"></i>
 		          		Pembayaran
 		        	</a>
-		      	</li>
+		      	</li> --}}
 		      	<li class="nav-item">
 		        	<a class="nav-link ploton text-white" href="{{ route('engagement_history') }}">
 		          		<i class="fa fa-calendar pr-2"></i>

@@ -333,10 +333,14 @@
                       <div class="col-md-12">
                         <label class="btn-block">Penawaran</label>
                       </div>
-                      <div class="col-md-12">
-                        <button class="mail-class btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>Kirim Customer</button><br>
-                        <label class="loading-class bg-info py-2 px-4 text-white d-none" style="border-radius: 3px;"><div class="loader"></div></label>
-                        <!-- <a href="{{ url('report/printOrderCustomer') }}/{{ $id }}" class="btn btn-warning" style="font-size: 12px;">Kirim Vendor</a> -->
+                      <div class="col-md-12 text-center">
+                        <div class="col-6 col-md-6 mx-auto">
+                          <button class="mail-class btn btn-success mb-2" style="font-size: 12px;" @click='sendMail(data.id)'>
+                            Kirim Customer
+                          </button>
+                          <br>
+                          <label class="loading-class py-2 px-4 text-white d-none" style="border-radius: 3px;"><div class="loader  bg-info"></div></label>
+                        </div>
                       </div>
                     </div> 
                     <div class="row">

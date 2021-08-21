@@ -93,29 +93,85 @@ class ResourceController extends Controller
         ]);
     }
 
-    public function getMaterialDashboard()
+    public function getMaterialDashboard(Request $request)
     {
         if (auth()->guard('api')->user()->role == 4) {
             return apiResponseBuilder(403, '', 'Unauthorize');
         }
 
-        $data_finish    = self::dataMaterial('finish');
+        $data_finish    = self::dataMaterial('finish', $request);
         $finish         = $data_finish['count'];
         $benefit        = $data_finish['price'];
-        $all            = self::dataMaterial('all');
-        $do             = self::dataMaterial('do');
-        $ignore         = self::dataMaterial('ignore');
-        $all_benefit    = self::dataMaterial('benefit');
-        $chart          = [$ignore, $do, $finish];
+        $all            = self::dataMaterial('all', $request);
+        $do             = self::dataMaterial('do', $request);
+        $ignore         = self::dataMaterial('ignore', $request);
+        $all_benefit    = self::dataMaterial('benefit', $request);
+        if (auth()->guard('api')->user()->role != 1) {
+            $datachart      = [[
+                                'label'             => 'Berjalan',
+                                'data'              => [$do],
+                                'maxBarThickness'   => 50,
+                                'backgroundColor'   => [
+                                    'rgba(54, 162, 235)',
+                                ],
+                                'borderWidth'       => 1
+                            ],[
+                                'label'             => 'Selesai',
+                                'data'              => [$finish],
+                                'maxBarThickness'   => 50,
+                                'backgroundColor'   => [
+                                    'rgba(255, 206, 86)',
+                                ],
+                                'borderWidth'       => 1
+                            ]];
+            $chart          = [
+                                'label' => ['Berjalan', 'Selesai'],
+                                'data'  => [$do, $finish],
+                                'color'  => ['rgba(54, 162, 235)', 'rgba(255, 206, 86)']
+                            ];
+            $chart1         = json_encode($datachart);
+        }else{
+            $datachart      = [[
+                                'label'             => 'Ditolak',
+                                'data'              => [$ignore],
+                                'maxBarThickness'   => 50,
+                                'backgroundColor'   => [
+                                    'rgba(255, 99, 132)',
+                                ],
+                                'borderWidth'       => 1
+                            ],[
+                                'label'             => 'Berjalan',
+                                'data'              => [$do],
+                                'maxBarThickness'   => 50,
+                                'backgroundColor'   => [
+                                    'rgba(54, 162, 235)',
+                                ],
+                                'borderWidth'       => 1
+                            ],[
+                                'label'             => 'Selesai',
+                                'data'              => [$finish],
+                                'maxBarThickness'   => 50,
+                                'backgroundColor'   => [
+                                    'rgba(255, 206, 86)',
+                                ],
+                                'borderWidth'       => 1
+                            ]];
+            $chart          = [
+                                'label' => ['Ditolak', 'Berjalan', 'Selesai'],
+                                'data'  => [$ignore, $do, $finish],
+                                'color'  => ['rgba(255, 99, 132)', 'rgba(54, 162, 235)', 'rgba(255, 206, 86)']
+                            ];
+            $chart1         = json_encode($datachart);
+        }
 
-        $datas = compact('all', 'finish', 'do', 'ignore', 'benefit', 'all_benefit', 'chart');
+        $datas = compact('all', 'finish', 'do', 'ignore', 'benefit', 'all_benefit', 'chart', 'chart1');
 
         return apiResponseBuilder(200, $datas, 'oke');
 
     }
     
 
-    public function dataMaterial($request)
+    public function dataMaterial($status, $request)
     {
         $data = Engagement::when(auth()->guard('api')->user()->role == 2, function($query){
                             $query->whereHas('employee', function ($query){
@@ -128,11 +184,12 @@ class ResourceController extends Controller
                         ->when(auth()->guard('api')->user()->role == 5, function($query){
                             $query->where('vendor_id', auth()->guard('api')->user()->id);
                         })
-                        ->whereMonth('date', 7);
+                        ->whereMonth('date', $request->month)
+                        ->whereYear('date', $request->year);
 
-        if ($request == 'all') {
+        if ($status == 'all') {
             $data   = $data->count();
-        }elseif($request == 'finish'){
+        }elseif($status == 'finish'){
 
             $data   = $data->where('status', 'finish')->with('report', function($query){
                         $query->select(['id', 'reservation_id', 'price_clean', 'price_dirt', 'volume'])->whereNotNull('parent_id');
@@ -166,13 +223,13 @@ class ResourceController extends Controller
 
             return $datas;
 
-        }elseif($request == 'do'){
+        }elseif($status == 'do'){
             $data   = $data->where([['status', '!=', 'finish'], ['status', '!=', 'ignore']])->count();
-        }elseif($request == 'ignore'){
+        }elseif($status == 'ignore'){
             $data   = $data->where('status', 'ignore')->count();
-        }elseif($request == 'benefit'){
+        }elseif($status == 'benefit'){
             $data   = $data->select('id', 'code')->where('status', 'acc')->orWhere('status', 'finish')->with('report', function($query){
-                    $query->select(['id', 'reservation_id', 'price_clean', 'price_dirt'])->whereNotNull('parent_id');
+                    $query->select(['id', 'reservation_id', 'price_clean', 'price_dirt', 'volume'])->whereNotNull('parent_id');
             })->get();
 
             $count = 0; 
