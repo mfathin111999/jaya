@@ -1,4 +1,4 @@
-F@extends('layout.app')
+@extends('layout.app')
 
 @if(session('id') == null || session('role') != 5)
   <script type="text/javascript">

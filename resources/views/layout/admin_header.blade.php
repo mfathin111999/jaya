@@ -97,12 +97,6 @@
 		        	</a>
 		      	</li>
 		      	<li class="nav-item">
-			        <a class="nav-link text-white" href="{{ route('supervisor.debt.card.all') }}">
-			          	<i class="fa fa-area-chart pr-2"></i>
-			          	Kartu Pembayaran
-			        	</a>
-			      	</li>
-		      	<li class="nav-item">
 		        	<a class="nav-link ploton text-white" href="{{ route('vendor.payment.card') }}">
 		          		<i class="fa fa-calendar pr-2"></i>
 		          		Pembayaran

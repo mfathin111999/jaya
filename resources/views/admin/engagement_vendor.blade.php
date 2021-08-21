@@ -39,8 +39,8 @@
                   </div>
                   <div class="col-12 col-md-12 mb-3 d-none d-lg-block">
                     <label class="mb-0 mr-2">Urutan :</label>
-                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terbaru</button>
-                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terlama</button>
+                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terbaru</button>
+                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terlama</button>
                   </div>
                   <div class="col-12 col-md-12 mb-3 d-lg-none d-block">
                     <label class="mb-0 mr-2">filter :</label>
@@ -48,6 +48,13 @@
                       <option value="offer">Penawaran</option>
                       <option value="deal">Proses Pekerjaan</option>
                       <option value="finish">Selesai</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-12 mb-3 d-md-none d-block">
+                    <label class="mb-0 mr-2">Urutan :</label>
+                    <select class="form-control font-12" v-model='order' @change="getData(filter)">
+                      <option value="desc">Terbaru</option>
+                      <option value="asc">Terlama</option>
                     </select>
                   </div>
                   <div class="col-md-12 p-3 mb-3 shadow-cards text-center" v-if='data.length == 0'>
@@ -115,7 +122,7 @@
             active: 'btn btn-success mx-2',
             normal: 'btn btn-outline-secondary mx-2',
             filter : 'offer',
-            order : 'asc',
+            order : 'desc',
             count : 0,
             action: '',
             employee: [],
@@ -125,10 +132,10 @@
           this.getData(this.filter);
         },
         methods: {
-          getData : function(filter, order = 'asc'){
+          getData : function(filter, order = 'desc'){
             this.filter = filter;
             this.order = order;
-            axios.post("{{ url('api/engagementVendor') }}",{ 'id' : "{{ session('id') }}", 'filter': filter}).then(function(response){
+            axios.post("{{ url('api/engagementVendor') }}",{ 'id' : "{{ session('id') }}", 'filter': filter, 'order' : this.order}).then(function(response){
               this.data = response.data.data;
               this.count = response.data.message;
             }.bind(this));

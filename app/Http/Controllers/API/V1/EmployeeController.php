@@ -58,7 +58,7 @@ class EmployeeController extends Controller
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
                   ->whereHas('termin', function($query){
-                    $query->where('status', 'doneCustomer');
+                    $query->where('status', 'doneCustomer')->orWhere('status', 'donePayed');
                   })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
@@ -178,9 +178,8 @@ class EmployeeController extends Controller
         ->whereHas('engageCustomer', function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->whereDoesntHave('termin', function($query){
-                    $query->where('status', 'doneCustomer')
-                          ->orWhere('status', 'donePayed');             
+                  ->whereHas('termin', function($query){
+                    $query->whereNull('status');
                   })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
@@ -192,9 +191,8 @@ class EmployeeController extends Controller
         ->with(['engageCustomer' => function($query) use ($request) {
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->whereDoesntHave('termin', function($query){
-                    $query->where('status', 'doneCustomer')
-                          ->orWhere('status', 'donePayed');             
+                  ->whereHas('termin', function($query){
+                    $query->whereNull('status');
                   })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
@@ -218,9 +216,8 @@ class EmployeeController extends Controller
         ->withCount(['engageCustomer' => function($query) use ($request){
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
-                  ->whereDoesntHave('termin', function($query){
-                    $query->where('status', 'doneCustomer')
-                          ->orWhere('status', 'donePayed');             
+                  ->whereHas('termin', function($query){
+                    $query->whereNull('status');
                   })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);

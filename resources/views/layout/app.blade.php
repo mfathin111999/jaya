@@ -28,6 +28,7 @@
 			.font-14{
 				font-size: 14px !important;
 			}
+			
 			[v-cloak]{
 				display: none;
 			}
@@ -36,9 +37,32 @@
 			  	border: 5px solid #f3f3f3; /* Light grey */
 			  	border-top: 5px solid #fdbe33; /* Blue */
 			  	border-radius: 50%;
+			  	animation: spin 1s linear infinite;
 			  	width: 15px;
 			  	height: 15px;
+			  	z-index: 10;
+			}
+
+			.big-loader {
+			  	border: 10px solid #f3f3f3; /* Light grey */
+			  	border-top: 10px solid #fdbe33; /* Blue */
+			  	border-radius: 50%;
 			  	animation: spin 1s linear infinite;
+			  	width: 50px;
+			  	height: 50px;
+			  	z-index: 10;
+			}
+
+			.loading-class{
+				background-color: #0000007d;
+				position: absolute; width: 100%; 
+				height: 100%; 
+				top: 0; 
+				left: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 10;
 			}
 
 			@keyframes spin {

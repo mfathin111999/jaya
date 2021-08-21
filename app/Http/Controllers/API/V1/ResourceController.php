@@ -16,11 +16,7 @@ class ResourceController extends Controller
     public function __construct(ResourceManagement $resource){
         $this->resource = $resource;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $data = $this->resource->allResource();
@@ -47,11 +43,6 @@ class ResourceController extends Controller
         return apiResponseBuilder(200, $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function createUnit(Request $request)
     {
         $data = $this->resource->createUnit($request);
@@ -62,13 +53,6 @@ class ResourceController extends Controller
         ]);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function updateUnit(Request $request, $id)
     {
         $data = $this->resource->updateUnit($id, $request);
@@ -79,12 +63,6 @@ class ResourceController extends Controller
         ]);        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function view($id)
     {
         $data = $this->resource->view($id);
@@ -95,12 +73,6 @@ class ResourceController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = $this->resource->delete($id);
@@ -119,6 +91,113 @@ class ResourceController extends Controller
             'status'    => 200,
             'data'      => $data,
         ]);
+    }
+
+    public function getMaterialDashboard()
+    {
+        if (auth()->guard('api')->user()->role == 4) {
+            return apiResponseBuilder(403, '', 'Unauthorize');
+        }
+
+        $data_finish    = self::dataMaterial('finish');
+        $finish         = $data_finish['count'];
+        $benefit        = $data_finish['price'];
+        $all            = self::dataMaterial('all');
+        $do             = self::dataMaterial('do');
+        $ignore         = self::dataMaterial('ignore');
+        $all_benefit    = self::dataMaterial('benefit');
+        $chart          = [$ignore, $do, $finish];
+
+        $datas = compact('all', 'finish', 'do', 'ignore', 'benefit', 'all_benefit', 'chart');
+
+        return apiResponseBuilder(200, $datas, 'oke');
+
+    }
+    
+
+    public function dataMaterial($request)
+    {
+        $data = Engagement::when(auth()->guard('api')->user()->role == 2, function($query){
+                            $query->whereHas('employee', function ($query){
+                                $query->where('users.id', auth()->guard('api')->user()->id);
+                            });
+                        })
+                        ->when(auth()->guard('api')->user()->role == 3, function($query){
+                            $query->where('mandor_id', auth()->guard('api')->user()->id);
+                        })
+                        ->when(auth()->guard('api')->user()->role == 5, function($query){
+                            $query->where('vendor_id', auth()->guard('api')->user()->id);
+                        })
+                        ->whereMonth('date', 7);
+
+        if ($request == 'all') {
+            $data   = $data->count();
+        }elseif($request == 'finish'){
+
+            $data   = $data->where('status', 'finish')->with('report', function($query){
+                        $query->select(['id', 'reservation_id', 'price_clean', 'price_dirt', 'volume'])->whereNotNull('parent_id');
+                    })->get();
+
+            $count = 0;
+
+            if (auth()->guard('api')->user()->role == 1) {
+                if($data->count() != 0){
+                    foreach ($data as $items) {
+                        foreach ($items->report as $item){
+                            $count += (($item->price_dirt*$item->volume) - ($item->price_clean*$item->volume));       
+                        }
+                    }
+                }
+            }else{
+                if($data->count() != 0){
+                    foreach ($data as $items) {
+                        foreach ($items->report as $item){
+                            $count += $item->price_clean*$item->volume;       
+                        }
+                    }
+                }
+            }
+            
+
+            $datas = [
+                'price' => $count,
+                'count' => $data->count()
+            ];
+
+            return $datas;
+
+        }elseif($request == 'do'){
+            $data   = $data->where([['status', '!=', 'finish'], ['status', '!=', 'ignore']])->count();
+        }elseif($request == 'ignore'){
+            $data   = $data->where('status', 'ignore')->count();
+        }elseif($request == 'benefit'){
+            $data   = $data->select('id', 'code')->where('status', 'acc')->orWhere('status', 'finish')->with('report', function($query){
+                    $query->select(['id', 'reservation_id', 'price_clean', 'price_dirt'])->whereNotNull('parent_id');
+            })->get();
+
+            $count = 0; 
+            if (auth()->guard('api')->user()->role == 1) {
+                if($data->count() != 0){
+                    foreach ($data as $items) {
+                        foreach ($items->report as $item){
+                            $count += (($item->price_dirt*$item->volume) - ($item->price_clean*$item->volume));       
+                        }
+                    }
+                }
+            }else{
+                if($data->count() != 0){
+                    foreach ($data as $items) {
+                        foreach ($items->report as $item){
+                            $count += $item->price_clean*$item->volume;       
+                        }
+                    }
+                }
+            }
+
+            return $count;
+        }
+
+        return $data;
     }
 
     public function getRegency(Request $request)

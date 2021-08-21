@@ -171,8 +171,8 @@
 
                   <div class="col-12 col-md-12 mb-3 d-none d-md-block">
                     <label class="mb-0 mr-2">Urutan :</label>
-                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terbaru</button>
-                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terlama</button>
+                    <button :class="order == 'desc' ? active : normal " :disabled="order == 'desc' ? true : false" @click="getData(filter, 'desc')">Terbaru</button>
+                    <button :class="order == 'asc' ? active : normal " :disabled="order == 'asc' ? true : false" @click="getData(filter, 'asc')">Terlama</button>
                   </div>
 
                   @if(auth()->user()->role == 1)
@@ -370,7 +370,7 @@
             @else
             filter : 'deal',
             @endif
-            order : 'asc',
+            order : 'desc',
             count : 0,
             employee: [],
             thisEmployee: [],
@@ -383,7 +383,7 @@
           this.valid();
         },
         methods: {
-          getData : function(filter = this.filter, order = 'asc'){
+          getData : function(filter = this.filter, order = 'desc'){
             this.filter = filter;
             this.order = order;
             axios.post("{{ url('api/engagement') }}", {'filter' : this.filter, 'order' : this.order, _method : 'GET'}).then(function(response){

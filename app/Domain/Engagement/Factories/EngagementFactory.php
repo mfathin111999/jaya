@@ -33,7 +33,39 @@ class EngagementFactory
                 'vendor_is'         => $item->vendor_is,
                 'service'           => self::serviceFactory($item->service),
                 'count'             => $item->report_count,
-                'created_at'        => Date('Y-m-d', strtotime($item->created_at))
+                'created_at'        => Date('Y-m-d', strtotime($item->created_at)),
+                'reason'            => $item->reason->reason ?? NULL,
+            ];
+        }
+        return $data;
+    }
+
+    public static function customerFactory($items){
+        $data = [];
+
+        foreach ($items as $item) {
+        $data[] = [
+                'id'                => $item->id,
+                'code'              => $item->code,
+                'name'              => $item->name,
+                'address'           => empty($item->address) ? '' : $item->address,
+                'village_id'        => $item->village_id,
+                'district_id'       => $item->district_id,
+                'regency_id'        => $item->regency_id,
+                'province_id'       => $item->province_id,
+                'village'           => $item->village->name,
+                'district'          => $item->district->name,
+                'regency'           => $item->regency->name,
+                'province'          => $item->province->name,
+                'date'              => $item->date,
+                'time'              => $item->time,
+                'status'            => $item->status,
+                'locked'            => $item->locked,
+                'phone_number'      => $item->phone_number,
+                'service'           => self::serviceFactory($item->service),
+                'created_at'        => Date('Y-m-d', strtotime($item->created_at)),
+                'reason'            => $item->reason->reason ?? NULL,
+                'price'             => self::allPriceDirt($item->report),
             ];
         }
         return $data;
@@ -78,6 +110,18 @@ class EngagementFactory
         foreach ($item as $key) {
             foreach ($key->subreport as $value) {
                 $price += $value->price_clean*$value->volume;
+            }
+        }
+
+        return $price;
+    }
+
+    public static function allPriceDirt($item){
+        $price = 0;
+ 
+        foreach ($item as $key) {
+            foreach ($key->subreport as $value) {
+                $price += $value->price_dirt*$value->volume;
             }
         }
 

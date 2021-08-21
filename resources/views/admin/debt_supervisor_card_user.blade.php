@@ -13,6 +13,9 @@
       <div class="modal fade" id="addPayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
+            <div class="loading-class d-none">
+              <div class="big-loader" id="loading"></div>
+            </div>
             <div class="modal-header" style="background-color: #ffc3c3;">
               <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -330,8 +333,11 @@
                 updated_at : '',
                 date_invoice : '',
               };
-              console.log(response);
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              // console.log(error.response.data.message);
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           showDetail: function(id, index){
             this.partner = this.data[index];
@@ -346,12 +352,20 @@
           allUnit: function(){
             axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
               this.allunit = response.data.data;
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              // console.log(error.response.data.message);
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           getReport : function(id){
             axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
               this.add_report = response.data.data;
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              // console.log(error.response.data.message);
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           addPayment : function(termin){
             this.add_termin.id            = termin.id; 
@@ -363,14 +377,23 @@
           sendPayment : function(id){
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
-
+            this.$nextTick(()=>{
+              $(".loading-class").removeClass('d-none');
+              $(".loading-class").addClass('d-flex');
+            });
             axios.post("{{ url('api/supervisor/addCheckout') }}/"+id, { date : forms.get('date') }).then(function(response){
               Swal.fire('Success', 'Tagihan Pembayaran Berhasil Terkirim', 'success');
               report.$nextTick(()=>{
+                $(".loading-class").removeClass('d-flex');
+                $(".loading-class").addClass('d-none');
                 $('#addPayment').modal('hide');
               });
             }.bind(this)).then(()=>{
               this.getData(this.id);
+            })
+            .catch(error => {
+              // console.log(error.response.data.message);
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
             });
           },
           formatPrice(value) {
@@ -389,7 +412,11 @@
               this.thisDistrict = '';
               this.village = {};
               this.thisVillage = '';
-            }.bind(this));
+            }.bind(this))
+            .catch(error => {
+              // console.log(error.response.data.message);
+              Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+            });
           },
           getRegency: function(){
             if (this.thisProvince != '') {
@@ -399,7 +426,11 @@
                 this.thisDistrict = '';
                 this.village = {};
                 this.thisVillage = '';
-              }.bind(this));
+              }.bind(this))
+              .catch(error => {
+                // console.log(error.response.data.message);
+                Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+              });
             }
           },
           getDistrict: function(){
@@ -408,14 +439,22 @@
                 this.district = response.data.data;
                 this.village = {};
                 this.thisVillage = '';
-              }.bind(this));
+              }.bind(this))
+              .catch(error => {
+                // console.log(error.response.data.message);
+                Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+              });
             }
           },
           getVillage: function(){
             if (this.thisDistrict != '') {
               axios.post("{{ url('api/village') }}", {id: this.thisDistrict}).then(function(response){
                 this.village = response.data.data;
-              }.bind(this));
+              }.bind(this))
+              .catch(error => {
+                // console.log(error.response.data.message);
+                Swal.fire('Opss', 'Terjadi Kesalahan <br> Harap hubungi team Developer', 'warning');
+              });
             }
           },
           formatRupiah: function(e){

@@ -26,7 +26,7 @@ class PaymentController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id'      => $order->id,
+                'order_id'      => $order->engagement->code.'-'.$order->id,
                 'gross_amount'  => $price,
             ],
             'customer_details'  => $customerDetails,
@@ -63,8 +63,12 @@ class PaymentController extends Controller
         $this->initPaymentGateway();
         $statusCode = null;
 
+
         $paymentNotification = new \Midtrans\Notification();
-        $order = Termin::where('id', $paymentNotification->order_id)->with('engagement')->firstOrFail();
+
+        $id_code = substr($paymentNotification->order_id, 8);
+        
+        $order = Termin::where('id', $id_code)->with('engagement')->firstOrFail();
 
         if ($order->isPaid()) {
             return apiResponseBuilder(422, '', 'The order has been paid before');

@@ -132,6 +132,27 @@ class ReportController extends Controller
         }
     }
 
+    public function engagementVendorAction($id){
+
+        $engagement = Engagement::where('id', $id)
+                    ->with(['user.partner', 'gallery', 'pprovince', 'pdistrict', 'pregency', 'pvillage', 'vendor', 'report' => function($query){
+                        $query->whereNull('parent_id')
+                                ->with(['termins.payment' => function ($query) {
+                                    $query->where('payment_log.status', 'success');
+                                }])
+                                ->with(['subreport' => function($query){
+                                    $query->orderBy('id', 'asc');
+                                }]);
+                        }])
+                    ->first();
+
+        if (auth()->guard('api')->user()->role == 4) {
+            if
+        }
+
+        return apiResponseBuilder(200, $engagement);
+    }
+
     public function addPrice(Request $request)
     {
         $data = $this->report->price($request);

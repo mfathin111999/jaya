@@ -658,7 +658,7 @@
               if (result.isConfirmed) {
                 axios.post("{{ url('api/report/destroy') }}/"+id).then(function(response){
                   this.getData(this.id);
-                  Swal.fire('Success', 'Store Successfully .. !', 'success');
+                  Swal.fire('Berhasil !', 'Data berhasil dihapus .. !', 'success');
                 }.bind(this));
               }
             });
@@ -712,7 +712,7 @@
               });
             }).then(() => {
               this.getData(this.id);
-              Swal.fire('Success', 'Update Successfully .. !', 'success');
+              Swal.fire('Berhasil !', 'Data berhasil disimpan .. !', 'success');
             });
           },
           saveReport : function(){
@@ -750,7 +750,7 @@
                 });
               }).then(() => {
                 this.getData(this.id);
-                Swal.fire('Success', 'Update Successfully .. !', 'success');
+                Swal.fire('Berhasil', 'Data berhasil disimpan .. !', 'success');
               });
             }
           },
@@ -777,7 +777,7 @@
               });
             }).then(() => {
               this.getData(this.id);
-              Swal.fire('Success', 'Store Successfully .. !', 'success');
+              Swal.fire('Berhasil !', 'Data berhasil disimpan .. !', 'success');
             });
           },
           savePartner : function(type = 0){
@@ -804,7 +804,7 @@
               });
             }).then(() => {
               this.getData(this.id);
-              Swal.fire('Success', 'Update Successfully .. !', 'success');
+              Swal.fire('Berhasil !', 'Data berhasil disimpan .. !', 'success');
             });
           },
           updateStep : function(id){
@@ -830,7 +830,7 @@
               });
             }).then(() => {
               this.getData(this.id);
-              Swal.fire('Success', 'Update Successfully .. !', 'success');
+              Swal.fire('Berhasil !', 'Data berhasil disimpan .. !', 'success');
             });
           },
           delStep : function(id, index){

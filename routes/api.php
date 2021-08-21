@@ -31,8 +31,6 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 
 
-
-
 Route::get('/termin/getByEngagementId/{id}', [PaymentController::class, 'getByEngagementId']);
 Route::get('/termin/view/{id}', [PaymentController::class, 'view']);
 Route::post('/termin', [PaymentController::class, 'store']);
@@ -75,6 +73,7 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/engagement/accVendor/{id}', [EngagementController::class, 'accVendor']);
 	Route::post('/engagement/update-engagement/{id}', [EngagementController::class, 'updateEngagement']);
 	Route::post('/engagement/destroy/{id}', [EngagementController::class, 'destroy']);
+	Route::post('/engagement/vendor/{id}', [EngagementController::class, 'engagementVendorAction']);
 
 	Route::post('/service/create-service', [ServiceController::class, 'createService']);
 	Route::get('/service/{id}', [ServiceController::class, 'view']);
@@ -138,6 +137,7 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/report/update', [ReportController::class, 'updateReport']);
 	Route::post('/report/destroy/{id}', [ReportController::class, 'destroy']);
 
+	Route::get('/resource/getMaterialDashboard', [ResourceController::class, 'getMaterialDashboard']);
 	Route::get('/resource', [ResourceController::class, 'index']);
 	Route::get('/resource/all-unit', [ResourceController::class, 'allUnit']);
 	Route::post('/resource/create-unit', [ResourceController::class, 'createUnit']);

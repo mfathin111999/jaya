@@ -23,6 +23,10 @@ class EngagementController extends Controller
 
     public function index(Request $request)
     {
+        if (auth()->user()->role == 4 || auth()->user()->role == 3) {
+            return apiResponseBuilder(403, [], 'unauthorize');
+        }
+        
         $data = Engagement::when(auth()->guard('api')->user()->role == 2, function ($query) {
                     $query->whereHas('employee', function ($query){
                         $query->where('users.id', auth()->guard('api')->user()->id);
@@ -52,7 +56,7 @@ class EngagementController extends Controller
                 ->with('province', 'regency', 'district', 'village', 'service')
                 ->withCount('report')
                 ->when($request->has('order'), function ($query) use ($request){
-                    $query->orderBy('date', $request->order);
+                    $query->orderBy('date', $request->order)->orderBy('status');
                 })
                 ->get();
 
@@ -103,13 +107,46 @@ class EngagementController extends Controller
         // return $data;
     }
 
-    public function indexCustomer()
+    public function indexCustomer(Request $request)
     {
-        $data = Engagement::whereHas('user', function($query) {
-                $query->where('user_id', auth()->guard('api')->user()->id);
-            })->with('province', 'regency', 'district', 'village', 'service')->withCount('report')->get();
 
-        return apiResponseBuilder(200, EngagementFactory::allFactory($data));
+        $data = Engagement::whereHas('user', function($query) {
+                    $query->where('user_id', auth()->guard('api')->user()->id);
+                })
+                ->when(auth()->guard('api')->user()->role == 5, function ($query) {
+                    $query->where('mandor_id', auth()->guard('api')->user()->id);
+                })
+                ->when($request->has('filter') && $request->filter == 'finish', function ($query) use ($request){
+                    $query->where('status', $request->filter);
+                })
+                ->when($request->has('filter') && $request->filter == 'pending', function ($query) use ($request){
+                    $query->where('status', $request->filter);
+                })
+                ->when($request->has('filter') && $request->filter == 'ignore', function ($query) use ($request){
+                    $query->where('status', $request->filter)->with('reason');
+                })
+                ->when($request->has('filter') && $request->filter == 'post_offer', function ($query) use ($request){
+                    $query->where('locked', 'offer')->where('status', 'acc')->whereHas('report');
+                })
+                ->when($request->has('filter') && $request->filter == 'offer', function ($query) use ($request){
+                    $query->where('locked', 'offer')->where('status', 'acc')->whereDoesntHave('report');
+                })
+                ->when($request->has('filter') && $request->filter == 'deal', function ($query) use ($request){
+                    $query->where('locked', 'deal')->where('status', 'acc');
+                })
+                ->when($request->has('order'), function ($query) use ($request){
+                    $query->orderBy('date', $request->order)->orderBy('status');
+                })
+                ->with('province', 'regency', 'district', 'village', 'service')->get();
+
+        $count = $data->count();
+
+        $datas = [
+            'data' => EngagementFactory::customerFactory($data),
+            'count' => $count,
+        ];
+
+        return apiResponseBuilder(200, $datas);
     }
 
     // GET CALENDAR
@@ -206,7 +243,7 @@ class EngagementController extends Controller
             if (auth()->user()->id === $data->user_id ) {
                 if ($data->vendor_is == 1) {
                     $data->locked = 'deal';
-                    $data->mandor_id = 2;
+                    $data->mandor_id = 2;   
                 }
 
                 $data->customer_is = 1;
@@ -215,7 +252,7 @@ class EngagementController extends Controller
 
                 return redirect()->route('action');
             }else{
-                return abort(404);
+                return abort(401);
             }
         }else{
             return redirect()->route('login');

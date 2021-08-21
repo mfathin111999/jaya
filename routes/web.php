@@ -66,9 +66,12 @@ Route::get('/history/all', function(){
 	return view('public.history');
 })->name('history.all');
 
-Route::get('/history/detail/{id}', function($id){
-	return view('public.history_detail', compact('id'));
-})->name('history.detail');
+Route::middleware('auth')->group(function(){
+	Route::get('/history/detail/{id}', function($id){
+		return view('public.history_detail', compact('id'));
+	})->name('history.detail');
+
+});
 
 Route::get('/dashboard', function(){
 	return view('admin.dashboard');
@@ -208,8 +211,3 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::get('/engagement/accCustomer/{id}', [EngagementController::class, 'accCustomer']);
-
-Route::get('generate', function (){
-    \Illuminate\Support\Facades\Artisan::call('storage:link');
-    echo 'ok';
-});
