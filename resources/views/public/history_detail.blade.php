@@ -170,7 +170,7 @@
                             <label class="m-0" v-if='termins.payment_url == null'>
                               Belum ada tagihan
                             </label>
-                            <label class="m-0 text-success" v-if='termins.status == "doneCustomer"'>
+                            <label class="m-0 text-success" v-if='termins.status == "doneCustomer" || termins.status == "donePayed"'>
                               Lunas
                             </label>
                           </td>

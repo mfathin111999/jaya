@@ -280,7 +280,7 @@ class EngagementController extends Controller
                     ->withCount(['report' => function($query){
                         $query->whereNull('parent_id')
                             ->whereHas('termin', function($query){
-                                $query->whereNull('status');
+                                $query->where('status', '!=', 'donePayed');
                             });
                     }])
                     ->first();

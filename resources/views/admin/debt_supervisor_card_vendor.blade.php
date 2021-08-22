@@ -272,15 +272,6 @@
             view: [],
             view_image: [],
             vendor: [],
-            allunit : [],
-            province: {},
-            thisProvince: '',
-            regency: {},
-            thisRegency: '',
-            district: {},
-            thisDistrict: '',
-            village: {},
-            thisVillage: '',
             priceCleanVendor: ''
         },
         mounted: function(){
@@ -325,11 +316,6 @@
             this.id = this.partner.id;
             this.id_engage = this.view_report.id;
           },
-          allUnit: function(){
-            axios.get("{{ url('api/resource/all-unit') }}").then(function(response){
-              this.allunit = response.data.data;
-            }.bind(this));
-          },
           getReport : function(id){
             axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){
               this.add_report = response.data.data;
@@ -361,44 +347,6 @@
           },
           addDetail : function(id){
             this.id_step = id;
-          },
-          loadProvince(){
-            axios.get("{{ url('api/province') }}").then(function(response){
-              this.province = response.data.data;
-              this.regency = {};
-              this.thisRegency = '';
-              this.district = {};
-              this.thisDistrict = '';
-              this.village = {};
-              this.thisVillage = '';
-            }.bind(this));
-          },
-          getRegency: function(){
-            if (this.thisProvince != '') {
-                axios.post("{{ url('api/regency') }}", {id: this.thisProvince}).then(function(response){
-                this.regency = response.data.data;
-                this.district = {};
-                this.thisDistrict = '';
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getDistrict: function(){
-            if (this.thisRegency != '') {
-              axios.post("{{ url('api/district') }}", {id: this.thisRegency}).then(function(response){
-                this.district = response.data.data;
-                this.village = {};
-                this.thisVillage = '';
-              }.bind(this));
-            }
-          },
-          getVillage: function(){
-            if (this.thisDistrict != '') {
-              axios.post("{{ url('api/village') }}", {id: this.thisDistrict}).then(function(response){
-                this.village = response.data.data;
-              }.bind(this));
-            }
           },
           formatRupiah: function(e){
             var number_string = e.target.value.replace(/[^,\d]/g, '').toString(),

@@ -35,7 +35,7 @@
         <div class="ml-4 mb-4 mt-4">
             Kepada Yth:<br>
             <strong>{{ $datas->name }}</strong><br>
-            <strong>Di {{ ucwords(strtolower($datas->district.', '.$datas->regency)) }}</strong><br>
+            <strong>Di {{ ucwords(strtolower($datas->district->name.', '.$datas->regency->name)) }}</strong><br>
         </div>
 
         <div class="ml-4 mb-3">

@@ -58,7 +58,7 @@ class EmployeeController extends Controller
             $query->where('status', 'acc')
                   ->where('locked', 'deal')
                   ->whereHas('termin', function($query){
-                    $query->where('status', 'doneCustomer')->orWhere('status', 'donePayed');
+                    $query->where('status', 'doneCustomer');
                   })
                   ->when($request->has('month') && $request->month != 'all', function($query) use ($request) {
                     $query->whereMonth('date', $request->month);
@@ -148,7 +148,8 @@ class EmployeeController extends Controller
                                   $query->orderBy('id', 'desc');
                                 }]);
                           }])->with(['payment' => function($query){
-                              $query->where('status', 'success');
+                              $query->where('status', 'success')
+                                    ->orWhere('status', 'settlement');
                           }]);
                   }]);
         }])
@@ -209,7 +210,8 @@ class EmployeeController extends Controller
                                     }]);
                           }])
                           ->with(['payment' => function($query){
-                              $query->where('status', 'success');
+                              $query->where('status', 'success')
+                                    ->orWhere('status', 'settlement');
                           }]);
                   }]);
         }])
@@ -270,7 +272,8 @@ class EmployeeController extends Controller
                     $query->where('status', 'doneCustomer')
                           ->orWhere('status', 'donePayed')
                           ->with(['payment' => function($query){
-                            $query->where('status', 'success');
+                            $query->where('status', 'success')
+                                  ->orWhere('status', 'settlement');
                           }])
                           ->with(['report' => function($query){
                             $query->whereNull('parent_id')

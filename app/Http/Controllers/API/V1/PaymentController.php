@@ -275,7 +275,7 @@ class PaymentController extends Controller
     }
 
     public function addPayMultiple(Request $request){
-        $data = Termin::whereIn('id', $request->id)->update(['status' => 'donePayed']);
+        $data = Termin::whereIn('id', $request->id)->update(['status' => 'donePayed', 'date_invoice' => date('Y-m-d'), 'document' => 'PAY/'.uniqid().'/'.date('m').'/'.date('Y')]);
 
         return $data;
     }

@@ -95,7 +95,7 @@ class ReportController extends Controller
                                 }]);
                             }])
                             ->with(['payment' => function($query){
-                                $query->where('payment_log.status', 'success');
+                                $query->where('payment_log.status', 'success')->orWhere('payment_log.status', 'settlement');
                             }])->get();
 
                 foreach($termin as $item){
@@ -138,7 +138,7 @@ class ReportController extends Controller
                     ->with(['user.partner', 'gallery', 'pprovince', 'pdistrict', 'pregency', 'pvillage', 'vendor', 'report' => function($query){
                         $query->whereNull('parent_id')
                                 ->with(['termins.payment' => function ($query) {
-                                    $query->where('payment_log.status', 'success');
+                                    $query->where('payment_log.status', 'success')->orWhere('payment_log.status', 'settlement');
                                 }])
                                 ->with(['subreport' => function($query){
                                     $query->orderBy('id', 'asc');
