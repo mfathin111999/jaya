@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Domain\Engagement\Entities\Engagement;
-use App\Domain\Engagement\Application\EngagementManagement;
+use App\Http\Controllers\API\V1\ReportController;
 use App\Domain\Engagement\Factories\EngagementFactory;
-use Illuminate\Support\Facades\Auth;
+use App\Domain\Engagement\Application\EngagementManagement;
+
+use PDF;
+use File;
+use Storage;
 
 class EngagementController extends Controller
 {
@@ -85,7 +90,7 @@ class EngagementController extends Controller
 
     public function indexVendor(Request $request)
     {
-        $data = Engagement::where('vendor_id', $request->id)
+        $data = Engagement::where('vendor_id', auth()->guard('api')->user()->id)
                             ->when($request->has('filter') && $request->filter == 'finish', function ($query) use ($request){
                                 $query->where('status', 'finish');
                             })
@@ -229,7 +234,6 @@ class EngagementController extends Controller
         }else if ($request['type'] == 'acc') {
             $data = $this->engagement->accVendor($id);
         }
-        return apiResponseBuilder(200, $data);
 
     }
 
@@ -280,7 +284,7 @@ class EngagementController extends Controller
                     ->withCount(['report' => function($query){
                         $query->whereNull('parent_id')
                             ->whereHas('termin', function($query){
-                                $query->where('status', '!=', 'donePayed');
+                                $query->whereNull('status')->orWhere('status', '!=', 'donePayed');
                             });
                     }])
                     ->first();

@@ -71,7 +71,6 @@
 @section('content')
 	@include('layout.header')
 	<div id="app" v-cloak>
-
 	    <!-- Carousel Start -->
 	    <div id="carousel" class="carousel slide" data-ride="carousel">
 	        <ol class="carousel-indicators">
@@ -354,7 +353,7 @@
 	                                <i class="flaticon-worker"></i>
 	                            </div>
 	                            <div class="fact-text">
-	                                <h2 data-toggle="counter-up">109</h2>
+	                                <h2 data-toggle="counter-up">33</h2>
 	                                <p>Expert Workers</p>
 	                            </div>
 	                        </div>
@@ -363,7 +362,7 @@
 	                                <i class="flaticon-building"></i>
 	                            </div>
 	                            <div class="fact-text">
-	                                <h2 data-toggle="counter-up">485</h2>
+	                                <h2 data-toggle="counter-up">120</h2>
 	                                <p>Happy Clients</p>
 	                            </div>
 	                        </div>
@@ -376,7 +375,7 @@
 	                                <i class="flaticon-address"></i>
 	                            </div>
 	                            <div class="fact-text">
-	                                <h2 data-toggle="counter-up">789</h2>
+	                                <h2 data-toggle="counter-up">132</h2>
 	                                <p>Completed Projects</p>
 	                            </div>
 	                        </div>
@@ -385,7 +384,7 @@
 	                                <i class="flaticon-crane"></i>
 	                            </div>
 	                            <div class="fact-text">
-	                                <h2 data-toggle="counter-up">890</h2>
+	                                <h2 data-toggle="counter-up">20</h2>
 	                                <p>Running Projects</p>
 	                            </div>
 	                        </div>
@@ -451,54 +450,6 @@
 	                            <a class="btn" href="{{ asset('img/all/focus-mechanical.png') }}" data-lightbox="service">+</a>
 	                        </div>
 	                    </div>
-	                </div>
-	                {{-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-	                    <div class="service-item">
-	                        <div class="service-img">
-	                            <img src="img/service-4.jpg" alt="Image">
-	                            <div class="service-overlay">
-	                                <p>
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
-	                                </p>
-	                            </div>
-	                        </div>
-	                        <div class="service-text">
-	                            <h3>Desain Interior</h3>
-	                            <a class="btn-theme" href="img/service-4.jpg" data-lightbox="service">+</a>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-	                    <div class="service-item">
-	                        <div class="service-img">
-	                            <img src="img/service-5.jpg" alt="Image">
-	                            <div class="service-overlay">
-	                                <p>
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
-	                                </p>
-	                            </div>
-	                        </div>
-	                        <div class="service-text">
-	                            <h3>Maintenance</h3>
-	                            <a class="btn-theme" href="img/service-5.jpg" data-lightbox="service">+</a>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-	                    <div class="service-item">
-	                        <div class="service-img">
-	                            <img src="img/service-6.jpg" alt="Image">
-	                            <div class="service-overlay">
-	                                <p>
-	                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
-	                                </p>
-	                            </div>
-	                        </div>
-	                        <div class="service-text">
-	                            <h3>Pengecatan</h3>
-	                            <a class="btn-theme" href="img/service-6.jpg" data-lightbox="service">+</a>
-	                        </div>
-	                    </div> --}}
 	                </div>
 	            </div>
 	        </div>
@@ -891,151 +842,8 @@
 	    </div>
 	    <!-- FAQs End -->
 
-	    <!-- Testimonial Start -->
-	    {{-- <div class="testimonial wow fadeIn" data-wow-delay="0.1s">
-	        <div class="container">
-	            <div class="row">
-	                <div class="col-12">
-	                    <div class="testimonial-slider-nav">
-	                        <div class="slider-nav"><img src="img/testimonial-1.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-2.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-3.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-4.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-1.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-2.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-3.jpg" alt="Testimonial"></div>
-	                        <div class="slider-nav"><img src="img/testimonial-4.jpg" alt="Testimonial"></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="row">
-	                <div class="col-12">
-	                    <div class="testimonial-slider">
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                        <div class="slider-item">
-	                            <h3>Customer Name</h3>
-	                            <h4>profession</h4>
-	                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus.</p>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div> --}}
-	    <!-- Testimonial End -->
-
-	    <!-- Blog Start -->
-	    {{-- <div class="blog">
-	        <div class="container">
-	            <div class="section-header text-center">
-	                <p>Blog Terbaru</p>
-	                <h2>Terbaru dari Blog Kami</h2>
-	            </div>
-	            <div class="row">
-	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-	                    <div class="blog-item">
-	                        <div class="blog-img">
-	                            <img src="img/blog-1.jpg" alt="Image">
-	                        </div>
-	                        <div class="blog-title">
-	                            <h3>Lorem ipsum dolor sit</h3>
-	                            <a class="btn-theme" href="">+</a>
-	                        </div>
-	                        <div class="blog-meta">
-	                            <p>By<a href="">Admin</a></p>
-	                            <p>In<a href="">Construction</a></p>
-	                        </div>
-	                        <div class="blog-text">
-	                            <p>
-	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
-	                            </p>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-6 wow fadeInUp">
-	                    <div class="blog-item">
-	                        <div class="blog-img">
-	                            <img src="img/blog-2.jpg" alt="Image">
-	                        </div>
-	                        <div class="blog-title">
-	                            <h3>Lorem ipsum dolor sit</h3>
-	                            <a class="btn-theme" href="">+</a>
-	                        </div>
-	                        <div class="blog-meta">
-	                            <p>By<a href="">Admin</a></p>
-	                            <p>In<a href="">Construction</a></p>
-	                        </div>
-	                        <div class="blog-text">
-	                            <p>
-	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
-	                            </p>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-	                    <div class="blog-item">
-	                        <div class="blog-img">
-	                            <img src="img/blog-3.jpg" alt="Image">
-	                        </div>
-	                        <div class="blog-title">
-	                            <h3>Lorem ipsum dolor sit</h3>
-	                            <a class="btn-theme" href="">+</a>
-	                        </div>
-	                        <div class="blog-meta">
-	                            <p>By<a href="">Admin</a></p>
-	                            <p>In<a href="">Construction</a></p>
-	                        </div>
-	                        <div class="blog-text">
-	                            <p>
-	                                Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor
-	                            </p>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div> --}}
-	    <!-- Blog End -->
-
-	    <!-- Footer Start -->            
-	    <!-- Footer End -->
-
 	</div>
-    <a href="https://wa.me/6281219961904?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
+    <a href="https://wa.me/6281224169630?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 	@include('layout.footer')
 @endsection
@@ -1174,7 +982,6 @@
 	              }
 	            ).then((response) => {
 	        		form.reset();
-	        		console.log(response);
 	              	Swal.fire('Success', 'Terima Kasih! Reservasi anda akan kami tinjau', 'success');
 	              	app.$nextTick(()=>{
 	              		$(".select2").val("");

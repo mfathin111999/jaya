@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 5)
+@if(auth()->user()->role != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -22,21 +22,27 @@
             <div class="modal-body">
               <div class="row align-items-center">
                 <div class="col-12 mb-2">
-                  <label class="m-0">Total Pembayaran</label>
+                  <label class="m-0">Total Pembayaran</label> 
                 </div>
                 <div class="col-12 mb-2">
-                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_report.price) }}</label>
+                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(detail.price_clean) }}</label>
                 </div>
                 <div class="col-12">
                   <div class="form-group">
                     <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                    <input type="text" class="form-control" id="date_start" v-model='add_report.date_invoice' name="date" required disabled="">
+                    <input type="text" class="form-control" id="date_start" v-model='detail.date_invoice' name="date" disabled="">
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="form-group">
-                    <label for="date_updated">Tanggal Laporan</label>
-                    <input type="text" class="form-control" id="date_updated" v-model='add_report.updated_at' required disabled="">
+                    <label for="date_updated">Penanggung Jawab Pembayaran</label>
+                    <input type="text" class="form-control" v-model='detail.pic' disabled="">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="d-block">Bukti Pembayaran</label>
+                    <img :src="'storage/'+detail.image" class="img-fluid">
                   </div>
                 </div>
               </div>
@@ -125,13 +131,7 @@
                                 <strong>Date Invoise</strong>
                               </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Document No</strong>
-                              </th>
-                              <th align="center" class="text-center" scope="col">
                                 <strong>Description</strong>
-                              </th>
-                              <th align="center" class="text-center" scope="col">
-                                <strong>Payment</strong>
                               </th>
                               <th align="center" class="text-center" scope="col">
                                 <strong>Payment Date</strong>
@@ -140,8 +140,8 @@
                                 <strong>Payment Amount</strong>
                               </th>
                               <th align="center" class="text-center" scope="col">
-                                <strong>Bank Account</strong>
-                            </th>
+                                <strong>Detail</strong>
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -153,13 +153,7 @@
                                 @{{ termins.date_pay }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ termins.document_no }}
-                              </td>
-                              <td align="center" style="vertical-align: middle;">
                                 <strong>@{{ mapUh(termins.report) }}</strong>
-                              </td>
-                              <td align="center" style="vertical-align: middle;">
-                                @{{ termins.payment[0].number }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
                                 @{{ moment(termins.date_pay).format('YYYY-MM-DD') }}
@@ -168,11 +162,11 @@
                                 @{{ formatPrice(termins.price_clean) }}
                               </td>
                               <td align="center" style="vertical-align: middle;">
-                                @{{ termins.payment[0].payment_type }}
+                                <button type="button" class="btn btn-primary font-12" v-on:click="showDetail(index)" data-toggle="modal" data-target="#seePayment">Detail</button>
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="6">
+                              <td colspan="4">
                                 <strong>Total @{{ partner.name }}</strong>
                               </td>
                               <td align="center" style="vertical-align: middle;">
@@ -218,6 +212,7 @@
             month : moment().format('MM'),
             year : moment().format('YYYY'),
             report: {},
+            detail: {},
             priceCleanVendor: ''
         },
         mounted: function(){
@@ -243,6 +238,10 @@
             this.view_report = this.data[id].vendor_engage[id2];
             this.id = this.partner.id;
             this.id_engage = this.view_report.id;
+          },
+          showDetail : function (id) {
+            this.detail = this.view_report.termin[id];
+            console.log(this.detail);
           },
           getReport : function(id){
             axios.get("{{ url('api/report/getByIdReport') }}/"+id).then(function(response){

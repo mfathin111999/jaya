@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 3)
+@if(auth()->user()->role != 3)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -167,7 +167,7 @@
                     <table class="table table-bordered" width="100%">
                       <thead>
                         <tr>
-                          <th colspan="6" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
+                          <th colspan="5" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
                           <th align="center" class="text-center" style="vertical-align: middle;" colspan="7">
                             <label class="m-0" v-if='report.status != "done" && report.status != "doneMandor" && report.status != "donePayed"'>Belum ada Laporan</label>
                             <label class="m-0" v-if='report.status == "doneMandor"'>Lengkap</label>
@@ -177,11 +177,10 @@
                         </tr>
                         <tr>
                           <td align="center" width="5%"><strong>No</strong></td>
-                          <td align="center" width="30%"><strong>Nama</strong></td>
-                          <td align="center" width="30%"><strong>Keterangan</strong></td>
+                          <td align="center" width="25%"><strong>Nama</strong></td>
+                          <td align="center" width="25%"><strong>Keterangan</strong></td>
                           <td align="center" width="5%"><strong>Volume</strong></td>
-                          <td align="center" width="5%"><strong>Unit</strong></td>
-                          <td align="center" width="5%"><strong>Waktu</strong></td>
+                          <td align="center" width="15%"><strong>Waktu</strong></td>
                           <td align="center" width="20%"><strong>Aksi</strong></td>
                         </tr>
                       </thead>
@@ -190,9 +189,8 @@
                           <td align="center" style="vertical-align: middle;">@{{ index3+1 }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.description }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.unit }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.time }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.volume }} @{{ detail.unit }}</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari ( @{{ detail.deadline }} )</td>
                           <td align="center" style="vertical-align: middle;">
                             <label class="m-0 text-success" v-if='(report.status == "deal" && report.status == "deal") && (detail.status == "deal" || detail.status == "offer")'>Proses Pengerjaan</label>
                             <label class="m-0 text-success" v-if='report.status == "done"'>Pengerjaan Selesai</label>
@@ -207,8 +205,9 @@
                 </div>
 
               </div>
-              <div class="card-footer text-center">
+              <div class="card-footer text-center d-flex align-items-center justify-content-between">
                 <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
+                <a href="{{ url('/engagement') }}" class="btn btn-info">Kembali</a>
               </div>
             </div>    
           </main>

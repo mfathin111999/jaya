@@ -4,6 +4,7 @@ namespace App\Domain\Report\Factories;
 
 class ReportFactory 
 {
+    private static $date_work = '';
 
     public static function call($items){
         $data = [
@@ -31,6 +32,8 @@ class ReportFactory
             'partner'      => $items->user->partner,
         ];
 
+        static::$date_work = $items->date_work;
+
         return $data;
     }
 
@@ -43,6 +46,7 @@ class ReportFactory
                 'reservation_id'    => $item->reservation_id,
                 'name'              => $item->name,
                 'termin'            => auth()->guard('api')->user()->role == 5 ? ($item->termins->payment ?? null ) : $item->termin,
+                'termin_status'     => auth()->guard('api')->user()->role == 5 ? $item->termins->status : '',
                 'termin_code'       => $item->termins->id ?? null,
                 'status'            => $item->status,
                 'all_price'         => self::price($item->subreport),
@@ -68,19 +72,30 @@ class ReportFactory
     public static function subReport($items){
         $data = [];
 
+        $date = static::$date_work;
+
         foreach ($items as $item) {
-        $data[] = [
-                'id'            => $item->id,
-                'name'          => $item->name,
-                'unit'          => $item->unit,
-                'volume'        => $item->volume,
-                'price_clean'   => $item->price_clean,
-                'price_dirt'    => $item->price_dirt,
-                'status'        => $item->status,
-                'time'          => $item->time,
-                'description'   => $item->description,
-            ];
+        
+            $date_finish = date('Y/m/d', strtotime($date.' +'.$item->time.' day'));
+
+            $data[] = [
+                    'id'            => $item->id,
+                    'name'          => $item->name,
+                    'unit'          => $item->unit,
+                    'volume'        => $item->volume,
+                    'price_clean'   => $item->price_clean,
+                    'price_dirt'    => $item->price_dirt,
+                    'status'        => $item->status,
+                    'time'          => $item->time,
+                    'deadline'      => $date_finish,
+                    'description'   => $item->description,
+                ];
+
+            $date = $date_finish;
+
         }
+
+        static::$date_work = $date;
 
         return $data;
     }

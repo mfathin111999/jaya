@@ -8,11 +8,10 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 use PDF;
-use File
+use File;
 use Storage;
 
-
-class SendEngage extends Mailable
+class SendEngageVendor extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -25,7 +24,7 @@ class SendEngage extends Mailable
      */
     public function __construct($engagement)
     {
-        $this->engagement   = $engagement;
+        $this->engagement = $engagement;
     }
 
     /**
@@ -36,7 +35,7 @@ class SendEngage extends Mailable
     public function build()
     {
         $datas = $this->engagement;
-        $pdf = PDF::loadView('export.customer', compact('datas'));
+        $pdf = PDF::loadView('export.vendor', compact('datas'));
         
         $path = public_path().'/public/pdf';
 
@@ -46,8 +45,8 @@ class SendEngage extends Mailable
         $content = $pdf->download()->getOriginalContent();
         Storage::put('public/pdf/SP'.$datas->code.date('ymdhis').'.pdf', $content);
 
-        return $this->subject('Penawaran Harga')
-                    ->view('email.engage')
-                    ->attachData($pdf->output(), "penawaran.pdf");
+        return $this->subject('Surat Penunjukan Rekanan')
+                    ->view('email.engageVendor')
+                    ->attachData($pdf->output(), "SPR.pdf");
     }
 }

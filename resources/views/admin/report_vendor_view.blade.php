@@ -1,10 +1,22 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') == 4)
+@if(auth()->user()->role != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
 @else
+
+  @section('sec-css')
+    <style type="text/css">
+      .buttoned{
+        border: 0px;
+        background-color: transparent;
+        cursor: pointer;
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  @endsection
 
   @section('content')
   	@include('layout.admin_header')
@@ -17,34 +29,54 @@
           <main role="main" class="col-lg-10 px-4 mt-4">
             <div class="card">
       				<div class="card-header">
-      					<h3 class="text-center mb-4"><strong>PENAWARAN PEKERJAAN</strong></h3>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-md-3 col-8">Kode Booking</div>
-                      <div class="col-md-1 col-4 text-center">:</div>
-                      <div class="col-md-8 col-12"><strong>@{{ data.code }}</strong></div>
-                      <div class="col-md-3 col-8">Nama Pelanggan</div>
-                      <div class="col-md-1 col-4 text-center">:</div>
-                      <div class="col-md-8 col-12"><strong>@{{ data.name }}</strong></div>
-                      <div class="col-md-3 col-8">Tanggal Survey</div>
-                      <div class="col-md-1 col-4 text-center">:</div>
-                      <div class="col-md-8 col-12"><strong>@{{ data.date }} @{{ data.time }}</strong></div>
-                      <div class="col-md-3 col-8">Vendor</div>
-                      <div class="col-md-1 col-4 text-center">:</div>
-                      <div class="col-md-8 col-12"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></div>
-                      <div class="col-md-3 col-8">Tanggal Mulai</div>
-                      <div class="col-md-1 col-4 text-center">:</div>
-                      <div class="col-md-8 col-12" v-if= 'data.date_work != null' >
-                        <strong>@{{ data.date_work }},</strong>
+      					  <h3 class="text-center mb-4"><strong>PENAWARAN PEKERJAAN</strong></h3>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-12">
+                          <label class="font-12 m-0">Kode Booking</label>
+                          <br>
+                          <label class="font-14"><strong>@{{ data.code }}</strong></label>
+                        </div>
+                        <div class="col-12">
+                          <label class="font-12 m-0">Nama Pelanggan</label>
+                          <br>
+                          <label class="font-14"><strong>@{{ data.name }}</strong></label>
+                        </div>
+                        <div class="col-12">
+                          <label class="font-12 m-0">Vendor</label>
+                          <br>
+                          <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                        </div>
+                        <div class="col-12">
+                          <label class="font-12 m-0">Tanggal Mulai</label>
+                          <br>
+                          <strong class="font-14">
+                            <label class="m-0" v-if= 'data.date_work != null' >
+                              @{{ data.date_work }},
+                            </label>
+                            <label class="m-0" v-if= 'data.date_work == null' >
+                              Belum ditentukan
+                            </label>
+                          </strong>
+                        </div>
                       </div>
-                      <div class="col-md-8 col-12" v-if= 'data.date_work == null' >
-                        <strong>Belum Ditentukan</strong>
+                    </div>
+                    <div class="col-md-6">
+                      <div>
+                        <label class="font-12">Status</label>
+                        <br>
+                        <label class="font-weight-bold text-warning h5" v-if='data.customer_is != 1'>Proses Penawaran</label>
+                        <label class="font-weight-bold text-warning h5" v-if='data.customer_is == 1 && data.vendor_is == 0'>Perlu Persetujuan Anda</label>
+                        <label class="font-weight-bold text-info h5" v-if='data.customer_is == 1 && data.vendor_is == 1'>Selesai</label>
+
+                        <br>
+                        <label class="font-12">Aksi</label>
+                        <br>
+                        <a href="{{ url('report/printVendor') }}/{{ $id }}" class="font-weight-bold btn btn-info font-12" v-if='data.customer_is == 1'>Print SPK</a>
                       </div>
                     </div>
                   </div>
-                </div>
-
       				</div>
     					<div class="card-body">
 
@@ -181,9 +213,10 @@
                 </div>
 
     					</div>
-    					<div class="card-footer text-center">
-    						<label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
-    					</div>
+    					<div class="card-footer text-center d-flex align-items-center justify-content-between">
+                <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
+                <a href="{{ url('/engagement_vendor') }}" class="btn btn-info">Kembali</a>
+              </div>
   			    </div>		
           </main>
         </div>

@@ -16,25 +16,20 @@
 			<td bgcolor="#ffffff" style="padding: 20px 30px 20px 30px; font-size: 16px; line-height: 2;">
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr style="line-height: 25px;">
-						<td style="text-align: center;"><strong>Hallo, {{ $report->engagement->name }}</strong><br>
-							Terima Kasih telah menggunakan NRU, Pembayaran pekerjaan tahap {{ $report->name }} dengan jumlah Rp. {{ number_format($price, 2) }}, dengan kode booking <strong>{{ $report->engagement->code }}</strong> harap segera diselesaikan.
+						<td style="text-align: center;"><strong>Hallo, {{ $engagement->vendor->name }}</strong><br>
+							 Sehubungan dengan adanya pekerjaan dengan kode booking <strong>{{ $engagement->code }}</strong>, berikut kami tawarkan harga per detail pekerjaan untuk menunjuk anda sebagai vendor pekerjaan ini.
 						</td>
 					</tr>
 					<tr height="30px">
 						<td style="text-align: center;">
-							<h3><strong style="color: #de2537;">Klik tombol dibawah untuk detail pembayaran</strong></h3>
-						</td>
-					</tr>
-					<tr>
-						<td style="text-align: center;">
-							<a href="{{ $report->payment_url }}?_token={{ $report->payment_token }}" style="background-color: #fdbe33; border-radius: 10px; color: #FFFFFF; padding: 10px 20px;"> 
-								Detail Pembayaran
-							</a>
+							<h3><strong style="color: #de2537;">Klik disini bila Sdr/i Setuju</strong></h3>
 						</td>
 					</tr>
 					<tr style="text-align: center;">
 						<td>
-
+							<a href="{{ url('/engagement/accVendor') }}/{{ $engagement->id }}" style="background-color: #fdbe33; border-radius: 10px; color: #FFFFFF; padding: 10px 20px;"> 
+								Setuju
+							</a>
 						</td>
 					</tr>
 				</table>

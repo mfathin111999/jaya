@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 1)
+@if(auth()->user()->role != 1)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -13,7 +13,7 @@
       <div class="modal fade" id="addPayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
+            <div class="modal-header" style="background-color: #fdbe33;">
               <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -22,6 +22,11 @@
             <form v-on:submit.prevent="sendPayment(add_termin.id)" id="form-add-pay">
               <div class="modal-body">
                 <div class="row align-items-center">
+                  <div class="col-12 mb-2" v-if='error.length != 0'>
+                    <div class="alert alert-danger" v-for="errors in error">
+                        @{{ errors[0] }}
+                    </div>
+                  </div>
                   <div class="col-12 mb-2">
                     <label class="m-0">Total Pembayaran</label>
                   </div>
@@ -40,50 +45,24 @@
                       <input type="text" id="date_update" class="form-control" v-model='add_termin.updated_at' required disabled="">
                     </div>
                   </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="date_update">Penanggung Jawab</label>
+                      <input type="text" class="form-control" name="pic" v-model='add_termin.pic' required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="date_update">Bukti Pembayaran</label>
+                      <input type="file" class="form-control" name="image" v-model='add_termin.image' required>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Kirim Pembayaran</button>
+                <button type="submit" class="btn btn-info">Kirim Pembayaran</button>
               </div>
             </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="seePayment" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Lihat Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="row align-items-center">
-                <div class="col-12 mb-2">
-                  <label class="m-0">Total Pembayaran</label>
-                </div>
-                <div class="col-12 mb-2">
-                  <label class="m-0 h5 font-weight-bold">Rp. @{{ formatPrice(add_termin.price) }}</label>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                    <label for="price_clean1">Tanggal Pembayaran Pekerjaan</label>
-                    <input type="text" class="form-control" id="date_start" v-model='add_termin.date_invoice' name="date" required disabled="">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                    <label for="date_updated">Tanggal Laporan</label>
-                    <input type="text" class="form-control" id="date_updated" v-model='add_termin.updated_at' required disabled="">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-            </div>
           </div>
         </div>
       </div>
@@ -258,6 +237,8 @@
               id : '',
               updated_at : '',
               date_invoice : '',
+              pic : '',
+              photo : '',
             },
             add_form : {},
             add_date : {},
@@ -272,7 +253,8 @@
             view: [],
             view_image: [],
             vendor: [],
-            priceCleanVendor: ''
+            priceCleanVendor: '',
+            error : {},
         },
         mounted: function(){
           this.getData();
@@ -332,13 +314,19 @@
             let form = document.getElementById('form-add-pay');
             let forms = new FormData(form);
 
-            axios.post("{{ url('api/supervisor/addPay') }}/"+id, { date : forms.get('date') }).then(function(response){
+            axios.post("{{ url('api/supervisor/addPay') }}/"+id, forms).then(function(response){
               Swal.fire('Success', 'Konfirmasi Pembayaran Berhasil', 'success');
+              this.error = {};
               report.$nextTick(()=>{
                 $('#addPayment').modal('hide');
               });
-            }.bind(this)).then(()=>{
+            }.bind(this))
+            .then(()=>{
               this.getData(this.id);
+            })
+            .catch(error => {
+              this.error = error.response.data.data;
+              console.log(error.response.data.data);
             });
           },
           formatPrice(value) {

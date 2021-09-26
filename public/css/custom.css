@@ -1,3 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.swal2-popup {
+	font-size: 0.8rem !important;
+}
+
+
+.font-10{
+	font-size: 10px !important;
+}
+
+.font-12{
+	font-size: 12px !important;
+}
+
+.font-14{
+	font-size: 14px !important;
+}
+
+.font-20{
+	font-size: 20px !important;
+}
+
+.font-icon{}
+
+.font-icon [class^="flaticon-"]::before {
+    margin: 0;
+    color: #030f27;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.dropdown-item:hover{
+	background-color: #030f27;
+	color: white;
+}
+
+.btn-theme{
+	display: inline-block;
+	font-weight: 400;
+	color: #212529;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-color: transparent;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.daterangepicker{
+	position: absolute !important;
+	padding: 0px;
+}
+.btn-navbar{
+	background: transparent;
+}
+
+.select2-container--default .select2-selection--multiple:before {
+	content: ' ';
+	display: block;
+	position: absolute;
+	border-color: #888 transparent transparent transparent;
+	border-style: solid;
+	border-width: 5px 4px 0 4px;
+	height: calc(2.25rem + 2px);
+	right: 6px;
+	margin-left: -4px;
+	margin-top: -2px;top: 50%;
+	width: 0;cursor: pointer
+}
+
+.select2-container--open .select2-selection--multiple:before {
+	content: ' ';
+	display: block;
+	position: absolute;
+	border-color: transparent transparent #888 transparent;
+	border-width: 0 4px 5px 4px;
+	height: calc(2.25rem + 2px);
+	right: 6px;
+	margin-left: -4px;
+	margin-top: -2px;top: 50%;
+	width: 0;cursor: pointer
+}
+
+[v-cloak] {
+	display: none;
+}
+
+.loader {
+	border: 16px solid #f3f3f3; /* Light grey */
+	border-top: 16px solid #fdbe33; /* Blue */
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
 a {
 	color: black;
+}
+
+.max-400{
+	width: auto !important;
+	height: 400px;
+}
+
+.nurani-rezeki-unggul{
+	
+}
+
+.max-500{
+	width: auto !important;
+	height: 500px;
+}
+
+.f-small{
+	font-size: 14px;
+}
+
+.f-light{
+	font-size: 12px;
+}
+
+.max-height-100{
+	height: 30px;
+}
+
+.card{
+	border-radius: 20px;
+}
+
+.card-footer{
+	border-bottom-right-radius: 20px !important;
+	border-bottom-left-radius: 20px !important;
+}
+
+.btn-submited{
+	padding: 16px 30px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #ffffff;
+	background: #030f27;
+	border: none;
+	border-radius: 0;
+	transition: .3s;
+}
+
+.back-to-whatsapp {
+	position: fixed;
+	display: inline;
+	color: #121518;
+	width: 75px;
+	height: 75px;
+	text-align: center;
+	line-height: 1;
+	font-size: 22px;
+	right: 0px;
+	bottom: 75px;
+	z-index: 9;
+}
+
+.back-to-whatsapp:hover {
+	transform: scale(1.5);
+}
+
+.shadow-cards{
+	box-shadow: 0 1px 6px 0 rgba(49, 53, 59, 0.12); 
+	border-radius: 8px;
+}
+
+
+.dataTables_filter{
+	text-align: right;
+}
+
+.dataTables_filter label{
+	text-align: left;
+	font-size: 12px;
+}
+
+.dataTables_info, .dataTables_length{
+	font-size: 12px;
+}
+
+.pagination{
+	justify-content: flex-end;
+	font-size: 12px;
+	margin-bottom: 0px !important;
+}
+
+.activated{
+	color: white !important;
 }

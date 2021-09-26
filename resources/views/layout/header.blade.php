@@ -10,6 +10,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="alert alert-danger" v-if='error_text == true'>
+                            Kombinasi Email dan Password Salah
+                        </div>
                         <div class="form-group">
                             <label for="emailLogin" class="font-12">Email</label>
                             <input type="email" class="form-control" id="emailLogin" name="email" placeholder="Masukan email" required="" autocomplete="false">
@@ -18,15 +21,18 @@
                             <label for="passwordLogin" class="font-12">Kata Sandi</label>
                             <input type="password" class="form-control" id="passwordLogin" name="password" placeholder="Kata Sandi" required="" autocomplete="false">
                         </div>
-                        <div class="custom-control custom-checkbox mb-2">
-                          <input type="checkbox" class="custom-control-input" id="customCheck1">
-                          <label class="custom-control-label font-12" for="customCheck1">Ingat Saya !</label>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="custom-control custom-checkbox mb-2 d-inline">
+                              <input type="checkbox" class="custom-control-input" id="customCheck1">
+                              <label class="custom-control-label font-12" for="customCheck1">Ingat Saya !</label>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-info btn-block text-center">Login</button>
                     </div>
                     <div class="modal-footer font-12">
+                        <a href="{{ url('forgot') }}" class="font-12">Lupa kata sandi ?</a>
                         <p class="m-0">Belum punya akun ? &nbsp</p>
-                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" data-target='#signModal' data-toggle="modal" >Daftar</button>
+                        <button class="text-info p-0 m-0" data-dismiss="modal" style="background:none; border:none; cursor: pointer;" data-target='#signModal' data-toggle="modal">Daftar</button>
                     </div>
                 </form>
             </div>
@@ -51,6 +57,7 @@
                                 </div>
                             @endforeach
                         @endif
+
                         <div class="form-group">
                             <label for="nameSign" class="font-12">Nama Lengkap</label>
                             <input type="text" value="{{request()->old('name')}}" class="form-control" id="nameSign" placeholder="Nama Lengkap" name="name" required="">
@@ -81,12 +88,30 @@
     <div class="top-bar">
         <div class="container-fluid">
             <div class="row align-items-center">
-                <div class="col-lg-4 col-md-12">
+                <div class="col-lg-4 col-md-12 ">
                     <div class="logo">
                         <a href="index.html">
-                            <h1 style="font-size: 30px !important;">Servis Rumah</h1>
+                            <h1 class="mt-2 mt-md-0" style="font-size: 30px !important;">Servis Rumah</h1>
                             <!-- <img src="img/logo.jpg" alt="Logo"> -->
                         </a>
+                    </div>
+                    <div class="col-12 col-sm-8 mx-auto d-block d-lg-none">
+                        <div class="row font-12 font-icon" style="color: black;">
+                            <div class="col-12">
+                                <div class=" d-flex align-items-center mb-2 justify-content-start">
+                                    <i class="flaticon-call"></i>
+                                    <p class="ml-3 mb-0">+62 812-2416-9630</p>
+                                </div>
+                                <div class=" d-flex align-items-center mb-2 justify-content-start">
+                                    <i class="flaticon-send-mail"></i>
+                                    <p class="ml-3 mb-0">nru@servisrumah.com</p>
+                                </div>
+                                <div class=" d-flex align-items-center mb-2 justify-content-start">
+                                    <i class="flaticon-calendar"></i>
+                                    <p class="mb-0 ml-3">Senin - Jumat, 08:00 - 17:00</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-7 d-none d-lg-block">
@@ -109,7 +134,7 @@
                                 </div>
                                 <div class="top-bar-text">
                                     <h3>Kontak Kami</h3>
-                                    <p>+62 812 1996 1904</p>
+                                    <p>+62 812-2416-9630</p>
                                 </div>
                             </div>
                         </div>
@@ -153,15 +178,12 @@
                     	<div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Hallo .. ! {{ auth()->user()->name }}</a>
                             <div class="dropdown-menu" style="width: 100%;">
-                                <form method="post" action="{{ url('logout') }}">
-                                @csrf
-                                <button class="dropdown-item" style="cursor: pointer;">Logout</button>
-                                </form>
                                 @if(auth()->user()->role == 4)
                             		<a href="{{ url('history/all') }}" class="dropdown-item">History</a>
                                 @else
                                     <a href="{{ url('dashboard') }}" class="dropdown-item">Dashboard</a>
                                 @endif
+                                <button class="dropdown-item" style="cursor: pointer;" v-on:click="logout">Logout</button>
                             </div>
                         </div>
                         @endauth
@@ -182,15 +204,12 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Hallo .. ! {{ auth()->user()->name }}</a>
                             <div class="dropdown-menu" style="width: 100%;">
-                                <form method="post" action="{{ url('logout') }}">
-                                    @csrf
-                                <button class="dropdown-item" style="cursor: pointer;">Logout</button>
-                                </form>
                                 @if(auth()->user()->role == 4)
                                     <a href="{{ url('history/all') }}" class="dropdown-item">History</a>
                                 @else
                                     <a href="{{ url('dashboard') }}" class="dropdown-item">Dashboard</a>
                                 @endif
+                                <button class="dropdown-item" style="cursor: pointer;" v-on:click="logout">Logout</button>
                             </div>
                         </div>
                         @endauth
@@ -215,6 +234,7 @@
 			data: [],
             signup: '{{ count($errors->all()) }}',
             class_menu : '{{ request()->is('history/*') }}' ? '' : 'homes',
+            error_text : false,
 		},
 		created: function(){
 			this.getData();
@@ -244,19 +264,18 @@
 		            }
 		        )
 		        .then(function(response){
-		        	// console.log(response.data);
-		        	this.setSession();
-
+                    this.error_text = false;
+                    window.location = "{{ route('home') }}";
 		        }.bind(this))
-		        .catch(function (response) {
-					//handle error
-					// Swal.fire('Opss', response.response.data.message, 'warning');
-                    Swal.fire('Opss', 'Kombinasi Email dan Password Salah !', 'warning');
+		        .catch((response) => {
+                    if (response.status != 302 && response.status != 301) {
+                        this.error_text = true;
+                    }
 				});
 			},
 			logout: function(){
 				axios.post(
-					'{{ route("logout") }}',
+                    '{{ url('logout') }}',
 					{},
 					{
 						headers: {
@@ -266,32 +285,9 @@
 				)
 				.then(function(response){
                     window.location = "{{ route('home') }}";
-				})
+				}.bind(this))
 				.catch(function (response) {
-					//handle error
-					console.log(response);
-				});
-			},
-			setSession: function(){
-				axios.post(
-					'{{ url("auth/setSession") }}',
-					{},
-					{
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					}
-				)
-				.then(function(response){
-					if (response.data.data.role == 4) {
-	                    window.location = "{{ route('home') }}";
-	                }else{
-	                    window.location = "{{ route('dashboard') }}";
-	                }
-				})
-				.catch(function (response) {
-					//handle error
-					console.log(response);
+                    Swal.fire('Warning', 'Mohon Maaf Terjadi Kesalahan, Laporkan kepada tim developer apabila error terus berlanjut', 'warning');
 				});
 			},
             goto : function(data){

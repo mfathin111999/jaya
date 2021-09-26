@@ -12,6 +12,10 @@ use App\Domain\Employee\Entities\EmployeeHasWork;
 use App\Domain\Employee\Factories\EmployeeFactory;
 use App\Domain\Employee\Application\EmployeeManagement;
 
+use File;
+use Storage;
+use PDF;
+
 class EmployeeController extends Controller
 {
 
@@ -409,8 +413,17 @@ class EmployeeController extends Controller
 
     public function test(Request $request)
     {
-        $data = [$request['name'], $request['email'], $request['phone_number'], $request['province_id'], $request['regency_id'], $request['district_id'], $request['address'], $request['date'], $request['time'], $request['service'], $request['description']];
+        $data = [];
 
-        return apiResponseBuilder(200, $data);
+        $path = public_path().'/public/pdf';
+
+        if (!file_exists($path))
+          File::makeDirectory($path, $mode = 0755, true, true);
+
+        $pdf = PDF::loadView('export/test', $data);
+
+        $content = $pdf->download()->getOriginalContent();
+
+        Storage::put('public/pdf/name.pdf',$content) ;
     }
 }

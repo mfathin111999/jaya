@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 5)
+@if(auth()->user()->role != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -42,7 +42,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label for="province">Provinsi</label>
-                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
+                      <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="" disabled="">
                         <option value="">Choose</option>
                         <option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
                       </select>
@@ -51,7 +51,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label for="regency">Kota/Kabupaten</label>
-                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="">
+                      <select type="text" class="form-control" id="regency" name="regency_id" v-model='thisRegency' @change='getDistrict()' required="" disabled="">
                         <option value="">Choose</option>
                               <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
                       </select>
@@ -60,7 +60,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label for="district">Kecamatan</label>
-                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="">
+                      <select type="text" class="form-control" id="district" name="district_id" v-model='thisDistrict' @change='getVillage()' required="" disabled="">
                         <option value="">Choose</option>
                         <option v-for = '(district, index) in district' :value = 'district.id'>@{{ ucwords(district.name) }}</option>
                       </select>
@@ -69,7 +69,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label for="village">Kelurahan</label>
-                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="">
+                      <select type="text" class="form-control" id="village" name="village_id" v-model='thisVillage' required="" disabled="">
                         <option value="">Choose</option>
                         <option v-for = '(village, index) in village' :value = 'village.id'>@{{ ucwords(village.name) }}</option>
                       </select>
@@ -128,12 +128,12 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="image_report" class="btn btn-sm btn-outline-secondary font-weight-bold m-0"><i class="fa fa-plus pr-2"></i>Tambah Gambar</label>
-                      <input type="file" name="gambar" id="image_report" class="form-control" multiple="" @change="onFileChange" style="display: none;">
+                      <input type="file" name="gambar" id="image_report" class="form-control" multiple="" v-on:change="onFileChange" style="display: none;">
                     </div>
                   </div>
                   <div class="col-6" v-for="(img, index) in view_image">
                     <div class="form-group">
-                      <i class="fa fa-minus-circle btn btn-warning" @click='deleteItem(index)' style="position: absolute; top: 5%; right: 10%;"></i>
+                      <i class="fa fa-minus-circle btn btn-warning" v-on:click='deleteItem(index)' style="position: absolute; top: 5%; right: 10%;"></i>
                       <img :src="img" class="img-fluid">
                     </div>
                   </div>
@@ -210,7 +210,7 @@
                       <div class="col-12">
                         <label class="font-12 m-0">Vendor</label>
                         <br>
-                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
+                        <label class="font-14"><strong>@{{ data.vendor ? data.vendor : '-' }}</strong></label>
                       </div>
                       <div class="col-12">
                         <label class="font-12">Tanggal Mulai</label>
@@ -246,14 +246,14 @@
                     <table class="table table-bordered" width="100%">
                       <thead>
                         <tr>
-                          <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ index+1 }} @{{ report.name }}</strong></th>
+                          <th colspan="8" style="vertical-align: middle;"><strong>Tahapan @{{ report.name }}</strong></th>
                         </tr>
                         <tr>
                           <td align="center" width="5%"><strong>No</strong></td>
-                          <td align="center" width="25%"><strong>Nama</strong></td>
-                          <td align="center" width="25%"><strong>keterangan</strong></td>
+                          <td align="center" width="20%"><strong>Nama</strong></td>
+                          <td align="center" width="20%"><strong>keterangan</strong></td>
                           <td align="center" width="5%"><strong>Volume</strong></td>
-                          <td align="center" width="5%"><strong>Waktu</strong></td>
+                          <td align="center" width="15%"><strong>Waktu (Tenggat)</strong></td>
                           <td align="center" width="5%"><strong>Satuan</strong></td>
                           <td align="center" width="10%"><strong>Harga</strong></td>
                           <td align="center" width="20%"><strong>Aksi</strong></td>
@@ -265,35 +265,35 @@
                           <td align="center" style="vertical-align: middle;">@{{ detail.name }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.description }}</td>
                           <td align="center" style="vertical-align: middle;">@{{ detail.volume }} @{{ detail.unit }}</td>
-                          <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari</td>
+                          <td align="center" style="vertical-align: middle;">@{{ detail.time }} Hari ( @{{ detail.deadline }} )</td>
                           <td align="center" style="vertical-align: middle;">@{{ formatPrice(detail.price_clean) }}</td>
                           <td align="center" style="vertical-align: middle;">
                             @{{ formatPrice(detail.price_clean*detail.volume) }}
                           </td>
-                          <td align="center" style="vertical-align: middle;" v-if='(index == 0 && data.report[index].termin.length != 0) 
-                          || (index == 1 && data.report[index-1].status == "doneMandor") 
-                          || (index > 1 && data.report[index-1].status == "doneMandor" && checked(data.report[index].termin_code, index))'>
-                            <button class="btn btn-success" v-if='(report.status == "offer" || report.status == "deal") && (detail.status == "deal" || detail.status == "offer")' @click='setWorkUpdate(detail.id)'><i class="fa fa-check-square-o"></i></button>
-                            <label class="m-0 text-success" v-if='report.status == "deal" && detail.status == "done"'>Selesai</label>
-                            <label class="m-0 text-success" v-if='report.status == "done"'>Selesai</label>
-                            <label class="m-0 text-success" v-if='report.status == "offer" && detail.status == "done"'>Menunggu</label>
-                            <label class="m-0 text-success" v-if='report.status == "doneMandor"'>Disetujui</label>
-                            <label class="m-0 text-success" v-if='report.status == "donePayed"'>Lunas</label>
-                          </td>
-                          <td class="text-center" v-if='(index == 0 && data.report[index].termin.length == 0) || (index == 1 && data.report[index-1].status != "doneMandor") || (index > 1 && data.report[index-1].status != "doneMandor"  && checked(data.report[index].termin_code, index))'>
-                            <label class="m-0">-</label>
+                          <td align="center" style="vertical-align: middle;">
+                            <button class="btn btn-success" v-on:click='setWorkUpdate(detail.id)' v-if="detail.status_action == 'active'">
+                              <i class="fa fa-check-square-o"></i>
+                            </button>
+                            <label class="m-0 text-success" v-if="detail.status_action == 'wait'">Menunggu</label>
+                            <label class="m-0 text-success" v-if="detail.status_action == 'finish'">Disetujui</label>
+                            <label class="m-0 text-success" v-if="detail.status_action == 'nonactive'">-</label>
                           </td>
                         </tr>
                         <tr>
                           <td colspan="6" align="center" style="vertical-align: middle;"><strong>Total Harga</strong></td>
-                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.all_price[0]) }}</strong></td>
-                          <td align="center" style="vertical-align: middle;" v-if='(index == 0 && data.report[index].termin.length != 0) || (index == 1 && data.report[index-1].status == "doneMandor") || (index > 1 && data.report[index-1].status == "doneMandor" && checked(data.report[index].termin_code, index))'>
-                            <button class="btn btn-info" data-toggle="modal" data-target="#addModal" @click='addDetail(report.id)' v-if='report.status == "offer" || report.status == "deal"'><i class="fa fa-check-square-o"></i></button>
-                            <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" @click='getReport(report.id)' v-if='report.status == "done" || report.status == "doneMandor"'><i class="fa fa-pencil mr-2"></i><span>Lihat</span></button>
-                            <button class="btn btn-info font-12" @click='infoCard' v-if='report.status == "doneMandor" || report.status == "donePayed"'><i class="fa fa-info-circle"></i></button>
-                          </td>
-                          <td class="text-center" v-if='(index == 0 && data.report[index].termin.length == 0) || (index == 1 && data.report[index-1].status != "doneMandor") || (index > 1 && data.report[index-1].status != "doneMandor" && checked(data.report[index].termin_code, index))'>
-                            <label class="m-0">-</label>
+                          <td align="center" style="vertical-align: middle;"><strong>@{{ formatPrice(report.price) }}</strong></td>
+                          <td align="center" style="vertical-align: middle;">
+                            <button class="btn btn-info" data-toggle="modal" data-target="#addModal" v-on:click='addDetail(report.id)' v-if="report.status == 'active'">
+                              <i class="fa fa-check-square-o"></i>
+                            </button>
+                            <button class="btn btn-info font-12" data-toggle="modal" data-target="#editModal" v-on:click='getReport(report.id)' v-if="report.status == 'wait' || report.status == 'finish'">
+                              <i class="fa fa-pencil mr-2"></i>
+                              <span>Lihat</span>
+                            </button>
+                            <button class="btn btn-info font-12" v-on:click='infoCard' v-if="report.status == 'finish'">
+                              <i class="fa fa-info-circle"></i>
+                            </button>
+                            <label class="m-0" v-if="report.status == 'nonactive'">-</label>
                           </td>
                         </tr>
                       </tbody>
@@ -302,8 +302,9 @@
                 </div>
 
               </div>
-              <div class="card-footer text-center">
+              <div class="card-footer text-center d-flex align-items-center justify-content-between">
                 <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
+                <a href="{{ url('/engagement_vendor') }}" class="btn btn-info">Kembali</a>
               </div>
             </div>    
           </main>
@@ -368,11 +369,9 @@
         },
         methods: {
           getData : function(id){
-            axios.get("{{ url('api/report/getByIdEngagement') }}/"+id).then(function(response){
+            axios.post("{{ url('api/report/vendor') }}/"+id).then(function(response){
               this.data = response.data.data;
               this.partner = response.data.data.partner
-              this.allPlace = response.data.data.pvillage.name+', '+response.data.data.pdistrict.name+', '+response.data.data.pregency.name+', '+response.data.data.pprovince.name;
-              this.termin = response.data.message;
             }.bind(this));
           },
           allUnit: function(){
@@ -387,19 +386,7 @@
           },
           infoCard : function(){
             // Swal.fire('Informasi', 'Check kartu hutang pada menu history untuk melihat pendapatan anda pada pekerjaan ini', 'info');
-            Swal.fire('Informasi', 'Lihat pada status pekerjaan, jika terdapat keterangan Lunas (Telah Dibayarkan) maka pekerjaan telah dibayarkan', 'info');
-          },
-          checked(id, index){
-            let find = this.termin.findIndex((item) => item.id == id);
-            if (find != 0) {
-              if(this.termin[find-1].status != null || this.termin[find-1].status != '' ){
-                return true;
-              }
-            }else if (find == -1){
-              return false;
-            }else {
-              return true
-            }
+            Swal.fire('Informasi', 'Lihat lihat pada menu pembayaran untuk melihat status pembayaran tahapan ini', 'info');
           },
           formatPrice(value) {
             let val = (value/1).toFixed(0).replace(',', ',')

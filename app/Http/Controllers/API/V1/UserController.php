@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Domain\User\Entities\User;
 use App\Domain\Employee\Entities\Vendor;
 use App\Domain\User\Factories\UserFactory;
+use Laravel\Passport\TokenRepository;
+use Laravel\Passport\RefreshTokenRepository;
 use Session;
 
 class UserController extends Controller
@@ -52,9 +54,6 @@ class UserController extends Controller
         $request->session()->put('id', $user->id);
         $request->session()->put('role', $user->role);
         $request->session()->put('access_token', $user->access_token);
-        Session::put('id', $user->id);
-        Session::put('role', $user->role);
-        Session::put('access_token', $user->access_token);
 
         $message                = "You get the Token";
 
@@ -97,7 +96,7 @@ class UserController extends Controller
     }
 
     public function getMe(Request $request){
-        $data = User::where('id', $request->id)->select('name', 'email', 'province_id', 'regency_id', 'district_id', 'village_id', 'phone', 'address')->first();
+        $data = User::where('id', auth()->guard('api')->user()->id)->select('name', 'email', 'province_id', 'regency_id', 'district_id', 'village_id', 'phone', 'address')->first();
 
         return apiResponseBuilder(200, $data);
     }

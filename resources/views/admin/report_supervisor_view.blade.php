@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 1)
+@if(auth()->user()->role != 1)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -314,7 +314,7 @@
                         <label class="font-14"><strong>@{{ data.vendor ? data.vendor.name : '-' }}</strong></label>
                       </div>
                       <div class="col-12">
-                        <label class="font-12">Tanggal Mulai</label>
+                        <label class="font-12 m-0">Tanggal Mulai</label>
                         <br>
                         <strong>
                           <label class="m-0" v-if= 'data.date_work != null' >
@@ -510,7 +510,7 @@
                               <td align="center" style="vertical-align: middle;">@{{ formatPrice(report.all_price[1]) }}</td>
                               <td align="center" style="vertical-align: middle;">
                                 <label v-if='termin.length == 0'>Tambah termin terlebih dahulu</label>
-                                <select class="form-control" v-if='termin.length != 0' v-model='report.termin' @change='addToTermin(report)' :disabled="data.locked == 'deal' ? true : false">
+                                <select class="form-control" v-if='termin.length != 0' v-model='report.termin' @change='addToTermin(report)' :disabled="data.locked == 'deal' || data.customer_is == 1 ? true : false">
                                   <option value="null">Pilih</option>
                                   <option v-for='(termins, index5) in termin' :value="termins.id">@{{ termins.termin }}</option>
                                 </select>
@@ -622,9 +622,10 @@
                 </div>
 
     					</div>
-    					<div class="card-footer text-center">
-    						<label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
-    					</div>
+    					<div class="card-footer text-center d-flex align-items-center justify-content-between">
+                <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
+                <a href="{{ url('/engagement') }}" class="btn btn-info">Kembali</a>
+              </div>
   			    </div>		
           </main>
         </div>
@@ -1097,7 +1098,7 @@
           addVendor: function(e){
             Swal.fire({
               title: 'Apakah kamu yakin ?',
-              text: "Kamu tidak bisa mengubah vendor setelah vendor ditetapkan",
+              text: "Kamu akan menunjuk vendor ini untuk pekerjaan ini",
               icon: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',

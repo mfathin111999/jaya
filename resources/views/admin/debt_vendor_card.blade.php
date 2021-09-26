@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 5)
+@if(auth()->user()->role != 5)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>

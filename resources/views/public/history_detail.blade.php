@@ -1,6 +1,6 @@
 @extends('layout.public')
 
-@if(session('id') == null || session('role') != 4)
+@if(auth()->user()->role != 4)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -85,8 +85,8 @@
                       <br>
                       <label class="font-12">Aksi</label>
                       <br>
-                      <button class="font-weight-bold btn btn-info" v-if='check == 0' v-on:click="completing">Selesaikan Pekerjaan</button>
-                      <label class="font-weight-bold" v-if='data.status != "finish" && check != 0'> - </label>
+                      <button class="font-weight-bold btn btn-info" v-if='data.status != "finish" && check == 0' v-on:click="completing">Selesaikan Pekerjaan</button>
+                      <label class="font-weight-bold" v-if='(data.status != "finish" && check != 0) || data.status == "finish"'> - </label>
                     </div>
                   </div>
                 </div>
@@ -263,7 +263,7 @@
                 if (result.isConfirmed) {
                   axios.post("{{ url('api/customer/completingOrder') }}", {'id' : this.id}).then(response => {})
                   .then(() => {
-                    Swal.fire('Berhasil !', 'Data berhasil dihapus .. !', 'success');
+                    Swal.fire('Berhasil !', 'Reservasimu telah Selesai .. ! <br> Terima Kasih telah menjadi rekan kami & semoga anda puas dengan pelayanan kami .. !', 'success');
                     this.getData(this.id);
                   });
                 }

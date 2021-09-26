@@ -8,7 +8,7 @@
 		<tr height="20px" bgcolor="#fdbe33">
 			<td>
 				<center>
-					<img src="{{ $message->embed('img/logo.png') }}" style="width: 15%; padding: 10px;">
+					<h3>ServisRumah.com</h3>
 				</center>
 			</td>
 		</tr>
@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#030f27" height="50px" style="text-align: center; color: white; font-size: 12px;">
-				© 2021 PT. Nurani Rejeki Unggul
+				© {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
 			</td>
 		</tr>
 	</table>

@@ -30,7 +30,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 
-
 Route::get('/termin/getByEngagementId/{id}', [PaymentController::class, 'getByEngagementId']);
 Route::get('/termin/view/{id}', [PaymentController::class, 'view']);
 Route::post('/termin', [PaymentController::class, 'store']);
@@ -139,6 +138,7 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/report/delImage', [ReportController::class, 'delImage']);
 	Route::post('/report/update', [ReportController::class, 'updateReport']);
 	Route::post('/report/destroy/{id}', [ReportController::class, 'destroy']);
+	Route::post('/report/vendor/{id}', [ReportController::class, 'engagementVendorAction']);
 
 	Route::get('/resource/getMaterialDashboard', [ResourceController::class, 'getMaterialDashboard']);
 	Route::get('/resource', [ResourceController::class, 'index']);
@@ -166,7 +166,9 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/storeReason', [ResourceController::class, 'storeReason']);
 	Route::post('/updateReason', [ResourceController::class, 'updateReason']);
 	Route::post('/destroyReason', [ResourceController::class, 'destroyReason']);
+
 });
+	Route::post('/destroySession', [UserController::class, 'destroyToken']);
 
 Route::get('/service', [ServiceController::class, 'index']);
 Route::get('/getDisableDate', [ResourceController::class, 'getDisableDate']);
@@ -175,3 +177,5 @@ Route::get('/province', [ResourceController::class, 'getProvince']);
 Route::post('/district', [ResourceController::class, 'getDistrict']);
 Route::post('/village', [ResourceController::class, 'getVillage']);
 Route::post('/regency', [ResourceController::class, 'getRegency']);
+
+Route::get('/test', [EmployeeController::class, 'test']);

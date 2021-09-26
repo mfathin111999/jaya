@@ -21,7 +21,7 @@
         </a>
       </li>
       <li class="nav-item">
-        @if(session('role') == 5)
+        @if(auth()->user()->role == 5)
         <a class="nav-link text-white" href="{{ route('engagement_vendor') }}">
         @else
         <a class="nav-link text-white" href="{{ route('engagement') }}">
@@ -30,7 +30,7 @@
           RESERVASI
         </a>
       </li>
-      @if(session('role') == 5)
+      @if(auth()->user()->role == 5)
       <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('vendor.debt.card') }}">
           <i class="fa fa-calendar pr-2"></i>
@@ -44,7 +44,7 @@
         </a>
       </li>
       @endif
-      @if(session('role') == 1)
+      @if(auth()->user()->role == 1)
       <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('vendor') }}">
           <i class="fa fa-tasks pr-2"></i>
@@ -109,7 +109,7 @@
           PENGATURAN AKUN
         </a>
       </li>
-      @if(session('role') == 1)
+      @if(auth()->user()->role == 1)
       <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('setting_user') }}">
           <i class="fa fa-cog pr-2"></i> 

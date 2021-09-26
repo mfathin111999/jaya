@@ -1,77 +1,10 @@
 @extends('layout.public')
 
-@if(session('id') == null || session('role') != 4)
+@if(auth()->user()->role != 4)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
 @else
-
-@section('sec-css')
-	<style type="text/css">
-		.max-400{
-			width: auto !important;
-			height: 400px;
-		}
-
-		.nurani-rezeki-unggul{
-			
-		}
-
-    .shadow-cards{
-      box-shadow: 0 1px 6px 0 rgba(49, 53, 59, 0.12); 
-      border-radius: 8px;
-    }
-
-		.max-500{
-			width: auto !important;
-			height: 500px;
-		}
-
-		.f-small{
-			font-size: 14px;
-		}
-
-		.f-light{
-			font-size: 12px;
-		}
-
-		.max-height-100{
-			height: 30px;
-		}
-
-		.card{
-			border-radius: 20px;
-		}
-
-		.card-footer{
-			border-bottom-right-radius: 20px !important;
-			border-bottom-left-radius: 20px !important;
-		}
-
-    .dataTables_filter{
-      text-align: right;
-    }
-
-    .dataTables_filter label{
-      text-align: left;
-      font-size: 12px;
-    }
-
-    .dataTables_info, .dataTables_length{
-      font-size: 12px;
-    }
-
-    .pagination{
-      justify-content: flex-end;
-      font-size: 12px;
-      margin-bottom: 0px !important;
-    }
-
-    .activated{
-      color: white !important;
-    }
-	</style>
-@endsection
 
 @section('content')
 	@include('layout.header')

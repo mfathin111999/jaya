@@ -1,5 +1,11 @@
 @extends('layout.app')
 
+@if(auth()->user()->role == 4)
+  <script type="text/javascript">
+    window.location = "{{ route('home') }}";
+  </script>
+@else
+
 @section('content')
   @include('layout.admin_header')
     <div id="app" v-cloak>
@@ -31,7 +37,7 @@
                         <div class="col-6">
                           <div class="form-group">
                             <label for="phone">No. Handphone</label>
-                            <input type="text" class="form-control" id="phone" name="phone" v-model ='data.phone' required>
+                            <input type="text" class="form-control" id="phone" name="phone" v-model ='data.phone' required placeholder="No. Handphone / Whatsapp">
                           </div>
                         </div>
                         <div class="col-12 mb-3 mt-2" style="border-top: 1px #ced4da solid;">
@@ -40,7 +46,7 @@
                           <div class="form-group">
                             <label for="province">Provinsi</label>
                             <select class="form-control" id="province" style="width: 100%;" v-model = 'thisProvince' v-on:change="getRegency()" name="province_id" required>
-                              <option value="">Pilih</option>
+                              <option value="null">Pilih</option>
                               <option v-for = '(province, index) in province' :value="province.id">@{{ ucwords(province.name) }}</option>
                             </select>
                           </div>
@@ -49,7 +55,7 @@
                           <div class="form-group">
                             <label for="regency">Kota / Kabupaten</label>
                             <select class="form-control" id="regency" style="width: 100%;" v-model = 'thisRegency' @change="getDistrict()" name="regency_id" required>
-                              <option value="">Pilih</option>
+                              <option value="null">Pilih</option>
                               <option v-for = '(regency, index) in regency' :value="regency.id">@{{ ucwords(regency.name) }}</option>
                             </select>
                           </div>
@@ -58,7 +64,7 @@
                           <div class="form-group">
                             <label for="district">Kecamatan</label>
                             <select class="form-control" id="district" style="width: 100%;" v-model = 'thisDistrict' @change="getVillage()" name="district_id" required>
-                              <option value="">Pilih</option>
+                              <option value="null">Pilih</option>
                               <option v-for = '(district, index) in district' :value="district.id">@{{ ucwords(district.name) }}</option>
                             </select>
                           </div>
@@ -67,7 +73,7 @@
                           <div class="form-group">
                             <label for="village">Desa</label>
                             <select class="form-control" id="village" style="width: 100%;" v-model = 'thisVillage' name="village_id" required>
-                              <option value="">Pilih</option>
+                              <option value="null">Pilih</option>
                               <option v-for = '(village, index) in village' :value="village.id">@{{ ucwords(village.name) }}</option>
                             </select>
                           </div>
@@ -75,7 +81,7 @@
                         <div class="col-12">
                           <div class="form-group">
                             <label for="address">Alamat</label>
-                            <input type="text" class="form-control" id="address" v-model ='data.address' name="address" required>
+                            <input type="text" class="form-control" id="address" v-model ='data.address' name="address" required placeholder="Alamat Lengkap">
                           </div>
                         </div>
                       </div>
@@ -229,3 +235,5 @@
     $(".select2").select2();
   </script>
 @endsection
+
+@endif

@@ -72,7 +72,7 @@
     		<td colspan="3" height="20px"></td>
     	</tr>
     	<tr>
-    		<td style="padding-top: 15px;" align="center" colspan="3">Nurani Rejeki Unggul</td>
+    		<td style="padding-top: 15px;" align="center" colspan="3">ServisRumah.com</td>
     	</tr>
     </table>
 </body>

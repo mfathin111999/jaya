@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') == 4)
+@if(auth()->user()->role == 4)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -256,7 +256,7 @@
                             <label class="text-center m-0 font-weight-bold px-2 py-1 bg-success text-white mt-2 rounded" v-if= 'filter == "offer"'>Diterima</label>
                             <label class="text-center m-0 font-weight-bold px-2 py-1 bg-primary text-white mt-2 rounded" v-if= 'filter == "post_offer"'>Telah Disurvey</label>
                             <label class="text-center m-0 font-weight-bold px-2 py-1 bg-dark text-white mt-2 rounded" v-if= 'filter == "deal"'>Telah Deal</label>
-                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-info text-white mt-2 rounded" v-if= 'filter == "finish"'>Finish</label>
+                            <label class="text-center m-0 font-weight-bold px-2 py-1 bg-info text-white mt-2 rounded" v-if= 'filter == "finish"'>Selesai</label>
                           </span>
                         </div>
                         <span class="d-block">

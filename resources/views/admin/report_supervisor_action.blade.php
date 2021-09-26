@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@if(session('id') == null || session('role') != 1)
+@if(auth()->user()->role != 1)
   <script type="text/javascript">
     window.location = "{{ route('home') }}";
   </script>
@@ -228,8 +228,9 @@
                 </div>
 
               </div>
-              <div class="card-footer text-center">
+              <div class="card-footer text-center d-flex align-items-center justify-content-between">
                 <label class="m-0 font-weight-bold">Isi dengan hati - hati</label>
+                <a href="{{ url('/engagement') }}" class="btn btn-info">Kembali</a>
               </div>
             </div>    
           </main>

@@ -40,15 +40,14 @@
 		<div class="card d-bord">
 			<div class="card-header text-center text-light">
 				<i class="fa fa-check-circle" style="font-size: 50px;"></i> 
-				{{-- <span class="h5 font-weight-bold m-0">Penawaran disetujui !</span> --}}
 			</div>
 			<div class="card-body text-center" style="line-height: 1.5rem;">
-				<label class="h5 font-weight-bold">Penawaran disetujui !</label>
+				<label class="h5 font-weight-bold">Pembayaran Telah Berhasil !</label>
 				<label class="mt-3 font-12 d-block">
 					Silahkan login untuk melihat progress dan detail reservasi anda. <br> Terima Kasih telah memilih <strong>Servisrumah.com</strong> sebagai partner.
 				</label>		
 				<a href="{{ url('/') }}" class="btn-back px-3 py-1 font-12 text-light font-weight-bold mt-2">Halaman Utama</a>
 			</div>
-		</div>
+			</div>
 	</div>
 @endsection

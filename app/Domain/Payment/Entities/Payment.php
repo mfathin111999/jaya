@@ -12,7 +12,10 @@ class Payment extends Model
 
     protected $table = "payments";
 
-    public const PAYMENT_CHANNELS = ['mandiri_clickpay'];
+    public const PAYMENT_CHANNELS = ["cimb_clicks",
+    "bca_klikbca", "bca_klikpay", "bri_epay", "echannel", "permata_va",
+    "bca_va", "bni_va", "bri_va", "other_va", "indomaret",
+    "danamon_online"];
 
 	public const EXPIRY_DURATION = 7;
 	public const EXPIRY_UNIT = 'days';

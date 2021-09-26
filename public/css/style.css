@@ -1055,6 +1055,14 @@ a:focus {
 }
 
 @media(max-width: 767.98px) {
+    .top-bar {
+        height: 150px;
+    }
+
+    .top-bar .logo h1 {
+        line-height: 20px;
+    }
+
     .faqs .row::after {
         display: none;
     }

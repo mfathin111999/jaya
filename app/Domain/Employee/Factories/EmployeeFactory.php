@@ -106,6 +106,8 @@ class EmployeeFactory
                 'payment_url'   => $item->payment_url,
                 'date_invoice'  => $item->date_invoice ?? '-',
                 'date_pay'      => $item->date_pay ?? '-',
+                'pic'           => $item->pic ?? '-',
+                'image'         => $item->image ?? '-',
                 'document_no'   => $item->document ?? '-',
                 'status'        => $item->status,
                 'payment'       => $item->payment,

@@ -10,7 +10,7 @@
     <div class="container">
         <center>
             <h4>SURAT PENAWARAN</h4>
-            <h6>SR/{{ $datas->code }}/1/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
+            <h6>SR/{{ $datas->code }}/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
         </center>
 
         <div class="mt-4">
@@ -35,7 +35,7 @@
         <div class="ml-4 mb-4 mt-4">
             Kepada Yth:<br>
             <strong>{{ $datas->name }}</strong><br>
-            <strong>Di {{ ucwords(strtolower($datas->district->name.', '.$datas->regency->name)) }}</strong><br>
+            <strong>Di {{ ucwords(strtolower(($datas->district->name ?? '-').', '.($datas->regency->name ?? '-'))) }}</strong><br>
         </div>
 
         <div class="ml-4 mb-3">
@@ -98,7 +98,7 @@
                             $price += $detail->price_dirt*$detail->volume;
                             $all_price += $detail->price_dirt*$detail->volume;
                             $date_before = date('Y/m/d', strtotime($date_after));
-                            $date_after = date('Y/m/d', strtotime($date_before.' +1 day'));
+                            $date_after = date('Y/m/d', strtotime($date_before.' +'.$detail->time.' day'));
                         @endphp
                         <tr>
                             <td>{{ $j++ }}</td>
@@ -139,8 +139,12 @@
             <br>
             <label class="mt-3">
                 <br>
-                servicerumah.com
+                ServisRumah.com
             </label>
+            <br>
+            <br>
+
+                © {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
         </div>
     </div>
 

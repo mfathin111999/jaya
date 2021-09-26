@@ -83,7 +83,7 @@ class ResourceController extends Controller
         ]);
     }
 
-    public function getProvince()
+    public function getProvince(Request $request)
     {
         $data = $this->resource->getProvince();
 
