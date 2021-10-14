@@ -73,9 +73,15 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $data = $this->service->delete($id);
+        if($request->has('type')){
+            if ($request->type == 'visible') {
+                $data = $this->service->visible($id);
+            }
+        }else{
+            $data = $this->service->delete($id);
+        }
 
         return apiResponseBuilder(200, $data);
     }

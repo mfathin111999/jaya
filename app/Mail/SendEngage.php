@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 use PDF;
-use File
+use File;
 use Storage;
 
 

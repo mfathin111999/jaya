@@ -11,6 +11,8 @@ use App\Domain\Payment\Entities\Payment;
 use App\Domain\Report\Entities\Report;
 use App\Models\PaymentLog;
 
+use App\Mail\SendPaymentNotification;
+
 class PaymentController extends Controller
 {
     public function getPaymentToken($order, $price)
@@ -66,13 +68,24 @@ class PaymentController extends Controller
 
         $paymentNotification = new \Midtrans\Notification();
 
-        $id_code = substr($paymentNotification->order_id, 8);
+        $id_code    = substr($paymentNotification->order_id, 8);
         
-        $order = Termin::where('id', $id_code)->with('engagement')->firstOrFail();
+        $step       = NULL;
+        $order      = Termin::where('id', $id_code)->with(['engagement', 'report' => function($query) {
+            $query->whereNull('parent_id');
+        }])->firstOrFail();
 
-        if ($order->isPaid()) {
-            return apiResponseBuilder(422, '', 'The order has been paid before');
+        foreach($order->report as $items){
+            if ($step == NULL) {
+                $step = $items->name;
+            }else{
+                $step = $step.', '.$items->name;
+            }
         }
+
+        // if ($order->isPaid()) {
+        //     return apiResponseBuilder(422, '', 'The order has been paid before');
+        // }
 
         $transaction    = $paymentNotification->transaction_status;
         $type           = $paymentNotification->payment_type;
@@ -118,7 +131,7 @@ class PaymentController extends Controller
 
         $paymentParams = [
             'order_id'      => $order->id,
-            'number'        => 'PAY-'.date('ymdhis').'-'.$order->engagement->code.'-'.$paymentStatus,
+            'number'        => $order->engagement->code.'-'.$order->termin.'-'.$paymentStatus.'/KWT/NRU-SR/'.self::numberToRomanRepresentation(date('m')).'/'.date('Y'),
             'amount'        => $paymentNotification->gross_amount,
             'method'        => 'midtrans',
             'status'        => $paymentStatus,
@@ -129,6 +142,19 @@ class PaymentController extends Controller
             'vendor_name'   => $vendorName,
             'biller_code'   => $paymentNotification->biller_code,
             'bill_key'      => $paymentNotification->bill_key,
+        ];
+
+        $mailParams = [
+            'order_id'      => $order->id,
+            'code'          => $order->engagement->code,
+            'email'         => $order->engagement->email,
+            'number'        => $order->engagement->code.'-'.$order->termin.'-'.$paymentStatus.'/KWT/NRU-SR/'.self::numberToRomanRepresentation(date('m')).'/'.date('Y'),
+            'amount'        => $paymentNotification->gross_amount,
+            'status'        => $paymentStatus,
+            'vendor_name'   => $vendorName,
+            'payment_type'  => $paymentNotification->payment_type,
+            'customer'      => $order->engagement->name,
+            'step'          => $step,
         ];
 
         $payment = PaymentLog::create($paymentParams);
@@ -144,6 +170,9 @@ class PaymentController extends Controller
                 }
             );
         }
+
+        Mail::to($mailParams['email'])
+             ->send(new SendPaymentNotification($mailParams));
 
         $message = 'Payment status is : '. $paymentStatus;
 
@@ -331,5 +360,20 @@ class PaymentController extends Controller
         $termin->delete();
 
         return apiResponseBuilder(200, $termin);
+    }
+
+    public function numberToRomanRepresentation($number) {
+        $map = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map as $roman => $int) {
+                if($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
     }
 }

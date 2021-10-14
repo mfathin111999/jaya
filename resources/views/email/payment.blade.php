@@ -16,20 +16,29 @@
 			<td bgcolor="#ffffff" style="padding: 20px 30px 20px 30px; font-size: 16px; line-height: 2;">
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr style="line-height: 25px;">
-						<td style="text-align: center;"><strong>Hallo, {{ $report->engagement->name }}</strong><br>
-							Terima Kasih telah menggunakan NRU, Pembayaran pekerjaan tahap {{ $report->name }} dengan jumlah Rp. {{ number_format($price, 2) }}, dengan kode booking <strong>{{ $report->engagement->code }}</strong> harap segera diselesaikan.
-						</td>
-					</tr>
-					<tr height="30px">
-						<td style="text-align: center;">
-							<h3><strong style="color: #de2537;">Klik tombol dibawah untuk detail pembayaran</strong></h3>
+						<td style="text-align: center;"><strong>Hallo, {{ $engagement['customer'] }}</strong><br>
+							Terima Kasih telah menggunakan ServisRumah.com, Pembayaran pekerjaan tahap {{ $engagement['step'] }} dengan jumlah Rp. {{ number_format($engagement['amount'], 2) }}, dengan kode booking <strong>{{ $engagement['code'] }}</strong>.
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
-							<a href="{{ $report->payment_url }}?_token={{ $report->payment_token }}" style="background-color: #fdbe33; border-radius: 10px; color: #FFFFFF; padding: 10px 20px;"> 
-								Detail Pembayaran
-							</a>
+							<strong>Telah Selesai</strong><br><br>
+							Dengan Status : <strong>
+								@if($engagement['status'] == 'success' || $engagement['status'] == 'settlement')
+									Berhasil
+								@elseif($engagement['status'] == 'pending')
+									Pending
+								@elseif($engagement['status'] == 'deny')
+									Ditolak
+								@elseif($engagement['status'] == 'expire')
+									Kadaluarsa
+								@elseif($engagement['status'] == 'cancel')
+									Dibatalkan
+								@else
+									Gagal
+								@endif
+							</strong> <br><br>
+							{{ $engagement['status'] == 'success' || $engagement['status'] == 'settlement' ? 'Berikut kami kuitansi pembayaran anda.' : '' }}
 						</td>
 					</tr>
 					<tr style="text-align: center;">
@@ -42,7 +51,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#030f27" height="50px" style="text-align: center; color: white; font-size: 12px;">
-				© {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
+				© {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rejeki Unggul
 			</td>
 		</tr>
 	</table>

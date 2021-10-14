@@ -348,7 +348,7 @@
                         <label class="btn-block">Print</label>
                       </div>
                       <div class="col-md-12">
-                        <a href="{{ url('report/printVendor') }}/{{ $id }}" class="btn btn-info mb-2" style="font-size: 12px;">Print Penawaran</a><br>
+                        <a href="{{ url('report/printVendor') }}/{{ $id }}" class="btn btn-info mb-2" style="font-size: 12px;" v-if='data.customer_is == 1'>SPK Vendor</a><br>
                         <a href="{{ url('report/printEngagement') }}/{{ $id }}" class="btn btn-danger" style="font-size: 12px;">Print Akad</a>
                       </div>
                     </div>

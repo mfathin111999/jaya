@@ -8,10 +8,19 @@
 
 <body style="font-size: 12px; align-content: center;">
     <div class="container">
-        <center>
-            <h4>SURAT PENUNJUKAN REKANAN</h4>
-            <h6>SR/{{ $datas->code }}/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
-        </center>
+        <table style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="width: 30%;">
+                        <img src="{{ public_path().'/img/logo/logo-complete.png' }}" style="width: 100px; height: auto;">
+                    </td>
+                    <td style="width: 70%">
+                        <h4>SURAT PENUNJUKAN REKANAN</h4>
+                        <h6>SPK/{{ $datas->code }}/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="mt-4">
             Hal : Penawaran Harga <br>
@@ -155,6 +164,8 @@
 
                 5.Bila terjadi perselisihan antar pihak, maka pada dasarnya akan diselesaikan secara musyawarah, bila musyawarah sebagaimana dimaksud belum dapat diatasi, maka perselisihan akan diselesaikan melalui Pengadilan Negeri. <br>
             </label>
+
+            <br>
 
                 © {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
         </div>

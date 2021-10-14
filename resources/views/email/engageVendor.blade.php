@@ -37,7 +37,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#030f27" height="50px" style="text-align: center; color: white; font-size: 12px;">
-				© {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
+				© {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rejeki Unggul
 			</td>
 		</tr>
 	</table>

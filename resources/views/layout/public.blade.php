@@ -5,6 +5,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
 		<title>Home Service</title>
 
+		<link rel="icon" href="{{ asset('img/logo/logo-simple.png') }}">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}">

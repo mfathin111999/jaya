@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ReportController;
 use App\Http\Controllers\API\V1\EngagementController;
+use App\Http\Controllers\API\V1\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,9 +148,9 @@ Route::middleware('auth')->group(function(){
 		return view('admin.debt_supervisor_card_vendor');
 	})->name('supervisor.debt.card.vendor');
 
-	Route::get('/debt_supervisor_card_all', function(){
-		return view('admin.debt_supervisor_card_all');
-	})->name('supervisor.debt.card.all');
+	// Route::get('/debt_supervisor_card_all', function(){
+	// 	return view('admin.debt_supervisor_card_all');
+	// })->name('supervisor.debt.card.all');
 
 	Route::get('/debt_supervisor_card_user', function(){
 		return view('admin.debt_supervisor_card_user');

@@ -25,7 +25,9 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Edit Worker</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 1'>Edit Surveyer</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 2'>Edit Mandor</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 3'>Edit Vendor</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -42,7 +44,7 @@
                   <div class="col-6">
                     <div class="form-group">
                       <label for="email">Email : @{{ view.email }}</label>
-                      <input type="email" class="form-control" id="email" name="email" required>
+                      <input type="email" class="form-control" id="email" name="email">
                     </div>
                   </div>
                   <div class="col-6">
@@ -132,8 +134,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
               </div>
             </form>
           </div>
@@ -146,7 +148,9 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header" style="background-color: #ffc3c3;">
-              <h5 class="modal-title" id="exampleModalLabel">Add Pekerja</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 1'>Tambah Surveyer</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 2'>Tambah Mandor</h5>
+              <h5 class="modal-title" id="exampleModalLabel" v-if='type_form == 3'>Tambah Vendor</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -275,8 +279,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
               </div>
             </form>
           </div>
@@ -291,7 +295,7 @@
               <h1 class="h4 font-weight-bold">SURVEYER</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(1)"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(1)"><i class="fa fa-plus pr-2"></i>Tambah Surveyer</button>
                 </div>
               </div>
             </div>
@@ -327,7 +331,7 @@
               <h1 class="h4 font-weight-bold">MANDOR</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(2)"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(2)"><i class="fa fa-plus pr-2"></i>Tambah Mandor</button>
                 </div>
               </div>
             </div>
@@ -363,7 +367,7 @@
               <h1 class="h4 font-weight-bold">VENDOR</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(3)"><i class="fa fa-plus pr-2"></i>Add</button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="addForm(3)"><i class="fa fa-plus pr-2"></i>Tambah Vendor</button>
                 </div>
               </div>
             </div>
@@ -503,7 +507,13 @@
                 $("#example").DataTable().destroy();
               });
             }).then(() => {
-              this.getData();
+              if (this.type_form == 1) {
+                this.getData();
+              }else if (this.type_form == 2) {
+                this.getDataMandor();
+              }else if (this.type_form == 3) {
+                this.getDataVendor();
+              }
               Swal.fire('Success', 'Update Successfully .. !', 'success');
             }).catch(error => {
               var email = '';
@@ -546,7 +556,13 @@
                 $("#example").DataTable().destroy();
               });
             }).then(() => {
-              this.getData();
+              if (this.type_form == 1) {
+                this.getData();
+              }else if (this.type_form == 2) {
+                this.getDataMandor();
+              }else if (this.type_form == 3) {
+                this.getDataVendor();
+              }
               Swal.fire('Success', 'Update Successfully .. !', 'success');
             }).catch(error => {
               var errors = error.response.data.error.email[0];

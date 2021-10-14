@@ -16,18 +16,20 @@
 			<td bgcolor="#ffffff" style="padding: 20px 30px 20px 30px; font-size: 16px; line-height: 2;">
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr style="line-height: 25px;">
-						<td style="text-align: center;"><strong>Hallo, {{ $engagement->name }}</strong><br>
-							Terima Kasih telah menggunakan ServisRumah.com, reservasi anda dengan kode booking <strong>{{ $engagement->code }}</strong> telah kami terima. Kami akan menuju anda pada tanggal dan waktu yang anda tentukan.
+						<td style="text-align: center;"><strong>Hallo, {{ $report->engagement->name }}</strong><br>
+							Terima Kasih telah menggunakan NRU, Pembayaran pekerjaan tahap {{ $report->name }} dengan jumlah Rp. {{ number_format($price, 2) }}, dengan kode booking <strong>{{ $report->engagement->code }}</strong> harap segera diselesaikan.
 						</td>
 					</tr>
 					<tr height="30px">
 						<td style="text-align: center;">
-							<h3><strong style="color: #28a745;">DITERIMA</strong></h3>
+							<h3><strong style="color: #de2537;">Klik tombol dibawah untuk detail pembayaran</strong></h3>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
-							<img src="{{ $message->embed('img/checked.png') }}" style="max-width: 100px;">
+							<a href="{{ $report->payment_url }}?_token={{ $report->payment_token }}" style="background-color: #fdbe33; border-radius: 10px; color: #FFFFFF; padding: 10px 20px;"> 
+								Detail Pembayaran
+							</a>
 						</td>
 					</tr>
 					<tr style="text-align: center;">

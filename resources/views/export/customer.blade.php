@@ -8,10 +8,19 @@
 
 <body style="font-size: 12px; align-content: center;">
     <div class="container">
-        <center>
-            <h4>SURAT PENAWARAN</h4>
-            <h6>SR/{{ $datas->code }}/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
-        </center>
+        <table style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="width: 30%;">
+                        <img src="{{ public_path().'/img/logo/logo-complete.png' }}" style="width: 100px; height: auto;">
+                    </td>
+                    <td style="width: 70%">
+                        <h4>SURAT PENAWARAN</h4>
+                        <h6>SP/{{ $datas->code }}/{{ integerToRoman(date('n')) }}/{{date('Y')}}</h6>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="mt-4">
             Hal : Penawaran Harga <br>
@@ -54,13 +63,10 @@
                                 No
                             </th>
                             <th width="15%" style="vertical-align: middle; text-align: center;">
-                                Keterangan
+                                Nama
                             </th>
                             <th width="10" style="vertical-align: middle; text-align: center;">
                                 Vol
-                            </th>
-                            <th width="10" style="vertical-align: middle; text-align: center;">
-                                Sat
                             </th>
                             <th width="15" style="vertical-align: middle; text-align: center;">
                                 Mulai
@@ -73,6 +79,9 @@
                             </th>
                             <th width="15" style="vertical-align: middle; text-align: center;">
                                 Jumlah Harga
+                            </th>
+                            <th width="15" style="vertical-align: middle; text-align: center;">
+                                Keterangan
                             </th>
                         </tr>
                     </thead>
@@ -103,24 +112,24 @@
                         <tr>
                             <td>{{ $j++ }}</td>
                             <td>{{ $detail->name }}</td>
-                            <td>{{ $detail->volume }}</td>
-                            <td>{{ $detail->unit }}</td>
+                            <td>{{ $detail->volume }} {{ $detail->unit }}</td>
                             <td>{{ $date_before }}</td>
                             <td>{{ $date_after }}</td>
                             <td>{{ number_format($detail->price_dirt,0,",",".") }}</td>
                             <td>{{ number_format(($detail->price_dirt * $detail->volume),0,",",".") }}</td>
+                            <td>{{ $detail->description }}</td>
                         </tr>
                         @endforeach
                         <tr>
-                            <td colspan="7">Total</td>
-                            <td>
+                            <td colspan="6">Total</td>
+                            <td colspan="2">
                                 {{ number_format($price,0,",",".") }}
                             </td>
                         </tr>
                     @endforeach
                         <tr>
-                            <td colspan="7">Total Keseluruhan</td>
-                            <td>{{ number_format($all_price,0,",",".") }}</td>
+                            <td colspan="6">Total Keseluruhan</td>
+                            <td colspan="2">{{ number_format($all_price,0,",",".") }}</td>
                         </tr>
                     </tbody>
 
@@ -144,7 +153,7 @@
             <br>
             <br>
 
-                © {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rezeki Unggul
+                © {{ date('Y') }} ServisRumah.com adalah merek dagang dari PT. Nurani Rejeki Unggul
         </div>
     </div>
 

@@ -206,7 +206,6 @@
               <h1 class="h2">Vendor</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2">
-                  <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus pr-2"></i>Tambah Vendor</button>
                 </div>
               </div>
             </div>
@@ -239,7 +238,6 @@
                       <td>@{{ item.owner }}</td>
                       <td>
                         <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id, index)'><i class="fa fa-trash"></i></a>
                       </td>
                     </tr>
                 </tbody>

@@ -63,12 +63,12 @@
           KARTU PIUTANG
         </a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('supervisor.debt.card.all') }}">
           <i class="fa fa-area-chart pr-2"></i>
           KARTU PEMBAYARAN
         </a>
-      </li>
+      </li> --}}
        <li class="nav-item">
         <a class="nav-link text-white" href="{{ route('supervisor.payment.vendor') }}">
           <i class="fa fa-area-chart pr-2"></i>

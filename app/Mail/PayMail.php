@@ -32,6 +32,6 @@ class PayMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Pembayaran Pekerjaan')->view('email.payment');
+        return $this->subject('Pembayaran Pekerjaan')->view('email.payment_confirm');
     }
 }

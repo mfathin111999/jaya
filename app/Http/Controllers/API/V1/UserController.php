@@ -135,7 +135,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
-            'email'     => 'email|unique:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -191,7 +190,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
-            'email'     => 'required|email|unique:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -258,7 +256,6 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
-            'email'     => 'required|email|unique:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -277,7 +274,7 @@ class UserController extends Controller
         $user->phone        = $request['phone'] ?? null;
         $user->save();
 
-        $vendor             = Vendor::find($user->id);
+        $vendor             = Vendor::where('user_id', $user->id)->first();
         $vendor->user_id    = $user->id;
         $vendor->vendor     = 'yes';
         $vendor->tax_id     = $request['tax_id'];

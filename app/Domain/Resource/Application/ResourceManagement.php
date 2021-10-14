@@ -72,7 +72,7 @@ class ResourceManagement
 	}
 
 	public function getProvince(){
-		$data = Province::orderBy('name')->get();
+		$data = Province::all();
 
 		return $data;
 	}

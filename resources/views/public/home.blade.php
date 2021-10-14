@@ -1,73 +1,5 @@
 @extends('layout.public')
 
-@section('sec-css')
-	<style type="text/css">
-		.max-400{
-			width: auto !important;
-			height: 400px;
-		}
-
-		.nurani-rezeki-unggul{
-			
-		}
-
-		.max-500{
-			width: auto !important;
-			height: 500px;
-		}
-
-		.f-small{
-			font-size: 14px;
-		}
-
-		.f-light{
-			font-size: 12px;
-		}
-
-		.max-height-100{
-			height: 30px;
-		}
-
-		.card{
-			border-radius: 20px;
-		}
-
-		.card-footer{
-			border-bottom-right-radius: 20px !important;
-			border-bottom-left-radius: 20px !important;
-		}
-
-		.btn-submited{
-			padding: 16px 30px;
-			font-size: 16px;
-			font-weight: 600;
-			color: #ffffff;
-			background: #030f27;
-			border: none;
-			border-radius: 0;
-			transition: .3s;
-		}
-
-		.back-to-whatsapp {
-		    position: fixed;
-		    display: inline;
-		    color: #121518;
-		    width: 75px;
-		    height: 75px;
-		    text-align: center;
-		    line-height: 1;
-		    font-size: 22px;
-		    right: 0px;
-		    bottom: 75px;
-		    z-index: 9;
-		}
-
-		.back-to-whatsapp:hover {
-		    transform: scale(1.5);
-		}
-	</style>
-@endsection
-
 @section('content')
 	@include('layout.header')
 	<div id="app" v-cloak>
@@ -77,10 +9,11 @@
 	            <li data-target="#carousel" data-slide-to="0" class="active"></li>
 	            <li data-target="#carousel" data-slide-to="1"></li>
 	            <li data-target="#carousel" data-slide-to="2"></li>
+	            <li data-target="#carousel" data-slide-to="3"></li>
 	        </ol>
 	        <div class="carousel-inner">
 	            <div class="carousel-item active">
-	                <img src="{{ asset('img/carousel-1.jpg') }}" alt="Carousel Image">
+	                <img src="{{ asset('img/slide/slide1.png') }}" alt="Carousel Image">
 	                <div class="carousel-caption">
 	                    <p class="animated fadeInRight">Profesionalitas</p>
 	                    <h1 class="animated fadeInLeft">For Your Dream Project</h1>
@@ -96,7 +29,7 @@
 	            </div>
 
 	            <div class="carousel-item">
-	                <img src="{{ asset('img/carousel-2.jpg') }}" alt="Carousel Image">
+	                <img src="{{ asset('img/slide/slide2.png') }}" alt="Carousel Image">
 	                <div class="carousel-caption">
 	                    <p class="animated fadeInRight">Pekerja Profesional</p>
 	                    <h1 class="animated fadeInLeft">We Build Your Home</h1>
@@ -111,10 +44,25 @@
 	            </div>
 
 	            <div class="carousel-item">
-	                <img src="{{ asset('img/carousel-3.jpg') }}" alt="Carousel Image">
+	                <img src="{{ asset('img/slide/slide3.png') }}" alt="Carousel Image">
 	                <div class="carousel-caption">
 	                    <p class="animated fadeInRight">Terpercaya</p>
 	                    <h1 class="animated fadeInLeft">For Your Dream Home</h1>
+	                    @auth
+	                    	<a class="btn animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
+	                    @endauth
+
+	                    @guest
+	                    <a class="btn animated fadeInUp"  href="#" data-target='#loginModal' data-toggle="modal">Daftar Untuk Memulai</a>
+	                    @endguest
+	                </div>
+	            </div>
+
+	            <div class="carousel-item">
+	                <img src="{{ asset('img/slide/slide4.png') }}" alt="Carousel Image">
+	                <div class="carousel-caption">
+	                    <p class="animated fadeInRight">Sistematis</p>
+	                    <h1 class="animated fadeInLeft">Trusted and Good System</h1>
 	                    @auth
 	                    	<a class="btn animated fadeInUp" v-on:click="toSelection">Ayo mulai bekerja besama kami</a>
 	                    @endauth
@@ -187,6 +135,7 @@
 	                <h2>Beri tahu kami kebutuhan anda .. !</h2>
 	            </div>
 	            @auth
+	            	@if(auth()->user()->role == 4)
 		            <form v-on:submit.prevent="sendReservation" id="form-engagement">
 		            <div class="row">
 		                <div class="col-md-6">
@@ -204,7 +153,7 @@
 							            <label class="font-12 text-white" for="province">Provinsi</label>
 							            <select type="text" class="form-control" id="province" name="province_id" v-model='thisProvince' @change='getRegency()' required="">
 							            	<option value="">Pilih</option>
-							            	<option v-for = '(province, index) in province' :value = 'province.id'>@{{ ucwords(province.name) }}</option>
+							            	<option v-for = '(province, index) in province' :value = 'province.id' v-if='province.id == 31 || province.id == 32 || province.id == 36'>@{{ ucwords(province.name) }}</option>
 							            </select>
 							        </div>
 						        </div>
@@ -265,7 +214,7 @@
 							<div class="control-group pt-2">
 					            <label class="font-12 text-black" for="service">Servis</label>
 					            <select type="text" class="form-control select2" id="service" name="service[]" multiple="" required="">
-					            	<option v-for = "(service, index) in service" :value = 'service.id'>@{{ service.name }}</option>
+					            	<option v-for = "(service, index) in service" :value = 'service.id' v-if='service.active == 1'>@{{ service.name }}</option>
 					            </select>
 					        </div>
 							<div class="control-group pt-2">
@@ -282,6 +231,15 @@
 		                </div>
 		            </div>
 		            </form>
+		            @else
+		            	<div class="row">
+		            		<div class="col-md-12 text-center">
+		                		<a class="btn-theme btn-submited" href="{{ url('dashboard') }}">
+			                		Menuju Dashboard Anda
+			                	</a>
+		            		</div>
+		            	</div>
+		            @endif
 	            @endauth
 
 	            @guest
@@ -299,7 +257,7 @@
 	            <div class="row align-items-center">
 	                <div class="col-lg-5 col-md-6">
 	                    <div class="about-img">
-	                        <img src="img/about.jpg" alt="Image">
+	                        <img src="img/all/about.png" alt="tentang-servis-rumah">
 	                    </div>
 	                </div>
 	                <div class="col-lg-7 col-md-6">
@@ -467,7 +425,7 @@
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="{{ asset('img/team/team-ceo.png') }}" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-ceo-v2.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
 	                            <h2>Jaedi</h2>
@@ -484,7 +442,7 @@
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="{{ asset('img/team/team-head-operation.png') }}" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-head-operation-v2.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
 	                            <h2>Firman</h2>
@@ -501,7 +459,7 @@
 	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="{{ asset('img/team/team-head-finance.png') }}" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-head-finance-v2.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
 	                            <h2>Andi</h2>
@@ -515,13 +473,13 @@
 	                        </div>
 	                    </div>
 	                </div>
-	                {{-- <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+	                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
 	                    <div class="team-item">
 	                        <div class="team-img">
-	                            <img src="{{ asset('img/team-member.png') }}" alt="Team Image">
+	                            <img src="{{ asset('img/team/team-surveyer-v2.png') }}" alt="Team Image">
 	                        </div>
 	                        <div class="team-text">
-	                            <h2>Sandi</h2>
+	                            <h2>Haryono</h2>
 	                            <p>Profesional Team</p>
 	                        </div>
 	                        <div class="team-social">
@@ -531,7 +489,7 @@
 	                            <a class="social-in" href=""><i class="fab fa-instagram"></i></a>
 	                        </div>
 	                    </div>
-	                </div> --}}
+	                </div>
 	            </div>
 	        </div>
 	    </div>
@@ -743,7 +701,7 @@
 	                            </div>
 	                            <div id="collapseThree" class="collapse" data-parent="#accordion-1">
 	                                <div class="card-body text-justify">
-	                                    Silahkan anda menghubungi kami melalui pesan whatsapp (0857-7768-6367).
+	                                    Silahkan anda menghubungi kami melalui pesan whatsapp (0812 1060 1312).
 	                                </div>
 	                            </div>
 	                        </div>
@@ -755,7 +713,7 @@
 	                            </div>
 	                            <div id="collapseFour" class="collapse" data-parent="#accordion-1">
 	                                <div class="card-body text-justify">
-	                                    Anda dapat menghubungi kami melalui website aplikasi kami di www.<strong>Servisrumah.com</strong> atau langsung menghubugi kami melalui WhatsApp 0857-7768-6367 dan bicarakan kepada kami mengenai rencana servis atau perbaikan property anda
+	                                    Anda dapat menghubungi kami melalui website aplikasi kami di www.<strong>Servisrumah.com</strong> atau langsung menghubugi kami melalui WhatsApp 0812 1060 1312 dan bicarakan kepada kami mengenai rencana servis atau perbaikan property anda
 	                                </div>
 	                            </div>
 	                        </div>
@@ -843,7 +801,7 @@
 	    <!-- FAQs End -->
 
 	</div>
-    <a href="https://wa.me/6281224169630?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
+    <a href="https://wa.me/6281210601312?text=Salam, saya ingin bertanya mengenai ServisRumah.com" target="_blank" class="back-to-whatsapp"><img src="{{ asset('img/whatsapp.png') }}" class="img-fluid"></a>
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 	@include('layout.footer')
 @endsection
@@ -889,17 +847,19 @@
 				    singleDatePicker: true,
 				    autoApply: true,
 			        disableTouchKeyboard: true,
-				    startDate: moment().add(7, 'days'),
-				    minDate: moment().add(7, 'days'),
-				    isInvalidDate: function(ele) {
-					    var currDate = moment(ele._d).format('YYYY-MM-DD');
-					    return response.data.data.indexOf(currDate) != -1;
-					},
+				    startDate: moment().add(2, 'days'),
+				    minDate: moment().add(2, 'days'),
 				    locale: {
 				      format: 'YYYY-MM-DD'
 				    }
 				});
 	        });
+
+	 		// isInvalidDate: function(ele) {
+			//     var currDate = moment(ele._d).format('YYYY-MM-DD');
+			//     return response.data.data.indexOf(currDate) != -1;
+			// },
+			
           }.bind(this));
         },
         addForm: function(){

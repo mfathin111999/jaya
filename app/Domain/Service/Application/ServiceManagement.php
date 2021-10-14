@@ -38,6 +38,20 @@ class ServiceManagement
 		return $data;
 	}
 
+	public function visible($id){
+		$data = Service::find($id);
+
+		if ($data->active == 1) {
+			$data->active = 0;
+		}else{
+			$data->active = 1;
+		}
+
+		$data->save();
+
+		return $data;
+	}
+
 	public function delete($id){
 		$data = Service::find($id)->delete();
 

@@ -73,7 +73,7 @@
                         <br>
                         <label class="font-12">Aksi</label>
                         <br>
-                        <a href="{{ url('report/printVendor') }}/{{ $id }}" class="font-weight-bold btn btn-info font-12" v-if='data.customer_is == 1'>Print SPK</a>
+                        <a href="{{ url('report/printVendor') }}/{{ $id }}" class="font-weight-bold btn btn-info font-12" v-if='data.customer_is == 1 && data.vendor_is == 1'>Print SPK</a>
                       </div>
                     </div>
                   </div>

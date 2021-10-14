@@ -109,20 +109,22 @@
               <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Steps</th>
-                        <th>Action</th>
+                        <th>Nama</th>
+                        <th>Descripsi</th>
+                        {{-- <th>Steps</th> --}}
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for = "(item, index) in data">
                       <td>@{{ item.name }}</td>
                       <td>@{{ item.description }}</td>
-                      <td>@{{ item.name }}</td>
+                      {{-- <td>@{{ item.name }}</td> --}}
                       <td>
                         <a class="btn btn-info text-light" type="button" v-on:click='viewData(item.id)'><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id, index)'><i class="fa fa-trash"></i></a>
+                        <a class="btn btn-danger text-light" type="button" v-on:click='visible(item.id, item.active)' v-if = 'item.active == 1'><i class="fa fa-eye-slash"></i></a>
+                        <a class="btn btn-success text-light" type="button" v-on:click='visible(item.id, item.active)' v-else><i class="fa fa-eye"></i></a>
+                        <a class="btn btn-danger text-light" type="button" v-on:click='deleteItem(item.id)'><i class="fa fa-trash"></i></a>
                       </td>
                     </tr>
                 </tbody>
@@ -170,8 +172,8 @@
           },
           deleteItem: function(id){
             Swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
+              title: 'Apakah anda yakin ?',
+              text: "Apakah anda akan menghapus servis dan seluruh history servis ini ?",
               icon: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
@@ -185,8 +187,34 @@
                   });
                 }).then(() => {
                     Swal.fire(
-                      'Deleted!',
-                      'Your file has been deleted.',
+                      'Terhapus!',
+                      'Servis berhasil dihapus !',
+                      'success'
+                  )
+                });
+                this.getData();
+              }
+            })
+          },
+          visible: function(id, item){
+            Swal.fire({
+              title: 'Apakah anda yakin ?',
+              text: item == 1 ? "Apakah kamu akan menonaktifkan servis ini" : "Apakah kamu akan mengaktifkan servis ini",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                axios.post("{{ url('api/service/destroy') }}/"+id, {type: 'visible'}).then(function(response){
+                  app.$nextTick(() => {
+                    $('#example').DataTable().destroy();
+                  });
+                }).then(() => {
+                    Swal.fire(
+                      'Nonaktif!',
+                      item == 1 ? 'Servis berhasil dinonaktifkan !' : 'Servis berhasil diaktifkan !',
                       'success'
                   )
                 });

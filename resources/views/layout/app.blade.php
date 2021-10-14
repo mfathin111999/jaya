@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
 		<title>Home Service</title>
+		
+		<link rel="icon" href="{{ asset('img/logo/logo-simple.png') }}">
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}">

@@ -163,7 +163,7 @@ class EngagementManagement
 		$engagement = Engagement::where('id', $id)
 			->with(['province', 'regency', 'district', 'village', 'service', 'gallery', 'partner', 'vendor', 'report' => function($query){
 				$query->whereNull('parent_id')->with(['subreport' => function($query){
-					$query->orderBy('id', 'desc');
+					$query->orderBy('id', 'asc');
 				}]);
 			}])->first();
 

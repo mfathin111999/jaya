@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="top-bar-text">
                                     <h3>Kontak Kami</h3>
-                                    <p>+62 812-2416-9630</p>
+                                    <p>+62 812 1060 1312</p>
                                 </div>
                             </div>
                         </div>
