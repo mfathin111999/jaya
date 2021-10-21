@@ -92,33 +92,33 @@
 	                <div class="col-lg-4 col-md-12">
 	                    <div class="feature-item">
 	                        <div class="feature-icon">
+	                            <i class="flaticon-calendar"></i>
+	                        </div>
+	                        <div class="feature-text">
+	                            <h3>Pilih Waktu Survey</h3>
+	                            <p>Isi formulir & jadwalkan survey berdasarkan waktu yang anda tentukan</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-12">
+	                    <div class="feature-item">
+	                        <div class="feature-icon">
+	                            <i class="flaticon-send-mail"></i>
+	                        </div>
+	                        <div class="feature-text">
+	                            <h3>Penawaran Pekerjaan</h3>
+	                            <p>Setelah survey, kami akan mengirimkan penawaran via email dan anda menyetujuinya secara online</p>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-4 col-md-12">
+	                    <div class="feature-item">
+	                        <div class="feature-icon">
 	                            <i class="flaticon-worker"></i>
 	                        </div>
 	                        <div class="feature-text">
-	                            <h3>Pekerja Profesional</h3>
-	                            <p>Pekerja yang telah mengikuti proses training dan dituntut memiliki kemampuan dalam bidang konstruksi.</p>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-12">
-	                    <div class="feature-item">
-	                        <div class="feature-icon">
-	                            <i class="flaticon-building"></i>
-	                        </div>
-	                        <div class="feature-text">
-	                            <h3>Ahli Dibidangnya</h3>
-	                            <p>Teruji dengan banyak nya pekerjaan dengan feedback baik.</p>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-lg-4 col-md-12">
-	                    <div class="feature-item">
-	                        <div class="feature-icon">
-	                            <i class="flaticon-call"></i>
-	                        </div>
-	                        <div class="feature-text">
-	                            <h3>Fast Response</h3>
-	                            <p>Pelayanan yang cepat, mudah dan praktis.</p>
+	                            <h3>Mulai Bekerja</h3>
+	                            <p>Tim profesional kami akan mewujudkan permintaan anda</p>
 	                        </div>
 	                    </div>
 	                </div>
@@ -300,7 +300,7 @@
 	    </div>
 	    <!-- About End -->
 
-	    <!-- Fact Start -->
+	    {{-- <!-- Fact Start -->
 	    <div class="fact">
 	        <div class="container-fluid">
 	            <div class="row counters">
@@ -351,7 +351,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <!-- Fact End -->
+	    <!-- Fact End --> --}}
 
 	    <!-- Service Start -->
 	    <div class="service" id="services">
